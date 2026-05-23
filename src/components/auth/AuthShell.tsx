@@ -2,7 +2,26 @@ import React from "react";
 import Card from "@/components/ui/card";
 import { Archive } from "lucide-react";
 
-export default function AuthShell({ children }: { children: React.ReactNode }) {
+type AuthShellProps = {
+  children: React.ReactNode;
+  title?: string;
+  description?: string;
+  footer?: React.ReactNode;
+};
+
+export default function AuthShell({
+  children,
+  title = "Sign In",
+  description = "Enter your credentials to manage your inventory.",
+  footer = (
+    <div className="mt-2 text-center text-sm text-muted-foreground">
+      <span>Have an invitation? </span>
+      <a className="font-medium text-primary" href="/register">
+        Accept Invitation
+      </a>
+    </div>
+  ),
+}: AuthShellProps) {
   return (
     <div className="flex min-h-screen items-center justify-center p-6">
       <div className="w-full max-w-md">
@@ -17,21 +36,14 @@ export default function AuthShell({ children }: { children: React.ReactNode }) {
         </div>
 
         <Card>
-          <h1 className="text-3xl font-semibold text-foreground">Sign In</h1>
-          <p className="text-sm text-muted-foreground mt-1.5 mb-6">
-            Enter your credentials to manage your inventory.
-          </p>
+          <h1 className="text-3xl font-semibold text-foreground">{title}</h1>
+          <p className="mt-1.5 text-sm text-muted-foreground">{description}</p>
 
-          {children}
+          <div className="mt-6">{children}</div>
 
           <div className="my-4 h-px bg-border" />
 
-          <div className="mt-2 text-center text-sm text-muted-foreground">
-            <span>Don&apos;t have an account? </span>
-            <a className="font-medium text-primary" href="/register">
-              Request Access
-            </a>
-          </div>
+          {footer}
         </Card>
       </div>
     </div>
