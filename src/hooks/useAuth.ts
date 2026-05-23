@@ -1,6 +1,13 @@
 import { useMutation } from "@tanstack/react-query";
-import { login, type LoginResponse } from "@/lib/auth";
+import {
+  acceptInvitation,
+  login,
+  type AcceptInvitationRequest,
+  type AcceptInvitationResponse,
+  type LoginResponse,
+} from "@/lib/auth";
 import type { LoginValues } from "@/schemas/login";
+import type { InviteValues } from "@/schemas/invite";
 import { useAuthStore } from "@/stores/auth-store";
 
 /**
@@ -17,7 +24,16 @@ export function useAuth() {
     },
   });
 
-  return { loginMutation } as const;
+  const acceptInviteMutation = useMutation<
+    AcceptInvitationResponse,
+    unknown,
+    InviteValues & { token: string }
+  >({
+    mutationFn: ({ token, password }) =>
+      acceptInvitation({ token, password } satisfies AcceptInvitationRequest),
+  });
+
+  return { loginMutation, acceptInviteMutation } as const;
 }
 
 export default useAuth;
