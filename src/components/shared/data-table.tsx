@@ -38,7 +38,8 @@ export function DataTable<TData, TValue>({
   });
 
   const leafColumns = table.getVisibleLeafColumns();
-  const columnCount = leafColumns.length > 0 ? leafColumns.length : columns.length;
+  const columnCount =
+    leafColumns.length > 0 ? leafColumns.length : columns.length;
   const safeColumnCount = columnCount > 0 ? columnCount : 1;
 
   return (
@@ -74,14 +75,16 @@ export function DataTable<TData, TValue>({
                   key={`loading-${rowIndex}`}
                   className="border-b transition-colors hover:bg-[#F8FAFC] dark:hover:bg-muted"
                 >
-                  {Array.from({ length: safeColumnCount }).map((__, cellIndex) => (
-                    <TableCell
-                      key={`loading-${rowIndex}-${cellIndex}`}
-                      className="p-2 align-middle whitespace-nowrap has-[[role=checkbox]]:pr-0"
-                    >
-                      <div className="h-3.5 w-full animate-pulse rounded bg-muted/70" />
-                    </TableCell>
-                  ))}
+                  {Array.from({ length: safeColumnCount }).map(
+                    (__, cellIndex) => (
+                      <TableCell
+                        key={`loading-${rowIndex}-${cellIndex}`}
+                        className="p-2 align-middle whitespace-nowrap has-[[role=checkbox]]:pr-0"
+                      >
+                        <div className="h-3.5 w-full animate-pulse rounded bg-muted/70" />
+                      </TableCell>
+                    ),
+                  )}
                 </TableRow>
               ))
             ) : data.length === 0 ? (
