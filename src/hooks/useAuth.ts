@@ -5,7 +5,7 @@ import {
   type RegisterRequest,
   type RegisterResponse,
   type LoginResponse,
-} from "@/lib/api/auth";
+} from "@/lib/auth";
 import type { LoginValues } from "@/schemas/login";
 import type { InviteValues } from "@/schemas/invite";
 import { useAuthStore } from "@/stores/auth-store";

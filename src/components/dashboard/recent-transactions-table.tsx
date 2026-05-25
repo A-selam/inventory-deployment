@@ -4,18 +4,49 @@ import { Package } from "lucide-react";
 import { DataTable } from "@/components/shared/data-table";
 import { Badge } from "@/components/ui/badge";
 import type { RecentTransaction } from "@/types/dashboard";
+import Card from "@/components/ui/card";
 
 const columnHelper = createColumnHelper<RecentTransaction>();
 
-function formatDate(value: string) {
+function parseDate(value: string | number | null | undefined) {
+  if (value === null || value === undefined) return null;
+
+  if (typeof value === "number") {
+    const ms = value < 1_000_000_000_000 ? value * 1000 : value;
+    const date = new Date(ms);
+    return Number.isNaN(date.getTime()) ? null : date;
+  }
+
+  const trimmed = value.trim();
+  if (!trimmed) return null;
+
+  if (/^\d+$/.test(trimmed)) {
+    const numeric = Number(trimmed);
+    if (!Number.isNaN(numeric)) {
+      const ms = numeric < 1_000_000_000_000 ? numeric * 1000 : numeric;
+      const date = new Date(ms);
+      return Number.isNaN(date.getTime()) ? null : date;
+    }
+  }
+
+  const parsed = new Date(trimmed);
+  return Number.isNaN(parsed.getTime()) ? null : parsed;
+}
+
+function formatDate(value: string | number | null | undefined) {
+  const date = parseDate(value);
+  if (!date) return "—";
+
   return new Intl.DateTimeFormat("en-US", {
     month: "short",
     day: "2-digit",
     year: "numeric",
-  }).format(new Date(value));
+  }).format(date);
 }
 
-function normalizeTransactionType(transactionType: string) {
+function normalizeTransactionType(transactionType?: string | null) {
+  if (!transactionType) return "UNKNOWN";
+
   const value = transactionType.toUpperCase();
 
   if (value.includes("OUT")) return "STOCK OUT";
@@ -92,15 +123,16 @@ export default function RecentTransactionsTable({
   transactions: RecentTransaction[];
 }) {
   return (
-    <section className="space-y-4">
-      <div>
-        <div className="label-caps">Recent Transactions</div>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Latest stock activity across the warehouse network.
-        </p>
+    // <section className="space-y-4 bg-card">
+    <Card className="rounded-[12px] p-0 border-border shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
+      <div className="p-6">
+        <div className="label-caps font-bold text-2xl mb-0">
+          Recent Transactions
+        </div>
       </div>
 
       <DataTable columns={columns} data={transactions} />
-    </section>
+    </Card>
+    // </section>
   );
 }

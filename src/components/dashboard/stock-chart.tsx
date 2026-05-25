@@ -34,7 +34,9 @@ export default function StockChart({
     <Card className="rounded-[12px] border-border shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
       <div className="flex items-start justify-between gap-4">
         <div className="space-y-2">
-          <div className="label-caps">Stock Movement Trends</div>
+          <div className="label-caps font-bold text-2xl mb-0">
+            Stock Movement Trends
+          </div>
           <p className="text-sm text-muted-foreground">
             Monthly inbound and outbound stock movement.
           </p>
@@ -43,10 +45,14 @@ export default function StockChart({
         <ChartLegend />
       </div>
 
-      <div className="mt-6 h-[320px]">
+      <div className="mt-6 h-80">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={data} barCategoryGap={20}>
-            <CartesianGrid vertical={false} stroke="#e5e7eb" strokeDasharray="3 3" />
+            <CartesianGrid
+              vertical={false}
+              stroke="#e5e7eb"
+              strokeDasharray="3 3"
+            />
             <XAxis
               dataKey="month"
               axisLine={false}
@@ -54,8 +60,18 @@ export default function StockChart({
               tick={{ fill: "#64748b", fontSize: 12 }}
             />
             <YAxis hide />
-            <Bar dataKey="stock_in" fill="#0f172a" radius={[8, 8, 0, 0]} maxBarSize={26} />
-            <Bar dataKey="stock_out" fill="#c6c6cd" radius={[8, 8, 0, 0]} maxBarSize={26} />
+            <Bar
+              dataKey="stock_in"
+              fill="#0f172a"
+              radius={[8, 8, 0, 0]}
+              maxBarSize={26}
+            />
+            <Bar
+              dataKey="stock_out"
+              fill="#c6c6cd"
+              radius={[8, 8, 0, 0]}
+              maxBarSize={26}
+            />
           </BarChart>
         </ResponsiveContainer>
       </div>

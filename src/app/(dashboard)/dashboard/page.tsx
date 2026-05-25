@@ -8,7 +8,7 @@ export default function DashboardPage() {
     <div className="space-y-8">
       <section className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
         <div className="space-y-2">
-          <h1 className="text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
+          <h1 className="text-3xl font-semibold tracking-tight text-foreground sm:text-4xl mb-0">
             Warehouse Dashboard
           </h1>
           <p className="max-w-2xl text-sm leading-6 text-muted-foreground sm:text-base">

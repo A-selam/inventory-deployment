@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useSyncExternalStore } from "react";
-import { AlertCircle, ArrowRight, LayoutGrid, ShieldAlert } from "lucide-react";
+import { AlertCircle, ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 import Button from "@/components/ui/button";
@@ -105,7 +105,7 @@ function DashboardErrorState({
 
 export default function DashboardClient() {
   const router = useRouter();
-  const token = useAuthStore((state) => state.token);
+  const accessToken = useAuthStore((state) => state.access_token);
 
   const isHydrated = useSyncExternalStore(
     (onStoreChange) => useAuthStore.persist.onFinishHydration(onStoreChange),
@@ -113,22 +113,18 @@ export default function DashboardClient() {
     () => false,
   );
 
-  const enabled = isHydrated && Boolean(token);
+  const enabled = isHydrated && Boolean(accessToken);
 
   useEffect(() => {
-    if (isHydrated && !token) {
+    if (isHydrated && !accessToken) {
       router.replace("/login");
     }
-  }, [isHydrated, router, token]);
+  }, [accessToken, isHydrated, router]);
 
   const query = useDashboardOverview({ enabled });
-  const promoStats = [
-    { label: "Live Zones", value: "12" },
-    { label: "Automated Pick Paths", value: "98%" },
-    { label: "Cycle Count Accuracy", value: "99.4%" },
-  ];
+  console.log("Dashboard overview query:", query);
 
-  if (!isHydrated || (isHydrated && !token)) {
+  if (!isHydrated || (isHydrated && !accessToken)) {
     return <DashboardLoadingState />;
   }
 
@@ -155,57 +151,8 @@ export default function DashboardClient() {
     <div className="space-y-8">
       <OverviewCards data={query.data} />
 
-      <div className="grid gap-4 xl:grid-cols-[minmax(0,3fr)_minmax(320px,1fr)]">
+      <div>
         <StockChart data={query.data.stock_movement_chart} />
-
-        <Card className="relative overflow-hidden rounded-[12px] border border-slate-800/30 bg-slate-950 p-6 text-white shadow-[0_16px_40px_rgba(15,23,42,0.18)]">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.18),transparent_28%),linear-gradient(180deg,rgba(15,23,42,0.2),rgba(15,23,42,0.9))]" />
-          <div className="absolute inset-x-6 top-6 h-24 rounded-3xl border border-white/10 bg-white/5" />
-          <div className="absolute -right-16 top-10 size-40 rounded-full bg-cyan-400/15 blur-3xl" />
-          <div className="absolute -left-8 bottom-4 size-28 rounded-full bg-slate-500/20 blur-2xl" />
-
-          <div className="relative z-10 flex h-full flex-col justify-between gap-8">
-            <div className="space-y-4">
-              <div className="label-caps text-slate-300!">
-                Warehouse Automation
-              </div>
-              <div className="space-y-3">
-                <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium uppercase tracking-[0.24em] text-white/70">
-                  <LayoutGrid className="size-3.5" />
-                  Zone A-1 Optimized
-                </div>
-                <h2 className="max-w-xs text-2xl font-semibold tracking-tight text-white">
-                  Warehouse Automation - ZONE A-1 OPTIMIZED
-                </h2>
-                <p className="max-w-xs text-sm leading-6 text-white/70">
-                  Rebalanced picking lanes, improved replenishment timing, and
-                  automated stock verification.
-                </p>
-              </div>
-            </div>
-
-            <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3">
-              {promoStats.map((stat) => (
-                <div
-                  key={stat.label}
-                  className="rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur-sm"
-                >
-                  <div className="text-[11px] font-semibold uppercase tracking-[0.24em] text-white/55">
-                    {stat.label}
-                  </div>
-                  <div className="mt-2 text-xl font-semibold text-white">
-                    {stat.value}
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white/80 backdrop-blur-sm">
-              <span>Optimize throughput with predictive replenishment</span>
-              <ShieldAlert className="size-4 text-cyan-300" />
-            </div>
-          </div>
-        </Card>
       </div>
 
       <RecentTransactionsTable transactions={query.data.recent_transactions} />

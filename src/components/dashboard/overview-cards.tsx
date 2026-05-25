@@ -1,9 +1,4 @@
-import {
-  AlertTriangle,
-  Boxes,
-  Landmark,
-  Users,
-} from "lucide-react";
+import { AlertTriangle, Boxes, Landmark, Users } from "lucide-react";
 
 import type { DashboardData } from "@/types/dashboard";
 
@@ -40,7 +35,9 @@ function StatCard({
           </div>
         </div>
 
-        <div className={`flex size-11 shrink-0 items-center justify-center rounded-xl ${iconClassName}`}>
+        <div
+          className={`flex size-11 shrink-0 items-center justify-center rounded-xl ${iconClassName}`}
+        >
           <Icon className="size-5" />
         </div>
       </div>
@@ -63,7 +60,7 @@ export default function OverviewCards({ data }: { data: DashboardData }) {
         value={new Intl.NumberFormat("en-US").format(data.low_stock)}
         icon={AlertTriangle}
         iconClassName="bg-orange-50 text-orange-600"
-        borderClassName="border-l-4 border-l-orange-500"
+        borderClassName="border-l-4 border-l-orange-600"
       />
 
       <StatCard
