@@ -5,7 +5,7 @@ import {
   type AcceptInvitationRequest,
   type AcceptInvitationResponse,
   type LoginResponse,
-} from "@/lib/auth";
+} from "@/lib/api/auth";
 import type { LoginValues } from "@/schemas/login";
 import type { InviteValues } from "@/schemas/invite";
 import { useAuthStore } from "@/stores/auth-store";
