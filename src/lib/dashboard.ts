@@ -1,20 +1,6 @@
 import { apiClient } from "@/lib/api-client";
 import type { ApiSuccessResponse } from "@/types/api";
-import type { Transaction } from "@/lib/transactions";
-
-export type StockMovementPoint = {
-  month: string;
-  movement: number;
-};
-
-export type DashboardData = {
-  total_items: number;
-  low_stock: number;
-  inventory_value: number;
-  active_vendors: number;
-  stock_movement_chart: StockMovementPoint[];
-  recent_transactions: Transaction[];
-};
+import type { DashboardData } from "@/types/dashboard";
 
 export type DashboardResponse = ApiSuccessResponse<DashboardData>;
 
@@ -26,8 +12,30 @@ export type DashboardSearchResult = {
 export type DashboardSearchResponse = ApiSuccessResponse<DashboardSearchResult>;
 
 export async function getDashboard(): Promise<DashboardResponse> {
-  const res = await apiClient.get("/dashboard");
-  return res.data as DashboardResponse;
+  const res = await apiClient.get<DashboardResponse>("/dashboard");
+  return res.data;
+}
+
+export async function getDashboardOverview(): Promise<DashboardData> {
+  const response = await getDashboard();
+  const data = response.data;
+
+  return {
+    ...data,
+    recent_transactions: data.recent_transactions.map((transaction) => ({
+      ...transaction,
+      transaction_type:
+        transaction.transaction_type ??
+        (transaction as { reason?: string }).reason ??
+        "",
+      item_name: transaction.item_name ?? transaction.item,
+      created_at:
+        transaction.created_at ??
+        ("timestamp" in transaction
+          ? String((transaction as { timestamp?: string | number }).timestamp ?? "")
+          : ""),
+    })),
+  };
 }
 
 export async function searchDashboard(

@@ -27,7 +27,7 @@ export default function LoginForm({ redirect }: { redirect?: string }) {
   async function onSubmit(data: LoginValues) {
     try {
       await loginMutation.mutateAsync(data);
-      router.push(redirect || "/");
+      router.push(redirect || "/dashboard");
     } catch (error) {
       console.error(error);
     }
