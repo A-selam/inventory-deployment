@@ -9,6 +9,7 @@ import Button from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Label from "@/components/ui/label";
 import useAuth from "@/hooks/useAuth";
+import { getApiErrorMessage } from "@/lib/api-errors";
 import { inviteSchema, type InviteValues } from "@/schemas/invite";
 
 type InviteAcceptanceFormProps = {
@@ -137,9 +138,10 @@ export default function InviteAcceptanceForm({
 
       {acceptInviteMutation.isError && (
         <p className="text-sm text-destructive">
-          {acceptInviteMutation.error instanceof Error
-            ? acceptInviteMutation.error.message
-            : "Failed to accept invitation"}
+          {getApiErrorMessage(
+            acceptInviteMutation.error,
+            "Failed to accept invitation",
+          )}
         </p>
       )}
     </form>

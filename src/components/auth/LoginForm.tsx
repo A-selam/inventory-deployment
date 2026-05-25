@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useRouter } from "next/navigation";
 import useAuth from "@/hooks/useAuth";
+import { getApiErrorMessage } from "@/lib/api-errors";
 import { loginSchema, type LoginValues } from "@/schemas/login";
 import Button from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -29,16 +30,6 @@ export default function LoginForm({ redirect }: { redirect?: string }) {
       router.push(redirect || "/");
     } catch (error) {
       console.error(error);
-    }
-  }
-
-  function getErrorMessage(err: unknown) {
-    if (!err) return "Failed to sign in";
-    if (err instanceof Error) return err.message;
-    try {
-      return String(err);
-    } catch {
-      return "Failed to sign in";
     }
   }
 
@@ -110,7 +101,7 @@ export default function LoginForm({ redirect }: { redirect?: string }) {
 
       {loginMutation.isError && (
         <div className="text-sm text-destructive">
-          {getErrorMessage(loginMutation.error)}
+          {getApiErrorMessage(loginMutation.error, "Failed to sign in")}
         </div>
       )}
     </form>

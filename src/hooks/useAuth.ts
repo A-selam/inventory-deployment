@@ -2,8 +2,8 @@ import { useMutation } from "@tanstack/react-query";
 import {
   acceptInvitation,
   login,
-  type AcceptInvitationRequest,
-  type AcceptInvitationResponse,
+  type RegisterRequest,
+  type RegisterResponse,
   type LoginResponse,
 } from "@/lib/auth";
 import type { LoginValues } from "@/schemas/login";
@@ -20,17 +20,22 @@ export function useAuth() {
   const loginMutation = useMutation<LoginResponse, unknown, LoginValues>({
     mutationFn: (data) => login({ email: data.email, password: data.password }),
     onSuccess: (res, variables) => {
-      setAuth(res.token, res.user, variables?.persistSession ?? false);
+      setAuth(
+        res.data.access_token,
+        res.data.token_type,
+        res.data.user,
+        variables?.persistSession ?? false,
+      );
     },
   });
 
   const acceptInviteMutation = useMutation<
-    AcceptInvitationResponse,
+    RegisterResponse,
     unknown,
     InviteValues & { token: string }
   >({
     mutationFn: ({ token, password }) =>
-      acceptInvitation({ token, password } satisfies AcceptInvitationRequest),
+      acceptInvitation({ token, password } satisfies RegisterRequest),
   });
 
   return { loginMutation, acceptInviteMutation } as const;
