@@ -6,11 +6,13 @@ export interface User {
 }
 
 export interface AuthState {
-  token: string | null;
+  access_token: string | null;
+  token_type: string | null;
   user: User | null;
   persistSession: boolean;
   setAuth: (
-    token: string,
+    access_token: string,
+    token_type: string,
     user: User,
     persistSession?: boolean,
   ) => void;
