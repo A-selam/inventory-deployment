@@ -10,9 +10,10 @@ export const apiClient = axios.create({
 
 // Request Interceptor: Attach JWT
 apiClient.interceptors.request.use((config) => {
-  const token = useAuthStore.getState().token;
-  if (token && config.headers) {
-    config.headers.Authorization = `Bearer ${token}`;
+  const { access_token, token_type } = useAuthStore.getState();
+  if (access_token && config.headers) {
+    const scheme = token_type?.trim() || "bearer";
+    config.headers.Authorization = `${scheme} ${access_token}`;
   }
   return config;
 });

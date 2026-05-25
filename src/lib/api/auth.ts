@@ -1,4 +1,5 @@
 import { apiClient } from "@/lib/api-client";
+import type { ApiSuccessResponse } from "@/types/api";
 import type { User } from "@/types/auth";
 
 export type LoginRequest = {
@@ -6,37 +7,42 @@ export type LoginRequest = {
   password: string;
 };
 
-export type LoginResponse = {
-  token: string;
+export type LoginData = {
+  access_token: string;
+  token_type: string;
   user: User;
 };
 
-export type AcceptInvitationRequest = {
+export type LoginResponse = ApiSuccessResponse<LoginData>;
+
+export type RegisterRequest = {
   token: string;
   password: string;
 };
 
-export type AcceptInvitationResponse = {
-  message: string;
+export type RegisterData = {
+  id: string;
+  name: string;
+  email: string;
+  role: User["role"];
 };
+
+export type RegisterResponse = ApiSuccessResponse<RegisterData>;
 
 export async function login(data: LoginRequest): Promise<LoginResponse> {
   const res = await apiClient.post("/auth/login", data);
   return res.data as LoginResponse;
 }
 
+export async function registerUser(
+  data: RegisterRequest,
+): Promise<RegisterResponse> {
+  const res = await apiClient.post("/auth/register", data);
+  return res.data as RegisterResponse;
+}
+
 export async function acceptInvitation(
-  data: AcceptInvitationRequest,
-): Promise<AcceptInvitationResponse> {
-  await new Promise((resolve) => {
-    setTimeout(resolve, 650);
-  });
-
-  if (!data.token.trim()) {
-    throw new Error("Invitation token is required");
-  }
-
-  return {
-    message: "Invitation accepted",
-  };
+  data: RegisterRequest,
+): Promise<RegisterResponse> {
+  return registerUser(data);
 }

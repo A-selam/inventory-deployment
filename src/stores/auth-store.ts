@@ -43,14 +43,20 @@ const authStorage: StateStorage = {
 export const useAuthStore = create<AuthState>()(
   persist(
     (set) => ({
-      token: null,
+      access_token: null,
+      token_type: null,
       user: null,
       persistSession: false,
-      setAuth: (token, user, persistSession = true) => {
-        set({ token, user, persistSession });
+      setAuth: (access_token, token_type, user, persistSession = true) => {
+        set({ access_token, token_type, user, persistSession });
       },
       logout: () => {
-        set({ token: null, user: null, persistSession: false });
+        set({
+          access_token: null,
+          token_type: null,
+          user: null,
+          persistSession: false,
+        });
         authStorage.removeItem(STORAGE_KEY);
       },
     }),
@@ -58,7 +64,8 @@ export const useAuthStore = create<AuthState>()(
       name: STORAGE_KEY,
       storage: createJSONStorage(() => authStorage),
       partialize: (state) => ({
-        token: state.token,
+        access_token: state.access_token,
+        token_type: state.token_type,
         user: state.user,
         persistSession: state.persistSession,
       }),
