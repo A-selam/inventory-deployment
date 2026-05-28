@@ -18,7 +18,7 @@ export default function TransactionHeader() {
         </p>
       </div>
 
-      <div className="flex w-full gap-3 sm:w-auto sm:flex-shrink-0">
+      <div className="flex w-full gap-3 sm:w-auto sm:shrink-0">
         <Button variant="outline" size="sm" className="gap-2">
           <Filter className="size-4" />
           <span className="hidden sm:inline">Filters</span>
