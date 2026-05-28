@@ -35,7 +35,8 @@ function DashboardLoadingState() {
         ))}
       </div>
 
-      <div className="grid gap-4 xl:grid-cols-[minmax(0,3fr)_minmax(320px,1fr)]">
+      {/* <div className="grid gap-4 xl:grid-cols-[minmax(0,3fr)_minmax(320px,1fr)]"> */}
+      <div>
         <Card className="rounded-[12px] border-border shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
           <div className="space-y-4">
             <Skeleton className="h-3 w-48" />
@@ -44,13 +45,13 @@ function DashboardLoadingState() {
           </div>
         </Card>
 
-        <Card className="overflow-hidden rounded-[12px] border border-slate-800/30 bg-slate-950 p-6 text-white shadow-[0_16px_40px_rgba(15,23,42,0.18)]">
+        {/* <Card className="overflow-hidden rounded-[12px] border border-slate-800/30 bg-slate-950 p-6 text-white shadow-[0_16px_40px_rgba(15,23,42,0.18)]">
           <div className="space-y-4">
             <Skeleton className="h-3 w-24 bg-white/20" />
             <Skeleton className="h-10 w-full bg-white/10" />
             <Skeleton className="h-24 w-full bg-white/10" />
           </div>
-        </Card>
+        </Card> */}
       </div>
 
       <Card className="rounded-[12px] border-border shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
