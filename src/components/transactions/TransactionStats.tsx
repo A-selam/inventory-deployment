@@ -1,6 +1,12 @@
 "use client";
 
-import { AlertCircle, ArrowDownRight, ArrowUpRight, TrendingUp } from "lucide-react";
+import {
+  AlertCircle,
+  ArrowDownRight,
+  ArrowUpRight,
+  TrendingUp,
+  type LucideIcon,
+} from "lucide-react";
 import { Card } from "@/components/ui/card";
 
 type TransactionStatsProps = {
@@ -10,6 +16,49 @@ type TransactionStatsProps = {
   anomalies: number;
 };
 
+function formatCount(value: number) {
+  return new Intl.NumberFormat("en-US").format(value);
+}
+
+function StatCard({
+  title,
+  value,
+  icon: Icon,
+  iconClassName,
+  valueClassName = "text-foreground",
+  borderClassName,
+}: {
+  title: string;
+  value: string;
+  icon: LucideIcon;
+  iconClassName: string;
+  valueClassName?: string;
+  borderClassName?: string;
+}) {
+  return (
+    <Card
+      className={`rounded-[12px] border border-border p-6 shadow-[0_1px_2px_rgba(15,23,42,0.04)] ${borderClassName ?? ""}`}
+    >
+      <div className="flex items-start justify-between gap-4">
+        <div className="space-y-3">
+          <div className="label-caps">{title}</div>
+          <div
+            className={`text-3xl font-bold tracking-tight ${valueClassName}`}
+          >
+            {value}
+          </div>
+        </div>
+
+        <div
+          className={`flex size-11 shrink-0 items-center justify-center rounded-xl ${iconClassName}`}
+        >
+          <Icon className="size-5" />
+        </div>
+      </div>
+    </Card>
+  );
+}
+
 export default function TransactionStats({
   totalMovements,
   inbound24h,
@@ -18,45 +67,35 @@ export default function TransactionStats({
 }: TransactionStatsProps) {
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
-      {/* Total Movements */}
-      <Card className="p-6">
-        <div className="mb-4 flex items-center justify-between">
-          <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-            Total Movements
-          </span>
-          <TrendingUp className="size-5 text-primary" />
-        </div>
-      </Card>
+      <StatCard
+        title="Total Movements"
+        value={formatCount(totalMovements)}
+        icon={TrendingUp}
+        iconClassName="bg-slate-100 text-slate-700"
+      />
 
-      {/* Inbound 24h */}
-      <Card className="p-6">
-        <div className="mb-4 flex items-center justify-between">
-          <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-            Inbound (24h)
-          </span>
-          <ArrowDownRight className="size-5 text-primary" />
-        </div>
-      </Card>
+      <StatCard
+        title="Inbound (24h)"
+        value={formatCount(inbound24h)}
+        icon={ArrowDownRight}
+        iconClassName="bg-slate-100 text-slate-700"
+      />
 
-      {/* Outbound 24h */}
-      <Card className="p-6">
-        <div className="mb-4 flex items-center justify-between">
-          <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-            Outbound (24h)
-          </span>
-          <ArrowUpRight className="size-5 text-primary" />
-        </div>
-      </Card>
+      <StatCard
+        title="Outbound (24h)"
+        value={formatCount(outbound24h)}
+        icon={ArrowUpRight}
+        iconClassName="bg-slate-100 text-slate-700"
+      />
 
-      {/* Anomalies */}
-      <Card className="border-l-4 border-l-destructive p-6">
-        <div className="mb-4 flex items-center justify-between">
-          <span className="text-xs font-semibold uppercase tracking-wide text-destructive">
-            Anomalies
-          </span>
-          <AlertCircle className="size-5 text-destructive" />
-        </div>
-      </Card>
+      <StatCard
+        title="Anomalies"
+        value={formatCount(anomalies)}
+        icon={AlertCircle}
+        iconClassName="bg-red-50 text-destructive"
+        valueClassName="text-destructive"
+        borderClassName="border-l-4 border-l-destructive"
+      />
     </div>
   );
 }

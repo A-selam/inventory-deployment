@@ -1,5 +1,47 @@
-import axios from "axios";
+import axios, {
+  type AxiosResponse,
+  type InternalAxiosRequestConfig,
+} from "axios";
 import { useAuthStore } from "@/stores/auth-store";
+
+type LoggedRequestConfig = InternalAxiosRequestConfig & {
+  metadata?: {
+    startedAt: number;
+  };
+};
+
+const shouldLogApiResponses = process.env.NODE_ENV !== "production";
+
+function logApiResponse(response: AxiosResponse) {
+  if (!shouldLogApiResponses) return;
+
+  const config = response.config as LoggedRequestConfig;
+  const durationMs = config.metadata?.startedAt
+    ? Date.now() - config.metadata.startedAt
+    : undefined;
+
+  console.log("[api:response]", {
+    method: config.method?.toUpperCase() ?? "GET",
+    url: config.baseURL ? `${config.baseURL}${config.url ?? ""}` : config.url,
+    status: response.status,
+    durationMs,
+    data: response.data,
+  });
+}
+
+function logApiError(error: unknown) {
+  if (!shouldLogApiResponses || !axios.isAxiosError(error)) return;
+
+  const config = error.config as LoggedRequestConfig | undefined;
+
+  console.error("[api:error]", {
+    method: config?.method?.toUpperCase() ?? "GET",
+    url: config?.baseURL ? `${config.baseURL}${config.url ?? ""}` : config?.url,
+    status: error.response?.status,
+    data: error.response?.data,
+    message: error.message,
+  });
+}
 
 export const apiClient = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1",
@@ -9,7 +51,11 @@ export const apiClient = axios.create({
 });
 
 // Request Interceptor: Attach JWT
-apiClient.interceptors.request.use((config) => {
+apiClient.interceptors.request.use((config: LoggedRequestConfig) => {
+  config.metadata = {
+    startedAt: Date.now(),
+  };
+
   const { access_token, token_type } = useAuthStore.getState();
   if (access_token && config.headers) {
     const scheme = token_type?.trim() || "bearer";
@@ -20,12 +66,20 @@ apiClient.interceptors.request.use((config) => {
 
 // Response Interceptor: Handle 401s
 apiClient.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    logApiResponse(response);
+    return response;
+  },
   (error) => {
+    logApiError(error);
+
     if (error.response?.status === 401) {
       useAuthStore.getState().logout();
-      window.location.href = "/login";
+      if (typeof window !== "undefined") {
+        window.location.href = "/login";
+      }
     }
+
     return Promise.reject(error);
   },
 );

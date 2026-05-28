@@ -1,7 +1,8 @@
 "use client";
 
-import { MoreVertical } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+
+import Button from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
   Table,
@@ -20,7 +21,14 @@ const reasonStyles: Record<TransactionReason, { bg: string; text: string }> = {
   "audit correction": { bg: "bg-amber-100", text: "text-amber-800" },
 };
 
-const getReasonLabel = (reason: TransactionReason): string => {
+const defaultReasonStyles = {
+  bg: "bg-slate-100",
+  text: "text-slate-700",
+};
+
+const getReasonLabel = (reason: string): string => {
+  if (!reason) return "Unknown";
+
   return reason.charAt(0).toUpperCase() + reason.slice(1);
 };
 
@@ -45,15 +53,48 @@ const formatTime = (timestamp: string): string => {
 type TransactionTableProps = {
   transactions: Transaction[];
   isLoading?: boolean;
+  page?: number;
+  totalPages?: number;
+  limit?: number;
+  totalItems?: number;
+  onPageChange?: (page: number) => void;
 };
+
+function PaginationButton({
+  children,
+  disabled,
+  onClick,
+}: {
+  children: React.ReactNode;
+  disabled?: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <Button
+      type="button"
+      variant="outline"
+      size="sm"
+      disabled={disabled}
+      className="h-9 gap-2 px-3"
+      onClick={onClick}
+    >
+      {children}
+    </Button>
+  );
+}
 
 export default function TransactionTable({
   transactions,
   isLoading = false,
+  page = 1,
+  totalPages = 1,
+  limit = 20,
+  totalItems = 0,
+  onPageChange,
 }: TransactionTableProps) {
   if (isLoading) {
     return (
-      <Card className="overflow-hidden">
+      <Card className="rounded-[12px] border border-border p-0 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
         <div className="flex items-center justify-center p-12">
           <p className="text-muted-foreground">Loading transactions...</p>
         </div>
@@ -63,7 +104,7 @@ export default function TransactionTable({
 
   if (!transactions || transactions.length === 0) {
     return (
-      <Card className="overflow-hidden">
+      <Card className="rounded-[12px] border border-border p-0 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
         <div className="flex flex-col items-center justify-center p-12">
           <p className="text-muted-foreground">No transactions found</p>
         </div>
@@ -72,95 +113,120 @@ export default function TransactionTable({
   }
 
   return (
-    <Card className="overflow-hidden">
-      <div className="overflow-x-auto">
-        <Table>
-          <TableHeader>
-            <TableRow className="border-b border-border bg-muted hover:bg-muted">
-              <TableHead className="text-xs font-semibold uppercase tracking-wide">
-                Transaction ID
-              </TableHead>
-              <TableHead className="text-xs font-semibold uppercase tracking-wide">
-                Timestamp
-              </TableHead>
-              <TableHead className="text-xs font-semibold uppercase tracking-wide">
-                Item &amp; SKU
-              </TableHead>
-              <TableHead className="text-xs font-semibold uppercase tracking-wide">
-                Reason
-              </TableHead>
-              <TableHead className="text-xs font-semibold uppercase tracking-wide">
-                Change
-              </TableHead>
-              <TableHead className="text-xs font-semibold uppercase tracking-wide">
-                Operator
-              </TableHead>
-              <TableHead className="w-12 text-right text-xs font-semibold uppercase tracking-wide" />
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {transactions.map((transaction) => {
-              const styles = reasonStyles[transaction.reason];
-              const isPositive = transaction.quantity_change > 0;
+    <Card className="rounded-[12px] border border-border p-0 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
+      <div className="overflow-hidden rounded-md bg-card shadow-sm">
+        <div className="overflow-x-auto">
+          <Table>
+            <TableHeader className="sticky top-0 z-10 bg-background shadow-sm [&_tr]:border-b">
+              <TableRow className="border-b transition-colors hover:bg-[#F8FAFC] dark:hover:bg-muted">
+                <TableHead className="sticky top-0 z-10 bg-background p-2 whitespace-nowrap text-foreground has-[[role=checkbox]]:pr-0">
+                  Transaction ID
+                </TableHead>
+                <TableHead className="sticky top-0 z-10 bg-background p-2 whitespace-nowrap text-foreground has-[[role=checkbox]]:pr-0">
+                  Timestamp
+                </TableHead>
+                <TableHead className="sticky top-0 z-10 bg-background p-2 whitespace-nowrap text-foreground has-[[role=checkbox]]:pr-0">
+                  Item &amp; SKU
+                </TableHead>
+                <TableHead className="sticky top-0 z-10 bg-background p-2 whitespace-nowrap text-foreground has-[[role=checkbox]]:pr-0">
+                  Reason
+                </TableHead>
+                <TableHead className="sticky top-0 z-10 bg-background p-2 whitespace-nowrap text-foreground has-[[role=checkbox]]:pr-0">
+                  Change
+                </TableHead>
+                <TableHead className="sticky top-0 z-10 bg-background p-2 whitespace-nowrap text-foreground has-[[role=checkbox]]:pr-0">
+                  Operator
+                </TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {transactions.map((transaction) => {
+                const styles =
+                  reasonStyles[transaction.reason as TransactionReason] ??
+                  defaultReasonStyles;
+                const isPositive = transaction.quantity_change > 0;
+                const reasonLabel = getReasonLabel(transaction.reason);
 
-              return (
-                <TableRow key={transaction.id} className="group hover:bg-muted/50">
-                  <TableCell className="font-mono text-xs font-semibold text-primary">
-                    #{transaction.id.slice(0, 8).toUpperCase()}
-                  </TableCell>
-                  <TableCell>
-                    <div className="text-sm font-medium text-foreground">
-                      {formatDate(transaction.timestamp)}
-                    </div>
-                    <div className="text-xs text-muted-foreground">
-                      {formatTime(transaction.timestamp)}
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <div className="font-semibold text-foreground">Item Name</div>
-                    <div className="font-mono text-xs text-muted-foreground">
-                      SKU-{transaction.item_id}
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <span
-                      className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${styles.bg} ${styles.text}`}
-                    >
-                      {getReasonLabel(transaction.reason)}
-                    </span>
-                  </TableCell>
-                  <TableCell>
-                    <span
-                      className={`font-mono text-base font-bold ${
-                        isPositive ? "text-green-700" : "text-red-700"
-                      }`}
-                    >
-                      {isPositive ? "+" : ""}{transaction.quantity_change}
-                    </span>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex items-center gap-2">
-                      <div className="flex size-6 items-center justify-center rounded-full bg-primary-foreground font-semibold text-primary">
-                        <span className="text-xs font-bold">U</span>
+                return (
+                  <TableRow
+                    key={transaction.id}
+                    className="border-b transition-colors hover:bg-[#F8FAFC] dark:hover:bg-muted"
+                  >
+                    <TableCell className="p-2 align-middle whitespace-nowrap has-[[role=checkbox]]:pr-0 font-mono text-xs font-semibold text-primary">
+                      #{transaction.id.slice(0, 8).toUpperCase()}
+                    </TableCell>
+                    <TableCell className="p-2 align-middle whitespace-nowrap has-[[role=checkbox]]:pr-0">
+                      <div className="text-sm font-medium text-foreground">
+                        {formatDate(transaction.timestamp)}
                       </div>
-                      <span className="text-sm">User Name</span>
-                    </div>
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="opacity-0 transition-opacity group-hover:opacity-100"
-                      aria-label="More options"
-                    >
-                      <MoreVertical className="size-4" />
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
+                      <div className="text-xs text-muted-foreground">
+                        {formatTime(transaction.timestamp)}
+                      </div>
+                    </TableCell>
+                    <TableCell className="p-2 align-middle whitespace-nowrap has-[[role=checkbox]]:pr-0">
+                      <div className="font-semibold text-foreground">
+                        Item Name
+                      </div>
+                      <div className="font-mono text-xs text-muted-foreground">
+                        SKU-{transaction.item_id}
+                      </div>
+                    </TableCell>
+                    <TableCell className="p-2 align-middle whitespace-nowrap has-[[role=checkbox]]:pr-0">
+                      <span
+                        className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${styles.bg} ${styles.text}`}
+                      >
+                        {reasonLabel}
+                      </span>
+                    </TableCell>
+                    <TableCell className="p-2 align-middle whitespace-nowrap has-[[role=checkbox]]:pr-0">
+                      <span
+                        className={`font-mono text-base font-bold ${
+                          isPositive ? "text-green-700" : "text-red-700"
+                        }`}
+                      >
+                        {isPositive ? "+" : ""}
+                        {transaction.quantity_change}
+                      </span>
+                    </TableCell>
+                    <TableCell className="p-2 align-middle whitespace-nowrap has-[[role=checkbox]]:pr-0">
+                      <div className="flex items-center gap-2">
+                        <div className="flex size-6 items-center justify-center rounded-full bg-primary-foreground font-semibold text-primary">
+                          <span className="text-xs font-bold">U</span>
+                        </div>
+                        <span className="text-sm">User Name</span>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </div>
+
+        <div className="flex flex-col gap-3 border-t border-border bg-background px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-sm text-muted-foreground">
+            Showing page {page} of {totalPages} • {totalItems} total items •{" "}
+            {limit} per page
+          </p>
+
+          <div className="flex items-center gap-2 self-end sm:self-auto">
+            <PaginationButton
+              disabled={page <= 1}
+              onClick={() => onPageChange?.(page - 1)}
+            >
+              <ChevronLeft className="size-4" />
+              Previous
+            </PaginationButton>
+
+            <PaginationButton
+              disabled={page >= totalPages}
+              onClick={() => onPageChange?.(page + 1)}
+            >
+              Next
+              <ChevronRight className="size-4" />
+            </PaginationButton>
+          </div>
+        </div>
       </div>
     </Card>
   );
