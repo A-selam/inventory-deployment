@@ -26,11 +26,6 @@ export default function TransactionStats({
           </span>
           <TrendingUp className="size-5 text-primary" />
         </div>
-        <p className="mb-3 text-3xl font-bold text-foreground">{totalMovements.toLocaleString()}</p>
-        <p className="flex items-center gap-1 text-sm text-green-700">
-          <ArrowUpRight className="size-4" />
-          +8.4% from last month
-        </p>
       </Card>
 
       {/* Inbound 24h */}
@@ -41,8 +36,6 @@ export default function TransactionStats({
           </span>
           <ArrowDownRight className="size-5 text-primary" />
         </div>
-        <p className="mb-3 text-3xl font-bold text-foreground">{inbound24h.toLocaleString()}</p>
-        <p className="text-sm text-muted-foreground">Received from 12 vendors</p>
       </Card>
 
       {/* Outbound 24h */}
@@ -53,8 +46,6 @@ export default function TransactionStats({
           </span>
           <ArrowUpRight className="size-5 text-primary" />
         </div>
-        <p className="mb-3 text-3xl font-bold text-foreground">{outbound24h.toLocaleString()}</p>
-        <p className="text-sm text-muted-foreground">Sold through 3 channels</p>
       </Card>
 
       {/* Anomalies */}
@@ -65,8 +56,6 @@ export default function TransactionStats({
           </span>
           <AlertCircle className="size-5 text-destructive" />
         </div>
-        <p className="mb-3 text-3xl font-bold text-destructive">{anomalies}</p>
-        <p className="text-sm font-semibold text-destructive">Needs immediate audit</p>
       </Card>
     </div>
   );
