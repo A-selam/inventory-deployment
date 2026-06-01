@@ -32,7 +32,9 @@ export async function getDashboardOverview(): Promise<DashboardData> {
       created_at:
         transaction.created_at ??
         ("timestamp" in transaction
-          ? String((transaction as { timestamp?: string | number }).timestamp ?? "")
+          ? String(
+              (transaction as { timestamp?: string | number }).timestamp ?? "",
+            )
           : ""),
     })),
   };

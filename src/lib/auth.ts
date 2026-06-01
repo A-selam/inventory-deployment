@@ -30,6 +30,7 @@ export type RegisterData = {
 export type RegisterResponse = ApiSuccessResponse<RegisterData>;
 
 export async function login(data: LoginRequest): Promise<LoginResponse> {
+  // Backend auth integration stays here for later reattachment.
   const res = await apiClient.post("/auth/login", data);
   return res.data as LoginResponse;
 }
@@ -37,6 +38,7 @@ export async function login(data: LoginRequest): Promise<LoginResponse> {
 export async function registerUser(
   data: RegisterRequest,
 ): Promise<RegisterResponse> {
+  // Backend invite integration stays here for later reattachment.
   const res = await apiClient.post("/auth/register", data);
   return res.data as RegisterResponse;
 }
