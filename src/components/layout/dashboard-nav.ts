@@ -1,9 +1,12 @@
 import type { LucideIcon } from "lucide-react";
 import {
+  AlertTriangle,
   ArrowRightLeft,
   Building2,
   LayoutDashboard,
   Package,
+  RefreshCw,
+  Upload,
   Users,
 } from "lucide-react";
 
@@ -17,9 +20,10 @@ export type DashboardNavItem = {
   href: string;
   icon: LucideIcon;
   children?: DashboardNavChild[];
+  adminOnly?: boolean;
 };
 
-export const DASHBOARD_NAV_LINKS = [
+export const DASHBOARD_NAV_LINKS: DashboardNavItem[] = [
   { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
   {
     label: "Items",
@@ -27,14 +31,16 @@ export const DASHBOARD_NAV_LINKS = [
     icon: Package,
     children: [
       { label: "All Inventory", href: "/inventory" },
-      { label: "Bulk Import", href: "/imports" },
       { label: "Categories", href: "/categories" },
     ],
   },
   { label: "Transactions", href: "/transactions", icon: ArrowRightLeft },
   { label: "Vendors", href: "/vendors", icon: Building2 },
-  { label: "Users", href: "/users", icon: Users },
-] as const satisfies readonly DashboardNavItem[];
+  { label: "Replenishment", href: "/replenishment", icon: RefreshCw },
+  { label: "Imports", href: "/imports", icon: Upload },
+  { label: "Alerts", href: "/alerts", icon: AlertTriangle },
+  { label: "Users", href: "/users", icon: Users, adminOnly: true },
+];
 
 export function isPathActive(pathname: string, href: string) {
   return pathname === href || pathname.startsWith(`${href}/`);

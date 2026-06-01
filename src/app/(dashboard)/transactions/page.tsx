@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import { useTransactionsList } from "@/hooks/useTransactions";
+import TransactionFilters from "@/components/transactions/TransactionFilters";
 import TransactionHeader from "@/components/transactions/TransactionHeader";
 import TransactionStats from "@/components/transactions/TransactionStats";
 import TransactionTable from "@/components/transactions/TransactionTable";
@@ -24,6 +25,10 @@ export default function TransactionsPage() {
 
   const page = parsePositiveInt(searchParams.get("page"), DEFAULT_PAGE);
   const limit = parsePositiveInt(searchParams.get("limit"), DEFAULT_LIMIT);
+  const inbound = searchParams.get("inbound") === "1";
+  const outbound = searchParams.get("outbound") === "1";
+  const startDate = searchParams.get("start_date") ?? undefined;
+  const endDate = searchParams.get("end_date") ?? undefined;
 
   useEffect(() => {
     const normalizedPage = searchParams.get("page");
@@ -40,7 +45,14 @@ export default function TransactionsPage() {
     router.replace(`/transactions?${params.toString()}`);
   }, [limit, page, router, searchParams]);
 
-  const { data, isLoading } = useTransactionsList({ page, limit });
+  const { data, isLoading } = useTransactionsList({
+    page,
+    limit,
+    inbound: inbound || undefined,
+    outbound: outbound || undefined,
+    start_date: startDate,
+    end_date: endDate,
+  });
 
   const transactionsData = data?.data;
 
@@ -57,6 +69,8 @@ export default function TransactionsPage() {
   return (
     <div className="space-y-8">
       <TransactionHeader />
+
+      <TransactionFilters />
 
       <TransactionStats
         totalMovements={transactionsData?.total_movement || 0}

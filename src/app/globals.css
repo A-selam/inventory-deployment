@@ -149,3 +149,13 @@
     color: #0f172a;
   }
 }
+
+@layer utilities {
+  .label-caps {
+    @apply text-[11px] font-semibold uppercase tracking-wider text-muted-foreground;
+  }
+
+  .max-w-container-max {
+    @apply mx-auto w-full max-w-350;
+  }
+}
