@@ -2,30 +2,22 @@ import { apiClient } from "@/lib/api-client";
 import type { ApiSuccessResponse } from "@/types/api";
 
 export type ReplenishmentItem = {
-  id: string;
+  item_name: string;
   sku: string;
-  name: string;
   current_stock: number;
   threshold: number;
-  reorder_quantity: number;
-  cost_price: number;
-  vendor_id: string;
-  category_id: string;
+  qty_needed: number;
+  estimated_cost: number;
 };
+
+export type ReplenishmentItemsByVendor = Record<string, ReplenishmentItem[]>;
 
 export type ReplenishmentData = {
   total_reorder_value: number;
   out_of_stock: number;
   pending_order: number;
   critical_low_stock: number;
-  items: ReplenishmentItem[];
-};
-
-export type ReplenishmentReportEntry = {
-  vendor_id: string;
-  vendor_name: string;
-  items_count: number;
-  total_reorder_value: number;
+  items_grouped_by_vendor: ReplenishmentItemsByVendor;
 };
 
 export type ReplenishmentQuery = {
@@ -35,18 +27,9 @@ export type ReplenishmentQuery = {
 
 export type ReplenishmentResponse = ApiSuccessResponse<ReplenishmentData>;
 
-export type ReplenishmentReportResponse = ApiSuccessResponse<
-  ReplenishmentReportEntry[]
->;
-
 export async function getReplenishment(
   params: ReplenishmentQuery,
 ): Promise<ReplenishmentResponse> {
   const res = await apiClient.get("/replenishment", { params });
   return res.data as ReplenishmentResponse;
-}
-
-export async function getReplenishmentReport(): Promise<ReplenishmentReportResponse> {
-  const res = await apiClient.get("/replenishment/report");
-  return res.data as ReplenishmentReportResponse;
 }
