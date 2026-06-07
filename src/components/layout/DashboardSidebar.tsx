@@ -2,13 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import {
-  Archive,
-  ChevronLeft,
-  ChevronRight,
-  Package,
-  X,
-} from "lucide-react";
+import { Archive, ChevronLeft, ChevronRight, Package, X } from "lucide-react";
 
 import StorageUsedCard from "@/components/shared/StorageCard";
 import { useSidebar } from "@/components/layout/DashboardShell";
@@ -86,12 +80,17 @@ export default function DashboardSidebar() {
       <aside
         className={cn(
           "fixed inset-y-0 left-0 z-50 flex shrink-0 flex-col border-r border-border bg-sidebar text-sidebar-foreground transition-all duration-200 lg:static lg:z-auto",
-          collapsed ? "w-[72px]" : "w-64",
+          collapsed ? "w-18" : "w-64",
           mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0",
         )}
       >
         <div className={cn("px-5 py-5", collapsed && "px-3")}>
-          <div className={cn("flex items-start gap-3", collapsed && "justify-center")}>
+          <div
+            className={cn(
+              "flex items-start gap-3",
+              collapsed && "justify-center",
+            )}
+          >
             <div className="flex size-8 shrink-0 items-center justify-center self-center rounded-sm bg-primary text-primary-foreground shadow-sm">
               <Archive className="size-4" />
             </div>
