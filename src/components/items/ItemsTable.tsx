@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 import Button from "@/components/ui/button";
@@ -19,15 +20,6 @@ const formatCurrency = (amount: number): string => {
     style: "currency",
     currency: "USD",
   }).format(amount);
-};
-
-const formatDate = (timestamp: string): string => {
-  const date = new Date(timestamp);
-  return date.toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
 };
 
 type ItemsTableProps = {
@@ -63,7 +55,13 @@ function PaginationButton({
   );
 }
 
-function StockStatusBadge({ quantity, minimum }: { quantity: number; minimum: number }) {
+function StockStatusBadge({
+  quantity,
+  minimum,
+}: {
+  quantity: number;
+  minimum: number;
+}) {
   if (quantity <= 0) {
     return (
       <span className="inline-flex items-center rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-semibold text-red-800">
@@ -145,49 +143,62 @@ export default function ItemsTable({
               </TableRow>
             </TableHeader>
             <TableBody>
-              {items.map((item) => (
-                <TableRow
-                  key={item.id}
-                  className="border-b transition-colors hover:bg-[#F8FAFC] dark:hover:bg-muted"
-                >
-                  <TableCell className="p-2 align-middle whitespace-nowrap has-[[role=checkbox]]:pr-0 font-mono text-xs font-semibold text-primary">
-                    {item.sku}
-                  </TableCell>
-                  <TableCell className="p-2 align-middle whitespace-nowrap has-[[role=checkbox]]:pr-0">
-                    <div className="font-semibold text-foreground">
-                      {item.name}
-                    </div>
-                    {item.description && (
+              {items.map((item) => {
+                const quantity = item.quantity_on_hand;
+                const minimum = item.minimum_stock_level;
+                const cost = item.cost_price;
+                const selling = item.selling_price;
+                const location = item.location;
+
+                return (
+                  <TableRow
+                    key={item.id}
+                    className="border-b transition-colors hover:bg-[#F8FAFC] dark:hover:bg-muted"
+                  >
+                    <TableCell className="p-2 align-middle whitespace-nowrap has-[[role=checkbox]]:pr-0 font-mono text-xs font-semibold text-primary">
+                      <Link
+                        className="hover:underline"
+                        href={`/inventory/${item.id}`}
+                      >
+                        {item.sku}
+                      </Link>
+                    </TableCell>
+                    <TableCell className="p-2 align-middle whitespace-nowrap has-[[role=checkbox]]:pr-0">
+                      <Link
+                        className="font-semibold text-foreground hover:underline"
+                        href={`/inventory/${item.id}`}
+                      >
+                        {item.name}
+                      </Link>
+                      {item.description && (
+                        <div className="text-xs text-muted-foreground">
+                          {item.description}
+                        </div>
+                      )}
+                    </TableCell>
+                    <TableCell className="p-2 align-middle whitespace-nowrap has-[[role=checkbox]]:pr-0">
+                      <span className="font-mono font-bold text-foreground">
+                        {quantity}
+                      </span>
                       <div className="text-xs text-muted-foreground">
-                        {item.description}
+                        Min: {minimum}
                       </div>
-                    )}
-                  </TableCell>
-                  <TableCell className="p-2 align-middle whitespace-nowrap has-[[role=checkbox]]:pr-0">
-                    <span className="font-mono font-bold text-foreground">
-                      {item.quantity_on_hand}
-                    </span>
-                    <div className="text-xs text-muted-foreground">
-                      Min: {item.minimum_stock_level}
-                    </div>
-                  </TableCell>
-                  <TableCell className="p-2 align-middle whitespace-nowrap has-[[role=checkbox]]:pr-0">
-                    <StockStatusBadge
-                      quantity={item.quantity_on_hand}
-                      minimum={item.minimum_stock_level}
-                    />
-                  </TableCell>
-                  <TableCell className="p-2 align-middle whitespace-nowrap has-[[role=checkbox]]:pr-0 text-foreground">
-                    {formatCurrency(item.cost_price)}
-                  </TableCell>
-                  <TableCell className="p-2 align-middle whitespace-nowrap has-[[role=checkbox]]:pr-0 text-foreground">
-                    {formatCurrency(item.selling_price)}
-                  </TableCell>
-                  <TableCell className="p-2 align-middle whitespace-nowrap has-[[role=checkbox]]:pr-0 text-muted-foreground">
-                    {item.location}
-                  </TableCell>
-                </TableRow>
-              ))}
+                    </TableCell>
+                    <TableCell className="p-2 align-middle whitespace-nowrap has-[[role=checkbox]]:pr-0">
+                      <StockStatusBadge quantity={quantity} minimum={minimum} />
+                    </TableCell>
+                    <TableCell className="p-2 align-middle whitespace-nowrap has-[[role=checkbox]]:pr-0 text-foreground">
+                      {formatCurrency(cost)}
+                    </TableCell>
+                    <TableCell className="p-2 align-middle whitespace-nowrap has-[[role=checkbox]]:pr-0 text-foreground">
+                      {formatCurrency(selling)}
+                    </TableCell>
+                    <TableCell className="p-2 align-middle whitespace-nowrap has-[[role=checkbox]]:pr-0 text-muted-foreground">
+                      {location}
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
             </TableBody>
           </Table>
         </div>

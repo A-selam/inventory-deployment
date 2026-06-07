@@ -8,6 +8,7 @@ import {
   searchItems,
   updateItem,
   type CreateItemRequest,
+  type ItemDetailResponse,
   type ItemResponse,
   type ItemsListQuery,
   type ItemsListResponse,
@@ -30,7 +31,7 @@ export function useItemsList(params: ItemsListQuery) {
 }
 
 export function useItem(id?: string) {
-  return useQuery<ItemResponse>({
+  return useQuery<ItemDetailResponse>({
     queryKey: itemDetailKey(id ?? ""),
     queryFn: () => getItem(id as string),
     enabled: Boolean(id),

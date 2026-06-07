@@ -1,5 +1,6 @@
 import { apiClient } from "@/lib/api-client";
 import type { ApiSuccessResponse, PaginatedResult } from "@/types/api";
+import type { ItemDetail } from "@/types/items";
 
 export type Item = {
   id: string;
@@ -37,6 +38,7 @@ export type ItemsListData = PaginatedResult<Item> & {
 export type ItemsListResponse = ApiSuccessResponse<ItemsListData>;
 
 export type ItemResponse = ApiSuccessResponse<Item>;
+export type ItemDetailResponse = ApiSuccessResponse<ItemDetail>;
 
 export type ItemsSearchResponse = ApiSuccessResponse<Item[]>;
 
@@ -90,9 +92,9 @@ export async function listItems(
   return res.data as ItemsListResponse;
 }
 
-export async function getItem(id: string): Promise<ItemResponse> {
+export async function getItem(id: string): Promise<ItemDetailResponse> {
   const res = await apiClient.get(`/items/${id}`);
-  return res.data as ItemResponse;
+  return res.data as ItemDetailResponse;
 }
 
 export async function searchItems(query: string): Promise<ItemsSearchResponse> {
