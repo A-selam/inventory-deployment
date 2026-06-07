@@ -22,12 +22,16 @@ export type Vendor = {
   is_active: boolean;
 };
 
+export type VendorSortBy = "name" | "contact_person" | "lead_time";
+
+export type VendorSortDir = "asc" | "desc";
+
 export type VendorsListQuery = {
   page?: number;
   limit?: number;
   search?: string;
-  sort_by?: string;
-  sort_dir?: "asc" | "desc";
+  sort_by?: VendorSortBy;
+  sort_dir?: VendorSortDir;
 };
 
 export type VendorsListResponse = ApiSuccessResponse<PaginatedResult<Vendor>>;
