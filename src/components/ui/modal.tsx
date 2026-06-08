@@ -11,6 +11,8 @@ type ModalProps = {
   onClose: () => void;
   title: string;
   description?: string;
+  accent?: boolean;
+  accentClassName?: string;
   children: ReactNode;
   className?: string;
   footer?: ReactNode;
@@ -21,6 +23,8 @@ export default function Modal({
   onClose,
   title,
   description,
+  accent = false,
+  accentClassName,
   children,
   className,
   footer,
@@ -44,9 +48,15 @@ export default function Modal({
           className,
         )}
       >
+        {accent ? (
+          <div className={cn("h-1 w-full bg-primary", accentClassName)} />
+        ) : null}
         <div className="flex items-start justify-between gap-4 border-b border-border px-6 py-4">
           <div className="space-y-1">
-            <h2 id="modal-title" className="text-lg font-semibold text-foreground">
+            <h2
+              id="modal-title"
+              className="text-lg font-semibold text-foreground"
+            >
               {title}
             </h2>
             {description ? (

@@ -138,8 +138,8 @@ export default function ReplenishmentPageClient() {
     category: category || undefined,
   });
 
-  const categoriesQuery = useCategoriesList({ limit: 100 });
-  const categories = categoriesQuery.data?.data.data ?? [];
+  const categoriesQuery = useCategoriesList();
+  const categories = categoriesQuery.data ?? [];
   const data = replenishmentQuery.data?.data;
 
   const hasFilters = Boolean(search || category);
