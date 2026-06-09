@@ -1,12 +1,28 @@
 import { apiClient } from "@/lib/api-client";
 import type { ApiSuccessResponse } from "@/types/api";
 
+export type VendorContactPerson = {
+  first_name: string;
+  last_name: string;
+};
+
+export type VendorContactInfo = {
+  primary_phone: string;
+  secondary_phone: string;
+  email: string;
+};
+
+export type VendorLocation = {
+  city: string;
+  country: string;
+};
+
 export type Vendor = {
   id: string;
   name: string;
-  contact_person: string;
-  contact_info: string;
-  location: string;
+  contact_person: string | VendorContactPerson;
+  contact_info: string | VendorContactInfo;
+  location: string | VendorLocation;
   lead_time: number;
   is_active: boolean;
   created_at: string;
@@ -31,9 +47,9 @@ export type VendorResponse = ApiSuccessResponse<Vendor>;
 
 export type CreateVendorRequest = {
   name: string;
-  contact_person: string;
-  contact_info: string;
-  location: string;
+  contact_person: VendorContactPerson;
+  contact_info: VendorContactInfo;
+  location: VendorLocation;
   lead_time: number;
   is_active?: boolean;
 };

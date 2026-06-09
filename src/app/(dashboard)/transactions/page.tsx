@@ -55,9 +55,23 @@ export default function TransactionsPage() {
   });
 
   const transactionsData = data?.data;
+  const allTransactions = transactionsData?.data ?? [];
+  const hasPagination =
+    typeof transactionsData?.total === "number" &&
+    typeof transactionsData?.page === "number" &&
+    typeof transactionsData?.limit === "number" &&
+    typeof transactionsData?.total_pages === "number";
 
-  const totalPages = transactionsData?.total_pages ?? 1;
-  const currentPage = Math.min(page, Math.max(totalPages, 1));
+  const totalItems = hasPagination
+    ? transactionsData.total
+    : allTransactions.length;
+  const totalPages = hasPagination
+    ? transactionsData.total_pages
+    : Math.max(1, Math.ceil((totalItems ?? 0) / limit));
+  const currentPage = Math.min(page, Math.max(totalPages ?? 0, 1));
+  const transactions = hasPagination
+    ? allTransactions
+    : allTransactions.slice((currentPage - 1) * limit, currentPage * limit);
 
   const updatePage = (nextPage: number) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -80,12 +94,12 @@ export default function TransactionsPage() {
       />
 
       <TransactionTable
-        transactions={transactionsData?.data || []}
+        transactions={transactions}
         isLoading={isLoading}
         page={currentPage}
         totalPages={totalPages}
         limit={limit}
-        totalItems={transactionsData?.total ?? 0}
+        totalItems={totalItems}
         onPageChange={updatePage}
       />
     </div>

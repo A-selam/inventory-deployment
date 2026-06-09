@@ -45,6 +45,11 @@ function parsePositiveInt(value: string | null, fallback: number) {
   return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
 }
 
+function parseBoolean(value: string | null) {
+  if (!value) return false;
+  return value === "true" || value === "1";
+}
+
 export default function InventoryPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -52,6 +57,10 @@ export default function InventoryPage() {
 
   const page = parsePositiveInt(searchParams.get("page"), DEFAULT_PAGE);
   const limit = parsePositiveInt(searchParams.get("limit"), DEFAULT_LIMIT);
+  const category = searchParams.get("category") ?? "";
+  const vendor = searchParams.get("vendor") ?? "";
+  const search = searchParams.get("search") ?? "";
+  const lowStock = parseBoolean(searchParams.get("low_stock"));
 
   useEffect(() => {
     const normalizedPage = searchParams.get("page");
@@ -68,7 +77,14 @@ export default function InventoryPage() {
     router.replace(`/inventory?${params.toString()}`);
   }, [limit, page, router, searchParams]);
 
-  const { data, isLoading } = useItemsList({ page, limit });
+  const { data, isLoading } = useItemsList({
+    page,
+    limit,
+    category: category || undefined,
+    vendor: vendor || undefined,
+    search: search || undefined,
+    low_stock: lowStock ? true : undefined,
+  });
 
   const itemsData = data?.data;
 
