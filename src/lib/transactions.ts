@@ -47,10 +47,12 @@ export type TransactionsListData = Partial<
 
 export type TransactionsListResponse = ApiSuccessResponse<TransactionsListData>;
 
+export type TransactionType = "inbound" | "outbound";
+
 export type CreateTransactionRequest = {
   item_id: string;
+  transaction_type: TransactionType;
   quantity_change: number;
-  reason: TransactionReason;
 };
 
 export type CreateTransactionResult = {
