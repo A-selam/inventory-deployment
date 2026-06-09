@@ -86,7 +86,7 @@ export default function UpdateItemForm({
     reset,
     formState: { errors },
   } = useForm<UpdateItemFormValues>({
-    resolver: standardSchemaResolver(updateItemSchema),
+    resolver: standardSchemaResolver(updateItemSchema) as never,
     defaultValues: defaults,
   });
 

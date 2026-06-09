@@ -100,14 +100,16 @@ export default function ItemSidebar({
         <div className="mt-4 divide-y divide-border">
           <MetaRow
             label="Vendor"
-            value={isVendorLoading ? "Loading..." : vendor?.name || "Unknown"}
+            value={
+              isVendorLoading ? "Loading..." : vendor?.name || item.vendor_id
+            }
           />
           <MetaRow
             label="Contact"
             value={
               isVendorLoading
                 ? "Loading..."
-                : vendor?.contact_person || "Unknown"
+                : vendor?.contact_person.toString() || "Unknown"
             }
           />
           <MetaRow
@@ -115,7 +117,9 @@ export default function ItemSidebar({
             value={
               isVendorLoading
                 ? "Loading..."
-                : vendor?.location || "Unknown"
+                : vendor
+                  ? `${vendor.location || "Unknown"}`
+                  : "Unknown"
             }
           />
           <MetaRow
