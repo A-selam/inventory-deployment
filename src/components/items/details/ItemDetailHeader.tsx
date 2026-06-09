@@ -56,10 +56,7 @@ export default function ItemDetailHeader({
               {statusLabel}
             </Badge>
             <Badge className="bg-slate-100 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-700">
-              {item.category}
-            </Badge>
-            <Badge className="bg-slate-100 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-700">
-              {item.Bin_location}
+              {item.bin_location}
             </Badge>
           </div>
         </div>

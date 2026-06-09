@@ -9,7 +9,6 @@ import {
   updateItem,
   type CreateItemRequest,
   type ItemDetailResponse,
-  type ItemResponse,
   type ItemsListQuery,
   type ItemsListResponse,
   type ItemsSearchResponse,

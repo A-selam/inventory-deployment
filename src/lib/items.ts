@@ -13,10 +13,10 @@ export type Item = {
   selling_price: number;
   category_id: string;
   vendor_id: string;
-  location: string;
+  bin_location: string;
   is_active: boolean;
   created_at: string;
-  updated_at: string;
+  status: string;
 };
 
 export type ItemsListQuery = {
@@ -53,13 +53,13 @@ export type CreateItemRequest = {
   sku: string;
   name: string;
   description: string;
-  quantity_on_hand: number;
+  initial_stock: number;
   minimum_stock_level: number;
   cost_price: number;
   selling_price: number;
   category_id: string;
   vendor_id: string;
-  location: string;
+  bin_location: string;
 };
 
 export type CreateItemResult = {
@@ -73,14 +73,12 @@ export type CreateItemResponse = ApiSuccessResponse<CreateItemResult>;
 export type UpdateItemRequest = {
   name?: string;
   description?: string;
-  quantity_on_hand?: number;
   minimum_stock_level?: number;
   cost_price?: number;
   selling_price?: number;
   category_id?: string;
   vendor_id?: string;
-  location?: string;
-  is_active?: boolean;
+  bin_location?: string;
 };
 
 export type DeleteItemResponse = ApiSuccessResponse<null>;

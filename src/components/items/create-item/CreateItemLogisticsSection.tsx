@@ -1,0 +1,109 @@
+"use client";
+
+import type { FieldErrors, UseFormRegister } from "react-hook-form";
+
+import Label from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import type { Category } from "@/lib/categories";
+import type { Vendor } from "@/lib/vendors";
+import type { CreateItemFormValues } from "./CreateItemBasicInfoSection";
+
+type CreateItemLogisticsSectionProps = {
+  register: UseFormRegister<CreateItemFormValues>;
+  errors: FieldErrors<CreateItemFormValues>;
+  disabled: boolean;
+  categories: Category[];
+  vendors: Vendor[];
+  isLoadingCategories: boolean;
+  isLoadingVendors: boolean;
+};
+
+export default function CreateItemLogisticsSection({
+  register,
+  errors,
+  disabled,
+  categories,
+  vendors,
+  isLoadingCategories,
+  isLoadingVendors,
+}: CreateItemLogisticsSectionProps) {
+  return (
+    <section className="space-y-4">
+      <div className="space-y-2">
+        <Label
+          htmlFor="create-item-category"
+          className="label-caps text-foreground"
+        >
+          Category
+        </Label>
+        <select
+          id="create-item-category"
+          className="h-11 w-full rounded-[10px] border border-input bg-transparent px-3 text-sm text-foreground shadow-xs outline-none transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40"
+          aria-invalid={Boolean(errors.category_id)}
+          disabled={disabled || isLoadingCategories}
+          {...register("category_id")}
+        >
+          <option value="">
+            {isLoadingCategories ? "Loading categories…" : "Select category"}
+          </option>
+          {categories.map((category) => (
+            <option key={category.id} value={category.id}>
+              {category.name}
+            </option>
+          ))}
+        </select>
+        {errors.category_id ? (
+          <p className="text-xs text-destructive">{errors.category_id.message}</p>
+        ) : null}
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="create-item-vendor" className="label-caps text-foreground">
+          Vendor
+        </Label>
+        <select
+          id="create-item-vendor"
+          className="h-11 w-full rounded-[10px] border border-input bg-transparent px-3 text-sm text-foreground shadow-xs outline-none transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40"
+          aria-invalid={Boolean(errors.vendor_id)}
+          disabled={disabled || isLoadingVendors}
+          {...register("vendor_id")}
+        >
+          <option value="">
+            {isLoadingVendors ? "Loading vendors…" : "Select vendor"}
+          </option>
+          {vendors.map((vendor) => (
+            <option key={vendor.id} value={vendor.id}>
+              {vendor.name}
+            </option>
+          ))}
+        </select>
+        {errors.vendor_id ? (
+          <p className="text-xs text-destructive">{errors.vendor_id.message}</p>
+        ) : null}
+      </div>
+
+      <div className="space-y-2">
+        <Label
+          htmlFor="create-item-bin-location"
+          className="label-caps text-foreground"
+        >
+          Bin Location
+        </Label>
+        <Input
+          id="create-item-bin-location"
+          placeholder="e.g. A-12-04"
+          className="h-11 rounded-[10px] px-4"
+          aria-invalid={Boolean(errors.bin_location)}
+          disabled={disabled}
+          {...register("bin_location")}
+        />
+        {errors.bin_location ? (
+          <p className="text-xs text-destructive">
+            {errors.bin_location.message}
+          </p>
+        ) : null}
+      </div>
+    </section>
+  );
+}
+

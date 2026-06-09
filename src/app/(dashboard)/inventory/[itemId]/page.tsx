@@ -30,7 +30,7 @@ export default function ItemDetailPage() {
 
   const item: ItemDetail | undefined = itemResponse?.data;
   const { data: vendorResponse, isLoading: isVendorLoading } = useVendor(
-    item?.vendor,
+    item?.vendor_id,
   );
 
   const itemTransactions = (historyResponse?.data ?? [])
@@ -40,7 +40,7 @@ export default function ItemDetailPage() {
     )
     .slice(0, 8);
 
-  const currentStock = item?.stock ?? 0;
+  const currentStock = item?.quantity_on_hand ?? 0;
   const minimumStock = item?.minimum_stock_level ?? 0;
   const derivedStatusLabel =
     currentStock <= 0
@@ -48,10 +48,10 @@ export default function ItemDetailPage() {
       : currentStock <= minimumStock
         ? "Low stock"
         : "In stock";
-  const statusLabel = item?.Status ?? derivedStatusLabel;
-  const statusClassName = item?.Status?.toLowerCase().includes("out")
+  const statusLabel = item?.status ?? derivedStatusLabel;
+  const statusClassName = item?.status?.toLowerCase().includes("out")
     ? "bg-rose-50 text-rose-700"
-    : item?.Status?.toLowerCase().includes("low")
+    : item?.status?.toLowerCase().includes("low")
       ? "bg-amber-50 text-amber-700"
       : "bg-emerald-50 text-emerald-700";
 

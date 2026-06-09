@@ -121,10 +121,9 @@ export default function VendorsPageClient() {
     sort_dir: sortDir,
   });
 
-  const vendorsData = vendorsQuery.data?.data;
-  const vendors = vendorsData?.data ?? [];
-  const totalPages = Math.max(vendorsData?.total_pages ?? 1, 1);
-  const currentPage = Math.min(page, totalPages);
+  const vendors = vendorsQuery.data?.data ?? [];
+  const totalPages = 1;
+  const currentPage = 1;
 
   const replaceWithResetPage = (
     updates: Record<string, string | undefined>,
@@ -195,16 +194,16 @@ export default function VendorsPageClient() {
 
           <VendorGrid vendors={vendors} isLoading={vendorsQuery.isLoading} />
 
-          {!vendorsQuery.isLoading && vendors.length > 0 && (
+          {/* {!vendorsQuery.isLoading && vendors.length > 0 && (
             <VendorPagination
               page={currentPage}
               totalPages={totalPages}
-              limit={vendorsData?.limit ?? limit}
-              totalItems={vendorsData?.total ?? 0}
+              limit={vendors?.limit ?? limit}
+              totalItems={vendors?.total ?? 0}
               shownItems={vendors.length}
               onPageChange={updatePage}
             />
-          )}
+          )} */}
         </section>
       )}
     </div>

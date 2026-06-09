@@ -1,7 +1,12 @@
 import type { Vendor } from "@/lib/vendors";
 
-export function formatVendorLocation(location: Vendor["location"]) {
-  return [location.city, location.country].filter(Boolean).join(", ");
+export function formatVendorLocation(location: string) {
+  return location;
+}
+
+export function parseVendorContactInfo(contactInfo: string) {
+  const [phone, email] = contactInfo.split("|").map((s) => s.trim());
+  return { phone, email };
 }
 
 export function getVendorInitials(name: string) {

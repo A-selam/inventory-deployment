@@ -1,9 +1,15 @@
-import { PackagePlus, RefreshCw, Truck } from "lucide-react";
+import { useState } from "react";
+import { PackagePlus, RefreshCw, Trash } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 import Card from "@/components/ui/card";
 import Button from "@/components/ui/button";
 import type { ItemDetail } from "@/types/items";
 import type { Vendor } from "@/lib/vendors";
+import { useDeleteItem } from "@/hooks/useItems";
+import { useToast } from "@/providers/ToastProvider";
+import UpdateItemDrawer from "@/components/items/update-item/UpdateItemDrawer";
+import DeleteItemModal from "@/components/items/delete-item/DeleteItemModal";
 
 type ItemSidebarProps = {
   item: ItemDetail;
@@ -25,6 +31,31 @@ export default function ItemSidebar({
   vendor,
   isVendorLoading = false,
 }: ItemSidebarProps) {
+  const router = useRouter();
+  const { toast } = useToast();
+  const deleteItemMutation = useDeleteItem();
+  const [updateOpen, setUpdateOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+
+  const handleDelete = async () => {
+    try {
+      await deleteItemMutation.mutateAsync(item.id);
+      toast({
+        title: "Item deleted",
+        description: `"${item.name}" was removed from inventory.`,
+        variant: "success",
+      });
+      setDeleteOpen(false);
+      router.push("/inventory");
+    } catch {
+      toast({
+        title: "Failed to delete item",
+        description: "Please try again.",
+        variant: "error",
+      });
+    }
+  };
+
   return (
     <div className="space-y-6">
       <Card className="rounded-[12px] border-border p-5 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
@@ -37,9 +68,20 @@ export default function ItemSidebar({
             variant="outline"
             size="sm"
             className="h-auto justify-start gap-2 py-4 text-sm"
+            onClick={() => setUpdateOpen(true)}
           >
             <RefreshCw className="size-4" />
             Update item
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            className="h-auto justify-start gap-2 py-4 text-sm"
+            onClick={() => setDeleteOpen(true)}
+          >
+            <Trash className="size-4" />
+            Delete
           </Button>
           <Button
             type="button"
@@ -47,15 +89,6 @@ export default function ItemSidebar({
           >
             <PackagePlus className="size-4" />
             Create transaction
-          </Button>
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            className="h-auto justify-start gap-2 py-4 text-sm"
-          >
-            <Truck className="size-4" />
-            Replenishment
           </Button>
         </div>
       </Card>
@@ -67,7 +100,7 @@ export default function ItemSidebar({
         <div className="mt-4 divide-y divide-border">
           <MetaRow
             label="Vendor"
-            value={isVendorLoading ? "Loading..." : vendor?.name || item.vendor}
+            value={isVendorLoading ? "Loading..." : vendor?.name || "Unknown"}
           />
           <MetaRow
             label="Contact"
@@ -82,9 +115,7 @@ export default function ItemSidebar({
             value={
               isVendorLoading
                 ? "Loading..."
-                : vendor
-                  ? `${vendor.location.city}, ${vendor.location.country}`
-                  : "Unknown"
+                : vendor?.location || "Unknown"
             }
           />
           <MetaRow
@@ -99,6 +130,19 @@ export default function ItemSidebar({
           />
         </div>
       </Card>
+
+      <UpdateItemDrawer
+        open={updateOpen}
+        onClose={() => setUpdateOpen(false)}
+        item={item}
+      />
+      <DeleteItemModal
+        open={deleteOpen}
+        onClose={() => setDeleteOpen(false)}
+        onConfirm={handleDelete}
+        isDeleting={deleteItemMutation.isPending}
+        item={item}
+      />
     </div>
   );
 }
