@@ -1,25 +1,16 @@
 import { apiClient } from "@/lib/api-client";
-import type { ApiSuccessResponse, PaginatedResult } from "@/types/api";
-
-export type VendorContactInfo = {
-  primary_phone: string;
-  secondary_phone?: string | null;
-  email: string;
-};
-
-export type VendorLocation = {
-  city: string;
-  country: string;
-};
+import type { ApiSuccessResponse } from "@/types/api";
 
 export type Vendor = {
   id: string;
   name: string;
   contact_person: string;
-  contact_info: VendorContactInfo;
-  location: VendorLocation;
+  contact_info: string;
+  location: string;
   lead_time: number;
   is_active: boolean;
+  created_at: string;
+  items_count: number;
 };
 
 export type VendorSortBy = "name" | "contact_person" | "lead_time";
@@ -34,15 +25,15 @@ export type VendorsListQuery = {
   sort_dir?: VendorSortDir;
 };
 
-export type VendorsListResponse = ApiSuccessResponse<PaginatedResult<Vendor>>;
+export type VendorsListResponse = ApiSuccessResponse<Vendor[]>;
 
 export type VendorResponse = ApiSuccessResponse<Vendor>;
 
 export type CreateVendorRequest = {
   name: string;
   contact_person: string;
-  contact_info: VendorContactInfo;
-  location: VendorLocation;
+  contact_info: string;
+  location: string;
   lead_time: number;
   is_active?: boolean;
 };

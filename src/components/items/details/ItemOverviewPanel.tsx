@@ -36,13 +36,8 @@ export default function ItemOverviewPanel({ item }: ItemOverviewPanelProps) {
             <div className="grid gap-4 sm:grid-cols-2">
               <DetailRow label="SKU" value={item.sku} />
               <DetailRow
-                label="Category"
-                value={item.category || "Unassigned"}
-              />
-              <DetailRow label="Vendor" value={item.vendor || "Unknown"} />
-              <DetailRow
                 label="Location"
-                value={item.Bin_location || "Unknown"}
+                value={item.bin_location || "Unknown"}
               />
             </div>
           </div>
@@ -60,7 +55,7 @@ export default function ItemOverviewPanel({ item }: ItemOverviewPanelProps) {
           </div>
 
           <div className="grid gap-4 p-6 sm:grid-cols-2">
-            <DetailRow label="Current stock" value={`${item.stock}`} />
+            <DetailRow label="Current stock" value={`${item.quantity_on_hand}`} />
             <DetailRow
               label="Minimum stock"
               value={`${item.minimum_stock_level}`}

@@ -8,6 +8,7 @@ import {
   getLeadTimeTone,
   getVendorInitials,
   getVendorStatus,
+  parseVendorContactInfo,
 } from "./vendor-utils";
 
 type VendorCardProps = {
@@ -43,6 +44,7 @@ export default function VendorCard({ vendor }: VendorCardProps) {
   const status = getVendorStatus(vendor);
   const leadTimeTone = getLeadTimeTone(vendor.lead_time);
   const location = formatVendorLocation(vendor.location);
+  const { phone, email } = parseVendorContactInfo(vendor.contact_info);
 
   return (
     <Card className="group rounded-[12px] border-border bg-card p-5 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition-all hover:-translate-y-0.5 hover:shadow-[0_14px_30px_rgba(15,23,42,0.08)]">
@@ -87,7 +89,7 @@ export default function VendorCard({ vendor }: VendorCardProps) {
           value={
             <span className="inline-flex min-w-0 items-center justify-end gap-1.5">
               <Phone className="size-4 shrink-0 text-muted-foreground" />
-              <span className="truncate">{vendor.contact_info.primary_phone}</span>
+              <span className="truncate">{phone || "N/A"}</span>
             </span>
           }
         />
@@ -96,10 +98,11 @@ export default function VendorCard({ vendor }: VendorCardProps) {
           value={
             <span className="inline-flex min-w-0 items-center justify-end gap-1.5">
               <Mail className="size-4 shrink-0 text-muted-foreground" />
-              <span className="truncate">{vendor.contact_info.email}</span>
+              <span className="truncate">{email || "N/A"}</span>
             </span>
           }
         />
+        <DetailRow label="Items" value={vendor.items_count} />
       </div>
 
       {vendor.contact_info.secondary_phone && (

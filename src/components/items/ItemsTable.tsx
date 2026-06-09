@@ -148,7 +148,7 @@ export default function ItemsTable({
                 const minimum = item.minimum_stock_level;
                 const cost = item.cost_price;
                 const selling = item.selling_price;
-                const location = item.location;
+                const location = item.bin_location;
 
                 return (
                   <TableRow

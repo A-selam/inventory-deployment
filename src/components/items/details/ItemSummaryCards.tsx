@@ -54,7 +54,7 @@ function MetricCard({
 }
 
 export default function ItemSummaryCards({ item }: ItemSummaryCardsProps) {
-  const quantity = item.stock ?? 0;
+  const quantity = item.quantity_on_hand ?? 0;
   const minimum = item.minimum_stock_level ?? 0;
   const stockValue = item.selling_price * quantity;
   const reorderGap = quantity - minimum;
@@ -95,8 +95,8 @@ export default function ItemSummaryCards({ item }: ItemSummaryCardsProps) {
       />
       <MetricCard
         title="Storage"
-        value={item.Bin_location || "Unknown"}
-        note={item.category || "No category assigned"}
+        value={item.bin_location || "Unknown"}
+        note="Location identifier"
         icon={Warehouse}
         accentClassName="bg-slate-100 text-slate-700"
       />
