@@ -206,7 +206,7 @@ export default function DashboardSidebar() {
           </div>
         </nav>
 
-        {!collapsed ? <StorageUsedCard /> : null}
+        {/* {!collapsed ? <StorageUsedCard /> : null} */}
 
         <div className="hidden border-t border-border p-3 lg:block">
           <button

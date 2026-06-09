@@ -67,7 +67,7 @@ export default function CreateItemForm({
     setValue,
     formState: { errors },
   } = useForm<CreateItemFormValues>({
-    resolver: standardSchemaResolver(createItemSchema),
+    resolver: standardSchemaResolver(createItemSchema) as never,
     defaultValues: {
       sku: "",
       name: "",
