@@ -55,7 +55,7 @@ export default function CreateVendorForm({
     handleSubmit,
     formState: { errors },
   } = useForm<CreateVendorFormValues>({
-    resolver: standardSchemaResolver(createVendorSchema),
+    resolver: standardSchemaResolver(createVendorSchema) as never,
     defaultValues: {
       name: "",
       contact_person: {
