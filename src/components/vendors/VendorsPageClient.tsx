@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { RefreshCw } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 
@@ -13,6 +13,7 @@ import VendorFilters from "./VendorFilters";
 import VendorGrid from "./VendorGrid";
 import VendorHeader from "./VendorHeader";
 import VendorPagination from "./VendorPagination";
+import CreateVendorDrawer from "./create-vendor/CreateVendorDrawer";
 
 const DEFAULT_PAGE = 1;
 const DEFAULT_LIMIT = 20;
@@ -81,6 +82,7 @@ function VendorsErrorState({
 export default function VendorsPageClient() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const [isCreateDrawerOpen, setIsCreateDrawerOpen] = useState(false);
 
   const page = parsePositiveInt(searchParams.get("page"), DEFAULT_PAGE);
   const limit = parsePositiveInt(searchParams.get("limit"), DEFAULT_LIMIT);
@@ -153,7 +155,7 @@ export default function VendorsPageClient() {
 
   return (
     <div className="space-y-8">
-      <VendorHeader />
+      <VendorHeader onAddClick={() => setIsCreateDrawerOpen(true)} />
 
       <VendorFilters
         search={search}
@@ -206,6 +208,11 @@ export default function VendorsPageClient() {
           )} */}
         </section>
       )}
+
+      <CreateVendorDrawer
+        open={isCreateDrawerOpen}
+        onClose={() => setIsCreateDrawerOpen(false)}
+      />
     </div>
   );
 }

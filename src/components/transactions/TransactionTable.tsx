@@ -131,17 +131,19 @@ function getTransactionBadgeClass(transaction: TransactionRow) {
 }
 
 function getItemName(transaction: TransactionRow) {
+  const name = transaction.item_name ?? transaction.item;
+  if (typeof name === "string" && name.trim()) return name;
+
+  const fallbackId = transaction.item_id ?? transaction.id;
   return (
-    transaction.item_name ??
-    transaction.item ??
-    `Item ${transaction.item_id.slice(0, 8).toUpperCase()}`
+    `Item ${fallbackId.slice(0, 8).toUpperCase()}`
   );
 }
 
 function getSku(transaction: TransactionRow) {
-  return (
-    transaction.sku ?? `SKU-${transaction.item_id.slice(0, 8).toUpperCase()}`
-  );
+  if (transaction.sku) return transaction.sku;
+  const fallbackId = transaction.item_id ?? transaction.id;
+  return `SKU-${fallbackId.slice(0, 8).toUpperCase()}`;
 }
 
 export default function TransactionTable({

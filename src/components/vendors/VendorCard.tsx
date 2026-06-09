@@ -1,9 +1,10 @@
-import { ChevronRight, Mail, MapPin, Phone, UserRound } from "lucide-react";
+import { Mail, MapPin, Phone, UserRound } from "lucide-react";
 
 import Card from "@/components/ui/card";
 import type { Vendor } from "@/lib/vendors";
 
 import {
+  formatVendorContactPerson,
   formatVendorLocation,
   getLeadTimeTone,
   getVendorInitials,
@@ -44,7 +45,10 @@ export default function VendorCard({ vendor }: VendorCardProps) {
   const status = getVendorStatus(vendor);
   const leadTimeTone = getLeadTimeTone(vendor.lead_time);
   const location = formatVendorLocation(vendor.location);
-  const { phone, email } = parseVendorContactInfo(vendor.contact_info);
+  const { phone, email, secondaryPhone } = parseVendorContactInfo(
+    vendor.contact_info,
+  );
+  const contactPerson = formatVendorContactPerson(vendor.contact_person);
 
   return (
     <Card className="group rounded-[12px] border-border bg-card p-5 shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition-all hover:-translate-y-0.5 hover:shadow-[0_14px_30px_rgba(15,23,42,0.08)]">
@@ -75,7 +79,7 @@ export default function VendorCard({ vendor }: VendorCardProps) {
           value={
             <span className="inline-flex min-w-0 items-center justify-end gap-1.5">
               <UserRound className="size-4 shrink-0 text-muted-foreground" />
-              <span className="truncate">{vendor.contact_person}</span>
+              <span className="truncate">{contactPerson || "N/A"}</span>
             </span>
           }
         />
@@ -105,18 +109,26 @@ export default function VendorCard({ vendor }: VendorCardProps) {
         <DetailRow label="Items" value={vendor.items_count} />
       </div>
 
-      {vendor.contact_info.secondary_phone && (
+      {secondaryPhone ? (
         <div className="mt-4 flex items-center justify-between gap-3 rounded-[10px] bg-muted px-3 py-2 text-xs text-muted-foreground">
           <span>Secondary phone</span>
-          <span className="font-medium text-foreground">
-            {vendor.contact_info.secondary_phone}
-          </span>
+          <span className="font-medium text-foreground">{secondaryPhone}</span>
         </div>
-      )}
+      ) : null}
 
       <div className="mt-4 flex items-center justify-between border-t border-border pt-4 text-sm text-muted-foreground">
-        <span>{vendor.is_active ? "Supplier available" : "Supplier paused"}</span>
-        <ChevronRight className="size-4 transition-transform group-hover:translate-x-0.5" />
+        <button
+          className="inline-flex items-center justify-center rounded-md px-3 py-1.5 text-xs font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
+          onClick={() => console.log("Edit vendor:", vendor.id)}
+        >
+          Edit
+        </button>
+        <button
+          className="inline-flex items-center justify-center rounded-md px-3 py-1.5 text-xs font-medium text-destructive transition-colors hover:bg-destructive/10"
+          onClick={() => console.log("Delete vendor:", vendor.id)}
+        >
+          Delete
+        </button>
       </div>
     </Card>
   );

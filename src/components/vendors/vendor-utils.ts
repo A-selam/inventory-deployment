@@ -1,12 +1,31 @@
 import type { Vendor } from "@/lib/vendors";
 
-export function formatVendorLocation(location: string) {
-  return location;
+export function formatVendorLocation(location: Vendor["location"]) {
+  if (typeof location === "string") return location || "Location unavailable";
+  if (!location.city && !location.country) return "Location unavailable";
+  if (!location.city) return location.country;
+  if (!location.country) return location.city;
+  return `${location.city}, ${location.country}`;
 }
 
-export function parseVendorContactInfo(contactInfo: string) {
-  const [phone, email] = contactInfo.split("|").map((s) => s.trim());
-  return { phone, email };
+export function parseVendorContactInfo(contactInfo: Vendor["contact_info"]) {
+  if (typeof contactInfo === "string") {
+    const [phone, email] = contactInfo.split("|").map((part) => part.trim());
+    return { phone: phone || "", secondaryPhone: "", email: email || "" };
+  }
+
+  return {
+    phone: contactInfo.primary_phone,
+    secondaryPhone: contactInfo.secondary_phone,
+    email: contactInfo.email,
+  };
+}
+
+export function formatVendorContactPerson(
+  contactPerson: Vendor["contact_person"],
+) {
+  if (typeof contactPerson === "string") return contactPerson;
+  return `${contactPerson.first_name} ${contactPerson.last_name}`.trim();
 }
 
 export function getVendorInitials(name: string) {

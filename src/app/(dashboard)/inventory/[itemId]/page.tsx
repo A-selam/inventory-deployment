@@ -34,9 +34,16 @@ export default function ItemDetailPage() {
   );
 
   const itemTransactions = (historyResponse?.data ?? [])
-    .filter((transaction) => transaction.item_id === item?.id)
+    .filter((transaction) => {
+      if (!item) return false;
+      if (transaction.item_id) return transaction.item_id === item.id;
+      if (transaction.sku) return transaction.sku === item.sku;
+      return false;
+    })
     .sort(
-      (left, right) => +new Date(right.timestamp) - +new Date(left.timestamp),
+      (left, right) =>
+        +new Date(String(right.created_at ?? right.timestamp ?? "")) -
+        +new Date(String(left.created_at ?? left.timestamp ?? "")),
     )
     .slice(0, 8);
 

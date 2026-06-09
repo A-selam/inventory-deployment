@@ -189,14 +189,14 @@ export default function ReplenishmentPageClient() {
         />
       ) : data ? (
         <div className="space-y-6">
-          <ReplenishmentStats
+          {/* <ReplenishmentStats
             totalReorderValue={data.total_reorder_value}
             outOfStock={data.out_of_stock}
             pendingOrder={data.pending_order}
             criticalLowStock={data.critical_low_stock}
-          />
+          /> */}
 
-          <ReplenishmentFilters
+          {/* <ReplenishmentFilters
             search={search}
             category={category}
             categories={categories}
@@ -204,7 +204,7 @@ export default function ReplenishmentPageClient() {
             onSearchChange={handleSearchChange}
             onCategoryChange={handleCategoryChange}
             onClear={handleClearFilters}
-          />
+          /> */}
 
           <section className="space-y-4">
             <div className="flex flex-wrap items-center justify-between gap-3">

@@ -16,25 +16,61 @@ type ItemActivityTableProps = {
   transactions: Transaction[];
 };
 
-function formatDate(timestamp: string) {
+function parseDate(value: string | number | null | undefined) {
+  if (value === null || value === undefined) return null;
+
+  if (typeof value === "number") {
+    const ms = value < 1_000_000_000_000 ? value * 1000 : value;
+    const date = new Date(ms);
+    return Number.isNaN(date.getTime()) ? null : date;
+  }
+
+  const trimmed = value.trim();
+  if (!trimmed) return null;
+
+  if (/^\d+$/.test(trimmed)) {
+    const numeric = Number(trimmed);
+    if (!Number.isNaN(numeric)) {
+      const ms = numeric < 1_000_000_000_000 ? numeric * 1000 : numeric;
+      const date = new Date(ms);
+      return Number.isNaN(date.getTime()) ? null : date;
+    }
+  }
+
+  const parsed = new Date(trimmed);
+  return Number.isNaN(parsed.getTime()) ? null : parsed;
+}
+
+function formatDate(value: string | number | null | undefined) {
+  const date = parseDate(value);
+  if (!date) return "—";
+
   return new Intl.DateTimeFormat("en-US", {
     month: "short",
     day: "numeric",
     hour: "numeric",
     minute: "2-digit",
-  }).format(new Date(timestamp));
+  }).format(date);
 }
 
-function typeLabel(reason: Transaction["reason"]) {
-  switch (reason) {
+function typeLabel(transaction: Transaction) {
+  const raw = transaction.transaction_type ?? transaction.reason ?? "";
+  const normalized = String(raw).trim().toLowerCase();
+
+  if (normalized.includes("out")) return "Stock out";
+  if (normalized.includes("in")) return "Stock in";
+
+  switch (normalized) {
     case "received stock":
       return "Stock in";
     case "sold":
       return "Stock out";
     case "damaged":
       return "Adjustment";
-    default:
+    case "audit correction":
       return "Audit correction";
+    default:
+      return normalized ? normalized : "—";
   }
 }
 
@@ -75,12 +111,18 @@ export default function ItemActivityTable({
         <TableBody>
           {transactions.map((transaction) => {
             const positive = transaction.quantity_change > 0;
+            const timestamp = transaction.created_at ?? transaction.timestamp;
+            const userLabel =
+              transaction.operator_name ??
+              transaction.Opratore_name ??
+              transaction.user_id ??
+              "—";
             return (
               <TableRow key={transaction.id}>
                 <TableCell className="font-mono text-xs font-semibold text-primary">
                   {transaction.id}
                 </TableCell>
-                <TableCell>{formatDate(transaction.timestamp)}</TableCell>
+                <TableCell>{formatDate(timestamp)}</TableCell>
                 <TableCell>
                   <Badge
                     className={
@@ -89,7 +131,7 @@ export default function ItemActivityTable({
                         : "bg-slate-100 text-slate-700"
                     }
                   >
-                    {typeLabel(transaction.reason)}
+                    {typeLabel(transaction)}
                   </Badge>
                 </TableCell>
                 <TableCell
@@ -103,7 +145,7 @@ export default function ItemActivityTable({
                   {transaction.quantity_change}
                 </TableCell>
                 <TableCell className="text-muted-foreground">
-                  {transaction.user_id}
+                  {userLabel}
                 </TableCell>
               </TableRow>
             );
