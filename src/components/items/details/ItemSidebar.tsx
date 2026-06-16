@@ -86,6 +86,7 @@ export default function ItemSidebar({
           <Button
             type="button"
             className="h-auto justify-start gap-2 py-4 text-sm"
+            onClick={() => router.push(`/inventory/${item.id}/transactions/new`)}
           >
             <PackagePlus className="size-4" />
             Create transaction
