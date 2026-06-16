@@ -51,23 +51,42 @@ export default function CreateTransactionForm({
     formState: { errors },
   } = useForm<CreateTransactionValues>({
     resolver: standardSchemaResolver(createTransactionSchema) as never,
+    mode: "onChange",
+    reValidateMode: "onChange",
     defaultValues: {
       transactionType: "inbound",
       quantity: 1,
     },
   });
 
-  const transactionType = useWatch({ control, name: "transactionType" });
-  const quantity = useWatch({ control, name: "quantity" });
+  const transactionType = useWatch({
+    control,
+    name: "transactionType",
+    defaultValue: "inbound",
+  });
+  const quantity = useWatch({ control, name: "quantity", defaultValue: 1 });
 
-  const safeQuantity = Number.isFinite(quantity) ? Math.max(0, quantity) : 0;
+  const safeQuantity =
+    typeof quantity === "number" && Number.isFinite(quantity)
+      ? Math.max(0, quantity)
+      : 0;
+  const isQuantityValid = safeQuantity >= 1;
   const netChange =
     transactionType === "outbound" ? -Math.abs(safeQuantity) : safeQuantity;
   const newBalance = currentStock + netChange;
   const invalidOutbound = transactionType === "outbound" && newBalance < 0;
+  const isFormInvalid = !isQuantityValid || invalidOutbound;
 
   async function onSubmit(values: CreateTransactionValues) {
     const safeQuantity = Math.abs(values.quantity);
+
+    if (safeQuantity < 1) {
+      setError("quantity", {
+        type: "validate",
+        message: "Quantity must be greater than 0.",
+      });
+      return;
+    }
 
     if (values.transactionType === "outbound" && safeQuantity > currentStock) {
       setError("quantity", {
@@ -109,7 +128,7 @@ export default function CreateTransactionForm({
   }
 
   const isSubmitting = createTransactionMutation.isPending;
-  const submitDisabled = isSubmitting || invalidOutbound;
+  const submitDisabled = isSubmitting || isFormInvalid;
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -170,7 +189,7 @@ export default function CreateTransactionForm({
               className="h-11 rounded-xl px-4"
               aria-invalid={Boolean(errors.quantity)}
               disabled={isSubmitting}
-              {...register("quantity")}
+              {...register("quantity", { valueAsNumber: true })}
             />
             <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">
               units
@@ -186,6 +205,11 @@ export default function CreateTransactionForm({
               Outbound transactions cannot reduce stock below 0.
             </p>
           ) : null}
+          {!errors.quantity && !isQuantityValid ? (
+            <p className="text-xs text-destructive">
+              Quantity must be greater than 0.
+            </p>
+          ) : null}
         </div>
       </div>
 
@@ -193,7 +217,7 @@ export default function CreateTransactionForm({
         currentStock={currentStock}
         netChange={netChange}
         newBalance={newBalance}
-        status={invalidOutbound ? "invalid" : "ready"}
+        status={isFormInvalid ? "invalid" : "ready"}
       />
 
       <div className="flex flex-col-reverse justify-end gap-3 sm:flex-row">
@@ -211,7 +235,9 @@ export default function CreateTransactionForm({
           className="h-11 rounded-xl px-5"
           disabled={submitDisabled}
         >
-          {isSubmitting ? <Loader2 className="size-4 animate-spin" /> : null}
+          {isSubmitting ? (
+            <Loader2 className="size-4 animate-spin mr-2" />
+          ) : null}
           <span>Submit Transaction</span>
         </Button>
       </div>

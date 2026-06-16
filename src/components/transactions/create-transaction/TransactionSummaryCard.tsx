@@ -10,7 +10,7 @@ type TransactionSummaryCardProps = {
 };
 
 function formatSigned(value: number) {
-  if (value === 0) return "0";
+  if (value === 0) return "—";
   return value > 0 ? `+${value}` : String(value);
 }
 
@@ -20,8 +20,10 @@ export default function TransactionSummaryCard({
   newBalance,
   status,
 }: TransactionSummaryCardProps) {
-  const changeClassName =
-    netChange === 0
+  const showPlaceholder = status === "invalid" && netChange === 0;
+  const changeClassName = showPlaceholder
+    ? "text-rose-700"
+    : netChange === 0
       ? "text-muted-foreground"
       : netChange > 0
         ? "text-emerald-700"
@@ -63,17 +65,16 @@ export default function TransactionSummaryCard({
               changeClassName,
             )}
           >
-            {formatSigned(netChange)}
+            {showPlaceholder ? "—" : formatSigned(netChange)}
           </p>
         </div>
         <div className="rounded-xl border border-border bg-card p-4 text-center">
           <p className="label-caps text-muted-foreground">New Balance</p>
           <p className="mt-1 text-2xl font-semibold tabular-nums text-foreground">
-            {newBalance}
+            {showPlaceholder ? "—" : newBalance}
           </p>
         </div>
       </div>
     </div>
   );
 }
-
