@@ -17,6 +17,8 @@ export type LoginResponse = ApiSuccessResponse<LoginData>;
 
 export type RegisterRequest = {
   token: string;
+  name: string;
+  email: string;
   password: string;
 };
 
@@ -88,7 +90,7 @@ export async function registerUser(
   data: RegisterRequest,
 ): Promise<RegisterResponse> {
   // Backend invite integration stays here for later reattachment.
-  const res = await apiClient.post("/auth/register", data);
+  const res = await apiClient.post("/auth/setup-password", data);
   return res.data as RegisterResponse;
 }
 

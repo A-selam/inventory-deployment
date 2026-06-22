@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useRouter } from "next/navigation";
-import { AlertTriangle, Loader2, Lock, ShieldCheck } from "lucide-react";
+import { AlertTriangle, Loader2, Lock, Mail, ShieldCheck, User } from "lucide-react";
 import Button from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Label from "@/components/ui/label";
@@ -43,7 +43,12 @@ export default function InviteAcceptanceForm({
   async function onSubmit(values: InviteValues) {
     if (!token) return;
 
-    await acceptInviteMutation.mutateAsync({ ...values, token });
+    await acceptInviteMutation.mutateAsync({
+      token,
+      name: values.name.trim(),
+      email: values.email.trim().toLowerCase(),
+      password: values.password,
+    });
     router.replace("/login?invited=1");
   }
 
@@ -84,6 +89,45 @@ export default function InviteAcceptanceForm({
           </p>
         </div>
       ) : null}
+
+      <div className="space-y-1.5">
+        <Label>FULL NAME</Label>
+        <div className="relative">
+          <div className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+            <User className="size-4" />
+          </div>
+          <Input
+            placeholder="Your full name"
+            className="pl-10"
+            aria-invalid={Boolean(errors.name)}
+            disabled={missingToken}
+            {...register("name")}
+          />
+        </div>
+        {errors.name && (
+          <p className="text-xs text-destructive">{errors.name.message}</p>
+        )}
+      </div>
+
+      <div className="space-y-1.5">
+        <Label>EMAIL ADDRESS</Label>
+        <div className="relative">
+          <div className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+            <Mail className="size-4" />
+          </div>
+          <Input
+            placeholder="name@company.com"
+            className="pl-10"
+            aria-invalid={Boolean(errors.email)}
+            disabled={missingToken}
+            inputMode="email"
+            {...register("email")}
+          />
+        </div>
+        {errors.email && (
+          <p className="text-xs text-destructive">{errors.email.message}</p>
+        )}
+      </div>
 
       <div className="space-y-1.5">
         <Label>PASSWORD</Label>
