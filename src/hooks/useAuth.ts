@@ -7,7 +7,6 @@ import {
   type LoginResponse,
 } from "@/lib/auth";
 import type { LoginValues } from "@/schemas/login";
-import type { InviteValues } from "@/schemas/invite";
 import { useAuthStore } from "@/stores/auth-store";
 
 /**
@@ -32,10 +31,9 @@ export function useAuth() {
   const acceptInviteMutation = useMutation<
     RegisterResponse,
     unknown,
-    InviteValues & { token: string }
+    RegisterRequest
   >({
-    mutationFn: ({ token, password }) =>
-      acceptInvitation({ token, password } satisfies RegisterRequest),
+    mutationFn: (data) => acceptInvitation(data),
   });
 
   return { loginMutation, acceptInviteMutation } as const;

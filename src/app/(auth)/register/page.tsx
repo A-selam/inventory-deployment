@@ -11,7 +11,7 @@ export default async function InviteAcceptancePage({
   return (
     <AuthShell
       title="Accept Invitation"
-      description="Set your password to activate your account and join the workspace."
+      description="Enter your details and set a password to activate your account and join the workspace."
       footer={
         <div className="mt-2 text-center text-sm text-muted-foreground">
           <span>Already activated? </span>
