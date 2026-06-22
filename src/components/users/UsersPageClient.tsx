@@ -1,117 +1,182 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Mail, Users } from "lucide-react";
+import { RefreshCw, UserPlus } from "lucide-react";
 
-import EmptyState from "@/components/shared/EmptyState";
 import PageHeader from "@/components/shared/PageHeader";
+import UsersFiltersBar from "@/components/users/UsersFiltersBar";
+import UsersPagination from "@/components/users/UsersPagination";
+import UsersTable from "@/components/users/UsersTable";
+import InviteUserModal from "@/components/users/InviteUserModal";
+import Button from "@/components/ui/button";
 import Card from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Skeleton } from "@/components/ui/skeleton";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { useUsersList } from "@/hooks/useUsers";
 import type { UserRole } from "@/lib/users";
 
-const roles: Array<UserRole | ""> = ["", "admin", "operator", "viewer"];
+const DEFAULT_PAGE = 1;
+const DEFAULT_LIMIT = 20;
+
+function parsePositiveInt(value: string | null, fallback: number) {
+  if (!value) return fallback;
+  const parsed = Number.parseInt(value, 10);
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
+}
+
+function parseRole(value: string | null): UserRole | undefined {
+  if (value === "admin" || value === "operator" || value === "viewer")
+    return value;
+  return undefined;
+}
+
+function buildUsersHref(
+  current: Pick<URLSearchParams, "toString">,
+  updates: Record<string, string | number | undefined>,
+) {
+  const params = new URLSearchParams(current.toString());
+
+  Object.entries(updates).forEach(([key, value]) => {
+    if (value === undefined || value === "") params.delete(key);
+    else params.set(key, String(value));
+  });
+
+  const query = params.toString();
+  return query ? `/users?${query}` : "/users";
+}
+
+function UsersErrorState({
+  message,
+  onRetry,
+}: {
+  message: string;
+  onRetry: () => void;
+}) {
+  return (
+    <Card className="rounded-[12px] border-border bg-card p-6 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
+      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        <div>
+          <div className="label-caps">Users unavailable</div>
+          <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">
+            {message}
+          </p>
+        </div>
+        <Button type="button" className="h-11 gap-2 px-4" onClick={onRetry}>
+          <RefreshCw className="size-4" />
+          Retry
+        </Button>
+      </div>
+    </Card>
+  );
+}
 
 export default function UsersPageClient() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const role = (searchParams.get("role") as UserRole | null) ?? undefined;
+  const [inviteOpen, setInviteOpen] = useState(false);
+  const page = parsePositiveInt(searchParams.get("page"), DEFAULT_PAGE);
+  const limit = parsePositiveInt(searchParams.get("limit"), DEFAULT_LIMIT);
+  const role = parseRole(searchParams.get("role"));
+  const search = searchParams.get("search") ?? "";
 
-  const query = useUsersList({ role, page: 1, limit: 50 });
+  useEffect(() => {
+    const normalizedPage = searchParams.get("page");
+    const normalizedLimit = searchParams.get("limit");
+    const normalizedRole = searchParams.get("role");
+    const normalizedSearch = searchParams.get("search") ?? "";
+
+    if (
+      normalizedPage === String(page) &&
+      normalizedLimit === String(limit) &&
+      normalizedRole === (role ?? null) &&
+      normalizedSearch === search
+    ) {
+      return;
+    }
+
+    router.replace(
+      buildUsersHref(searchParams, {
+        page,
+        limit,
+        role,
+        search: search || undefined,
+      }),
+    );
+  }, [limit, page, role, router, search, searchParams]);
+
+  const query = useUsersList({
+    role,
+    page,
+    limit,
+    search: search || undefined,
+  });
   const payload = query.data?.data;
-  const users = payload?.data.data ?? [];
+  const paginated = payload?.data;
+  const users = paginated?.data ?? [];
+  const totalPages = paginated?.total_pages ?? 1;
+  const totalUsers = payload?.total_users ?? paginated?.total ?? 0;
 
   return (
     <div className="space-y-8">
       <PageHeader
         title="Users"
         description="Manage workspace members, roles, and pending invitations."
+        actions={
+          <Button
+            type="button"
+            className="h-11 gap-2 rounded-xl px-5"
+            onClick={() => setInviteOpen(true)}
+          >
+            <UserPlus className="size-4" />
+            Invite User
+          </Button>
+        }
       />
 
-      <div className="grid gap-4 sm:grid-cols-3">
-        <Card className="rounded-[12px] border-border p-5">
-          <div className="label-caps">Total users</div>
-          <p className="mt-2 text-2xl font-semibold">{payload?.total_users ?? 0}</p>
-        </Card>
-        <Card className="rounded-[12px] border-border p-5">
-          <div className="label-caps">Active now</div>
-          <p className="mt-2 text-2xl font-semibold">{payload?.active_now ?? 0}</p>
-        </Card>
-        <Card className="rounded-[12px] border-border border-dashed p-5">
-          <div className="label-caps">Pending invites</div>
-          <div className="mt-2 flex items-center gap-2">
-            <Mail className="size-4 text-muted-foreground" />
-            <p className="text-2xl font-semibold">{payload?.pending_invites ?? 0}</p>
-          </div>
-        </Card>
-      </div>
+      <UsersFiltersBar
+        role={role}
+        onRoleChange={(nextRole) =>
+          router.push(
+            buildUsersHref(searchParams, {
+              role: nextRole,
+              search: search || undefined,
+              page: DEFAULT_PAGE,
+              limit,
+            }),
+          )
+        }
+      />
 
-      <Card className="rounded-[12px] border-border p-4">
-        <label className="text-sm text-muted-foreground" htmlFor="role-filter">
-          Filter by role
-        </label>
-        <select
-          id="role-filter"
-          className="mt-2 h-9 w-full max-w-xs rounded-md border border-input bg-transparent px-2.5 text-sm sm:w-auto"
-          value={role ?? ""}
-          onChange={(event) => {
-            const params = new URLSearchParams(searchParams.toString());
-            if (event.target.value) params.set("role", event.target.value);
-            else params.delete("role");
-            router.push(`/users?${params.toString()}`);
-          }}
-        >
-          {roles.map((entry) => (
-            <option key={entry || "all"} value={entry}>
-              {entry ? entry.charAt(0).toUpperCase() + entry.slice(1) : "All roles"}
-            </option>
-          ))}
-        </select>
-      </Card>
-
-      {query.isLoading ? (
-        <Skeleton className="h-64 w-full" />
-      ) : users.length === 0 ? (
-        <EmptyState
-          icon={Users}
-          title="No users match this filter"
-          description="Try another role filter or invite a new team member."
+      {query.isError ? (
+        <UsersErrorState
+          message={query.error.message || "We could not load users right now."}
+          onRetry={() => query.refetch()}
         />
       ) : (
-        <Card className="overflow-hidden rounded-[12px] border-border p-0">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>Email</TableHead>
-                <TableHead>Role</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {users.map((user) => (
-                <TableRow key={user.id}>
-                  <TableCell className="font-medium">{user.name}</TableCell>
-                  <TableCell>{user.email}</TableCell>
-                  <TableCell>
-                    <Badge className="bg-muted text-foreground capitalize">
-                      {user.role}
-                    </Badge>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </Card>
+        <section className="space-y-0">
+          <UsersTable users={users} isLoading={query.isLoading} />
+          {!query.isLoading ? (
+            <UsersPagination
+              page={paginated?.page ?? page}
+              totalPages={totalPages}
+              limit={paginated?.limit ?? limit}
+              totalItems={totalUsers}
+              shownItems={users.length}
+              onPageChange={(nextPage) =>
+                router.push(
+                  buildUsersHref(searchParams, {
+                    role,
+                    search: search || undefined,
+                    page: nextPage,
+                    limit,
+                  }),
+                )
+              }
+            />
+          ) : null}
+        </section>
       )}
+
+      <InviteUserModal open={inviteOpen} onClose={() => setInviteOpen(false)} />
     </div>
   );
 }

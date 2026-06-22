@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   inviteUser,
   listUsers,
+  type InviteUserData,
   type InviteUserRequest,
   type UsersListQuery,
   type UsersListResponse,
@@ -20,7 +21,7 @@ export function useUsersList(params: UsersListQuery) {
 export function useInviteUser() {
   const queryClient = useQueryClient();
 
-  return useMutation({
+  return useMutation<InviteUserData, unknown, InviteUserRequest>({
     mutationFn: (data: InviteUserRequest) => inviteUser(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users"] });
