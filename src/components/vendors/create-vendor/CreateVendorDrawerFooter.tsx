@@ -7,12 +7,14 @@ type CreateVendorDrawerFooterProps = {
   formId: string;
   isSubmitting: boolean;
   onCancel: () => void;
+  submitLabel?: string;
 };
 
 export default function CreateVendorDrawerFooter({
   formId,
   isSubmitting,
   onCancel,
+  submitLabel = "Create Vendor",
 }: CreateVendorDrawerFooterProps) {
   return (
     <div className="flex items-center gap-3 border-t border-border bg-card px-6 py-5">
@@ -32,7 +34,7 @@ export default function CreateVendorDrawerFooter({
         disabled={isSubmitting}
       >
         {isSubmitting ? <Loader2 className="size-4 animate-spin" /> : null}
-        <span>Create Vendor</span>
+        <span>{submitLabel}</span>
       </Button>
     </div>
   );

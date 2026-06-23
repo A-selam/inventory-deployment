@@ -1,4 +1,5 @@
 import axios, {
+  AxiosError,
   type AxiosResponse,
   type InternalAxiosRequestConfig,
 } from "axios";
@@ -68,6 +69,37 @@ apiClient.interceptors.request.use((config: LoggedRequestConfig) => {
 apiClient.interceptors.response.use(
   (response) => {
     logApiResponse(response);
+
+    const payload = response.data as unknown;
+    if (payload && typeof payload === "object" && "success" in payload) {
+      const success = (payload as { success?: unknown }).success;
+      if (success === false) {
+        const code =
+          typeof (payload as { error?: { code?: unknown } }).error?.code ===
+          "string"
+            ? ((payload as { error?: { code?: string } }).error?.code as string)
+            : "API_ERROR";
+
+        const message =
+          typeof (payload as { error?: { message?: unknown } }).error
+            ?.message === "string"
+            ? ((payload as { error?: { message?: string } }).error
+                ?.message as string)
+            : "Request failed";
+
+        const businessError = new AxiosError(
+          message,
+          code,
+          response.config,
+          response.request,
+          response,
+        );
+
+        logApiError(businessError);
+        return Promise.reject(businessError);
+      }
+    }
+
     return response;
   },
   (error) => {

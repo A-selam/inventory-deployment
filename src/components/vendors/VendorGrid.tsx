@@ -9,6 +9,8 @@ import VendorCard from "./VendorCard";
 type VendorGridProps = {
   vendors: Vendor[];
   isLoading?: boolean;
+  onEditVendor?: (vendor: Vendor) => void;
+  onDeleteVendor?: (vendor: Vendor) => void;
 };
 
 function VendorGridSkeleton() {
@@ -56,7 +58,12 @@ function VendorEmptyState() {
   );
 }
 
-export default function VendorGrid({ vendors, isLoading = false }: VendorGridProps) {
+export default function VendorGrid({
+  vendors,
+  isLoading = false,
+  onEditVendor,
+  onDeleteVendor,
+}: VendorGridProps) {
   if (isLoading) return <VendorGridSkeleton />;
 
   if (vendors.length === 0) return <VendorEmptyState />;
@@ -64,7 +71,12 @@ export default function VendorGrid({ vendors, isLoading = false }: VendorGridPro
   return (
     <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
       {vendors.map((vendor) => (
-        <VendorCard key={vendor.id} vendor={vendor} />
+        <VendorCard
+          key={vendor.id}
+          vendor={vendor}
+          onEdit={onEditVendor}
+          onDelete={onDeleteVendor}
+        />
       ))}
     </div>
   );
