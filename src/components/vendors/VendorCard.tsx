@@ -14,6 +14,8 @@ import {
 
 type VendorCardProps = {
   vendor: Vendor;
+  onEdit?: (vendor: Vendor) => void;
+  onDelete?: (vendor: Vendor) => void;
 };
 
 function DetailRow({
@@ -41,7 +43,11 @@ function DetailRow({
   );
 }
 
-export default function VendorCard({ vendor }: VendorCardProps) {
+export default function VendorCard({
+  vendor,
+  onEdit,
+  onDelete,
+}: VendorCardProps) {
   const status = getVendorStatus(vendor);
   const leadTimeTone = getLeadTimeTone(vendor.lead_time);
   const location = formatVendorLocation(vendor.location);
@@ -119,13 +125,14 @@ export default function VendorCard({ vendor }: VendorCardProps) {
       <div className="mt-4 flex items-center justify-between border-t border-border pt-4 text-sm text-muted-foreground">
         <button
           className="inline-flex items-center justify-center rounded-md px-3 py-1.5 text-xs font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
-          onClick={() => console.log("Edit vendor:", vendor.id)}
+          onClick={() => onEdit?.(vendor)}
         >
           Edit
         </button>
         <button
-          className="inline-flex items-center justify-center rounded-md px-3 py-1.5 text-xs font-medium text-destructive transition-colors hover:bg-destructive/10"
-          onClick={() => console.log("Delete vendor:", vendor.id)}
+          className="inline-flex items-center justify-center rounded-md px-3 py-1.5 text-xs font-medium text-destructive transition-colors hover:bg-destructive/10 disabled:cursor-not-allowed"
+          onClick={() => onDelete?.(vendor)}
+          disabled={vendor.items_count > 0}
         >
           Delete
         </button>

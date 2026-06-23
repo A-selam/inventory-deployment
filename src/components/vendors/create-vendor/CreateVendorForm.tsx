@@ -5,10 +5,12 @@ import { useForm } from "react-hook-form";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { z } from "zod";
 
-import { useCreateVendor } from "@/hooks/useVendors";
+import { useCreateVendor, useUpdateVendor } from "@/hooks/useVendors";
 import { getApiErrorMessage } from "@/lib/api-errors";
+import type { Vendor } from "@/lib/vendors";
 import { useToast } from "@/providers/ToastProvider";
 
+import { parseVendorContactInfo } from "../vendor-utils";
 import CreateVendorBasicInfoSection from "./CreateVendorBasicInfoSection";
 import CreateVendorContactSection from "./CreateVendorContactSection";
 import CreateVendorLocationSection from "./CreateVendorLocationSection";
@@ -36,52 +38,127 @@ const createVendorSchema = z.object({
 
 export type CreateVendorFormValues = z.infer<typeof createVendorSchema>;
 
+const emptyFormValues: CreateVendorFormValues = {
+  name: "",
+  contact_person: {
+    first_name: "",
+    last_name: "",
+  },
+  contact_info: {
+    primary_phone: "",
+    secondary_phone: "",
+    email: "",
+  },
+  location: {
+    city: "",
+    country: "",
+  },
+  lead_time: 0,
+};
+
+function splitLocation(raw: string) {
+  const trimmed = raw.trim();
+  if (!trimmed) return { city: "", country: "" };
+
+  const parts = trimmed
+    .split(",")
+    .map((part) => part.trim())
+    .filter(Boolean);
+
+  if (parts.length === 1) return { city: parts[0] ?? "", country: "" };
+  return { city: parts[0] ?? "", country: parts.slice(1).join(", ") };
+}
+
+function splitContactPerson(raw: string) {
+  const trimmed = raw.trim();
+  if (!trimmed) return { first_name: "", last_name: "" };
+  const parts = trimmed.split(/\s+/).filter(Boolean);
+  if (parts.length === 1) return { first_name: parts[0] ?? "", last_name: "" };
+  return { first_name: parts[0] ?? "", last_name: parts.slice(1).join(" ") };
+}
+
+function toFormValues(vendor: Vendor): CreateVendorFormValues {
+  const contactInfo = parseVendorContactInfo(vendor.contact_info);
+  const contactPerson =
+    typeof vendor.contact_person === "string"
+      ? splitContactPerson(vendor.contact_person)
+      : vendor.contact_person;
+
+  const location =
+    typeof vendor.location === "string"
+      ? splitLocation(vendor.location)
+      : vendor.location;
+
+  return {
+    name: vendor.name ?? "",
+    contact_person: {
+      first_name: contactPerson.first_name ?? "",
+      last_name: contactPerson.last_name ?? "",
+    },
+    contact_info: {
+      primary_phone: contactInfo.phone ?? "",
+      secondary_phone: contactInfo.secondaryPhone ?? "",
+      email: contactInfo.email ?? "",
+    },
+    location: {
+      city: location.city ?? "",
+      country: location.country ?? "",
+    },
+    lead_time: vendor.lead_time ?? 0,
+  };
+}
+
 type CreateVendorFormProps = {
   formId: string;
-  onCreated: () => void;
+  mode?: "create" | "edit";
+  vendor?: Vendor;
+  onSuccess: () => void;
   onSubmittingChange: (value: boolean) => void;
 };
 
 export default function CreateVendorForm({
   formId,
-  onCreated,
+  mode = "create",
+  vendor,
+  onSuccess,
   onSubmittingChange,
 }: CreateVendorFormProps) {
   const { toast } = useToast();
   const createVendorMutation = useCreateVendor();
+  const updateVendorMutation = useUpdateVendor(mode === "edit" ? vendor?.id : undefined);
+  const isEdit = mode === "edit";
 
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<CreateVendorFormValues>({
     resolver: standardSchemaResolver(createVendorSchema) as never,
-    defaultValues: {
-      name: "",
-      contact_person: {
-        first_name: "",
-        last_name: "",
-      },
-      contact_info: {
-        primary_phone: "",
-        secondary_phone: "",
-        email: "",
-      },
-      location: {
-        city: "",
-        country: "",
-      },
-      lead_time: 0,
-    },
+    defaultValues: emptyFormValues,
   });
 
   useEffect(() => {
-    onSubmittingChange(createVendorMutation.isPending);
-  }, [createVendorMutation.isPending, onSubmittingChange]);
+    onSubmittingChange(isEdit ? updateVendorMutation.isPending : createVendorMutation.isPending);
+  }, [
+    createVendorMutation.isPending,
+    isEdit,
+    onSubmittingChange,
+    updateVendorMutation.isPending,
+  ]);
+
+  useEffect(() => {
+    if (isEdit && vendor) {
+      reset(toFormValues(vendor));
+      return;
+    }
+
+    reset(emptyFormValues);
+  }, [isEdit, reset, vendor]);
 
   async function onSubmit(values: CreateVendorFormValues) {
     try {
-      await createVendorMutation.mutateAsync({
+      const payload = {
         ...values,
         name: values.name.trim(),
         contact_person: {
@@ -98,25 +175,42 @@ export default function CreateVendorForm({
           city: values.location.city.trim(),
           country: values.location.country.trim(),
         },
-      });
+      };
 
-      toast({
-        title: "Vendor created",
-        description: `${values.name} has been successfully added to the network.`,
-        variant: "success",
-      });
+      if (isEdit) {
+        if (!vendor?.id) {
+          throw new Error("Missing vendor id");
+        }
 
-      onCreated();
+        await updateVendorMutation.mutateAsync(payload);
+
+        toast({
+          title: "Vendor updated",
+          description: `${values.name} has been successfully updated.`,
+          variant: "success",
+        });
+      } else {
+        await createVendorMutation.mutateAsync(payload);
+
+        toast({
+          title: "Vendor created",
+          description: `${values.name} has been successfully added to the network.`,
+          variant: "success",
+        });
+      }
+
+      onSuccess();
     } catch (error) {
       toast({
-        title: "Failed to create vendor",
+        title: isEdit ? "Failed to update vendor" : "Failed to create vendor",
         description: getApiErrorMessage(error),
         variant: "error",
       });
     }
   }
 
-  const isSubmitting = createVendorMutation.isPending;
+  const activeMutation = isEdit ? updateVendorMutation : createVendorMutation;
+  const isSubmitting = activeMutation.isPending;
 
   return (
     <form
@@ -156,11 +250,11 @@ export default function CreateVendorForm({
           />
         </section>
 
-        {createVendorMutation.isError ? (
+        {activeMutation.isError ? (
           <p className="text-sm text-destructive">
             {getApiErrorMessage(
-              createVendorMutation.error,
-              "Failed to create vendor",
+              activeMutation.error,
+              isEdit ? "Failed to update vendor" : "Failed to create vendor",
             )}
           </p>
         ) : null}
