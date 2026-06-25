@@ -5,8 +5,8 @@ import type { DashboardData } from "@/types/dashboard";
 export type DashboardResponse = ApiSuccessResponse<DashboardData>;
 
 export type DashboardSearchResult = {
-  items: Array<{ id: string; sku: string; name: string }>;
-  vendors: Array<{ id: string; name: string }>;
+  inventory: Array<{ id: string; sku: string; name: string; qty: number }>;
+  vendors: Array<{ id: string; name: string; email: string }>;
 };
 
 export type DashboardSearchResponse = ApiSuccessResponse<DashboardSearchResult>;
