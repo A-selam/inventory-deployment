@@ -2,16 +2,16 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   getImportHistory,
   importCsv,
-  type ImportCsvResponse,
+  type ImportCsvResult,
   type ImportHistoryQuery,
-  type ImportHistoryResponse,
+  type ImportHistoryEntry,
 } from "@/lib/imports";
 
 const importHistoryKey = (params?: ImportHistoryQuery) =>
   ["imports", "history", params ?? {}] as const;
 
 export function useImportHistory(params: ImportHistoryQuery) {
-  return useQuery<ImportHistoryResponse>({
+  return useQuery<ImportHistoryEntry[]>({
     queryKey: importHistoryKey(params),
     queryFn: () => getImportHistory(params),
   });
@@ -20,9 +20,10 @@ export function useImportHistory(params: ImportHistoryQuery) {
 export function useImportCsv() {
   const queryClient = useQueryClient();
 
-  return useMutation<ImportCsvResponse, unknown, File>({
+  return useMutation<ImportCsvResult, unknown, File>({
     mutationFn: (file) => importCsv(file),
-    onSuccess: () => {
+    onSuccess: (result) => {
+      if (result.status !== "success") return;
       queryClient.invalidateQueries({ queryKey: ["imports"] });
       queryClient.invalidateQueries({ queryKey: ["items"] });
     },
