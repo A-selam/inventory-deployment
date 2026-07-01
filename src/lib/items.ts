@@ -59,7 +59,9 @@ export type CreateItemRequest = {
   selling_price: number;
   category_id: string;
   vendor_id: string;
+  warehouse_id: string;
   bin_location: string;
+  Itemtypes: string;
 };
 
 export type CreateItemResult = {
@@ -82,6 +84,52 @@ export type UpdateItemRequest = {
 };
 
 export type DeleteItemResponse = ApiSuccessResponse<null>;
+
+export type CheckSkuResult = {
+  sku: string;
+  available: boolean;
+  message: string;
+};
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return Boolean(value) && typeof value === "object";
+}
+
+function normalizeCheckSkuResult(payload: unknown): CheckSkuResult | null {
+  if (!payload) return null;
+
+  if (isRecord(payload) && isRecord(payload.data)) {
+    const nested = payload.data;
+    if (
+      typeof nested.sku === "string" &&
+      typeof nested.available === "boolean" &&
+      typeof nested.message === "string"
+    ) {
+      return nested as CheckSkuResult;
+    }
+    if (isRecord(nested) && isRecord(nested.data)) {
+      const twice = nested.data;
+      if (
+        typeof twice.sku === "string" &&
+        typeof twice.available === "boolean" &&
+        typeof twice.message === "string"
+      ) {
+        return twice as CheckSkuResult;
+      }
+    }
+  }
+
+  if (
+    isRecord(payload) &&
+    typeof payload.sku === "string" &&
+    typeof payload.available === "boolean" &&
+    typeof payload.message === "string"
+  ) {
+    return payload as CheckSkuResult;
+  }
+
+  return null;
+}
 
 export async function listItems(
   params: ItemsListQuery,
@@ -110,6 +158,15 @@ export async function createItem(
 ): Promise<CreateItemResponse> {
   const res = await apiClient.post("/items", data);
   return res.data as CreateItemResponse;
+}
+
+export async function checkSkuAvailability(sku: string): Promise<CheckSkuResult> {
+  const res = await apiClient.get("/items/check-sku", {
+    params: { sku },
+  });
+  const normalized = normalizeCheckSkuResult(res.data as unknown);
+  if (!normalized) throw new Error("Invalid SKU validation response");
+  return normalized;
 }
 
 export async function updateItem(

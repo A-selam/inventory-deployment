@@ -6,6 +6,7 @@ import Label from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import type { Category } from "@/lib/categories";
 import type { Vendor } from "@/lib/vendors";
+import type { Warehouse } from "@/lib/warehouses";
 import type { CreateItemFormValues } from "./CreateItemBasicInfoSection";
 
 type CreateItemLogisticsSectionProps = {
@@ -14,8 +15,10 @@ type CreateItemLogisticsSectionProps = {
   disabled: boolean;
   categories: Category[];
   vendors: Vendor[];
+  warehouses: Warehouse[];
   isLoadingCategories: boolean;
   isLoadingVendors: boolean;
+  isLoadingWarehouses: boolean;
 };
 
 export default function CreateItemLogisticsSection({
@@ -24,8 +27,10 @@ export default function CreateItemLogisticsSection({
   disabled,
   categories,
   vendors,
+  warehouses,
   isLoadingCategories,
   isLoadingVendors,
+  isLoadingWarehouses,
 }: CreateItemLogisticsSectionProps) {
   return (
     <section className="space-y-4">
@@ -79,6 +84,57 @@ export default function CreateItemLogisticsSection({
         </select>
         {errors.vendor_id ? (
           <p className="text-xs text-destructive">{errors.vendor_id.message}</p>
+        ) : null}
+      </div>
+
+      <div className="space-y-2">
+        <Label
+          htmlFor="create-item-warehouse"
+          className="label-caps text-foreground"
+        >
+          Warehouse
+        </Label>
+        <select
+          id="create-item-warehouse"
+          className="h-11 w-full rounded-[10px] border border-input bg-transparent px-3 text-sm text-foreground shadow-xs outline-none transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40"
+          aria-invalid={Boolean(errors.warehouse_id)}
+          disabled={disabled || isLoadingWarehouses}
+          {...register("warehouse_id")}
+        >
+          <option value="">
+            {isLoadingWarehouses ? "Loading warehouses…" : "Select warehouse"}
+          </option>
+          {warehouses.map((warehouse) => (
+            <option key={warehouse.id} value={warehouse.id}>
+              {warehouse.name}
+            </option>
+          ))}
+        </select>
+        {errors.warehouse_id ? (
+          <p className="text-xs text-destructive">
+            {errors.warehouse_id.message}
+          </p>
+        ) : null}
+      </div>
+
+      <div className="space-y-2">
+        <Label
+          htmlFor="create-item-item-type"
+          className="label-caps text-foreground"
+        >
+          Item Type
+        </Label>
+        <select
+          id="create-item-item-type"
+          className="h-11 w-full rounded-[10px] border border-input bg-transparent px-3 text-sm text-foreground shadow-xs outline-none transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40"
+          aria-invalid={Boolean(errors.Itemtypes)}
+          disabled={disabled}
+          {...register("Itemtypes")}
+        >
+          <option value="SALLABLE">SALLABLE</option>
+        </select>
+        {errors.Itemtypes ? (
+          <p className="text-xs text-destructive">{errors.Itemtypes.message}</p>
         ) : null}
       </div>
 

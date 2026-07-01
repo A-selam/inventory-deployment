@@ -1,6 +1,10 @@
 "use client";
 
-import type { FieldErrors, UseFormRegister } from "react-hook-form";
+import type {
+  FieldErrors,
+  UseFormRegister,
+  UseFormRegisterReturn,
+} from "react-hook-form";
 
 import { Input } from "@/components/ui/input";
 import Label from "@/components/ui/label";
@@ -15,19 +19,27 @@ export type CreateItemFormValues = {
   selling_price: number;
   category_id: string;
   vendor_id: string;
+  warehouse_id: string;
   bin_location: string;
+  Itemtypes: string;
 };
 
 type CreateItemBasicInfoSectionProps = {
   register: UseFormRegister<CreateItemFormValues>;
+  skuField?: UseFormRegisterReturn;
   errors: FieldErrors<CreateItemFormValues>;
   disabled: boolean;
+  skuStatusMessage?: string;
+  skuStatusTone?: "muted" | "success" | "error";
 };
 
 export default function CreateItemBasicInfoSection({
   register,
+  skuField,
   errors,
   disabled,
+  skuStatusMessage,
+  skuStatusTone = "muted",
 }: CreateItemBasicInfoSectionProps) {
   return (
     <section className="space-y-4">
@@ -37,14 +49,26 @@ export default function CreateItemBasicInfoSection({
         </Label>
         <Input
           id="create-item-sku"
-          placeholder="e.g. SL-1234-A"
+          placeholder="e.g. SKU-001"
           className="h-11 rounded-[10px] px-4"
           aria-invalid={Boolean(errors.sku)}
           disabled={disabled}
-          {...register("sku")}
+          {...(skuField ?? register("sku"))}
         />
         {errors.sku ? (
           <p className="text-xs text-destructive">{errors.sku.message}</p>
+        ) : skuStatusMessage ? (
+          <p
+            className={
+              skuStatusTone === "success"
+                ? "text-xs text-emerald-700"
+                : skuStatusTone === "error"
+                  ? "text-xs text-destructive"
+                  : "text-xs text-muted-foreground"
+            }
+          >
+            {skuStatusMessage}
+          </p>
         ) : null}
       </div>
 
