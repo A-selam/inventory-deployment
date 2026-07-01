@@ -214,7 +214,7 @@ export default function DashboardHeader() {
               <CircleChevronLeft className="size-5" />
             )}
           </button>
-          <div className="min-w-0 truncate text-2xl font-bold tracking-tight text-foreground sm:text-base">
+          <div className="min-w-0 truncate text-sm font-semibold tracking-tight text-foreground sm:text-xl">
             {pageTitle}
           </div>
         </div>

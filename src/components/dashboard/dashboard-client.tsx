@@ -153,7 +153,7 @@ export default function DashboardClient() {
       <OverviewCards data={query.data} />
 
       <div>
-        <StockChart data={query.data.stock_movement_chart} />
+        <StockChart yearlyData={query.data.stock_movement_chart} />
       </div>
 
       <RecentTransactionsTable transactions={query.data.recent_transactions} />
