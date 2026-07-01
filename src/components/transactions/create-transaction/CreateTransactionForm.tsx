@@ -102,7 +102,7 @@ export default function CreateTransactionForm({
     }
 
     const quantityChange =
-      values.transactionType === "outbound" ? -safeQuantity : safeQuantity;
+      values.transactionType === "outbound" ? safeQuantity : safeQuantity;
 
     try {
       await createTransactionMutation.mutateAsync({

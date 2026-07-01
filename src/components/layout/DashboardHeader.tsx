@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  Bell,
   Building2,
   Loader2,
   Menu,
@@ -24,6 +23,7 @@ import { useSidebar } from "@/components/layout/DashboardShell";
 import { Input } from "@/components/ui/input";
 import { useDashboardSearch } from "@/hooks/useDashboard";
 import Card from "@/components/ui/card";
+import NotificationsBell from "@/components/notifications/NotificationsBell";
 import { cn } from "@/lib/utils";
 
 const EMPTY_INVENTORY: Array<{
@@ -357,13 +357,7 @@ export default function DashboardHeader() {
       </div>
 
       <div className="flex items-center gap-2">
-        <button
-          type="button"
-          className="inline-flex size-10 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-sidebar-foreground"
-          aria-label="Notifications"
-        >
-          <Bell className="size-4" />
-        </button>
+        <NotificationsBell />
         <button
           type="button"
           className="hidden size-10 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-sidebar-foreground sm:inline-flex"
