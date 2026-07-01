@@ -12,27 +12,17 @@ type ItemsHeaderProps = {
 
 export default function ItemsHeader({ onAddItem }: ItemsHeaderProps) {
   return (
-    <div className="mb-6 space-y-4">
-      <div className="flex items-start justify-between gap-4">
-        <div>
-          <h1 className="mb-1 text-3xl font-bold tracking-tight text-foreground">
-            Inventory
-          </h1>
-          <p className="text-sm text-muted-foreground">
-            Manage and track all items in your warehouse.
-          </p>
-        </div>
-        {onAddItem ? (
-          <Button
-            type="button"
-            className="h-11 shrink-0 gap-2 rounded-[10px] px-4"
-            onClick={onAddItem}
-          >
-            <Plus className="size-4" />
-            Add Item
-          </Button>
-        ) : null}
-      </div>
+    <div className="flex flex-wrap items-center justify-end gap-3">
+      {onAddItem ? (
+        <Button
+          type="button"
+          className="h-11 shrink-0 gap-2 rounded-[10px] px-4"
+          onClick={onAddItem}
+        >
+          <Plus className="size-4" />
+          Add Item
+        </Button>
+      ) : null}
     </div>
   );
 }

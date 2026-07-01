@@ -32,12 +32,12 @@ export default function DashboardShell({ children }: { children: ReactNode }) {
       value={{ collapsed, setCollapsed, mobileOpen, setMobileOpen }}
     >
       <DashboardGuard>
-        <div className="min-h-screen flex bg-background">
+        <div className="flex h-dvh min-h-screen overflow-hidden bg-background">
           <DashboardSidebar />
 
-          <div className="flex min-w-0 flex-1 flex-col">
+          <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
             <DashboardHeader />
-            <main className="flex-1 overflow-auto p-4 sm:p-6 lg:p-8 max-w-container-max">
+            <main className="flex-1 overflow-y-auto overflow-x-hidden p-4 sm:p-6 lg:p-8 max-w-container-max">
               {children}
             </main>
           </div>

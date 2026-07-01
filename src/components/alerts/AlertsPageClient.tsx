@@ -4,7 +4,6 @@ import { useMemo } from "react";
 import { AlertCircle, AlertTriangle, RefreshCw } from "lucide-react";
 
 import EmptyState from "@/components/shared/EmptyState";
-import PageHeader from "@/components/shared/PageHeader";
 import Button from "@/components/ui/button";
 import Card from "@/components/ui/card";
 // import { Skeleton } from "@/components/ui/skeleton";
@@ -94,31 +93,25 @@ export default function AlertsPageClient() {
 
   return (
     <div className="space-y-8">
-      <PageHeader
-        title="Alerts"
-        description="Review items that are below their stock thresholds and need attention."
-        actions={
-          <div className="flex items-center gap-3">
-            {lastUpdatedLabel ? (
-              <div className="hidden text-xs text-muted-foreground sm:block">
-                Updated {lastUpdatedLabel}
-              </div>
-            ) : null}
-            <Button
-              type="button"
-              variant="outline"
-              className="h-11 gap-2 rounded-xl px-5"
-              onClick={() => query.refetch()}
-              disabled={query.isFetching}
-            >
-              <RefreshCw
-                className={cn("size-4", query.isFetching && "animate-spin")}
-              />
-              Refresh
-            </Button>
+      <div className="flex flex-wrap items-center justify-end gap-3">
+        {lastUpdatedLabel ? (
+          <div className="hidden text-xs text-muted-foreground sm:block">
+            Updated {lastUpdatedLabel}
           </div>
-        }
-      />
+        ) : null}
+        <Button
+          type="button"
+          variant="outline"
+          className="h-11 gap-2 rounded-xl px-5"
+          onClick={() => query.refetch()}
+          disabled={query.isFetching}
+        >
+          <RefreshCw
+            className={cn("size-4", query.isFetching && "animate-spin")}
+          />
+          Refresh
+        </Button>
+      </div>
 
       <AlertsStatsCards
         isLoading={query.isLoading}

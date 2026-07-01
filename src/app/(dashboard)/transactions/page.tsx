@@ -5,7 +5,6 @@ import { useRouter, useSearchParams } from "next/navigation";
 
 import { useTransactionsList } from "@/hooks/useTransactions";
 import TransactionFilters from "@/components/transactions/TransactionFilters";
-import TransactionHeader from "@/components/transactions/TransactionHeader";
 import TransactionStats from "@/components/transactions/TransactionStats";
 import TransactionTable from "@/components/transactions/TransactionTable";
 
@@ -82,8 +81,6 @@ export default function TransactionsPage() {
 
   return (
     <div className="space-y-8">
-      <TransactionHeader />
-
       <TransactionFilters />
 
       <TransactionStats
