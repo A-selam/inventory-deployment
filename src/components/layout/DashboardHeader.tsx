@@ -1,13 +1,6 @@
 "use client";
 
-import {
-  Building2,
-  Loader2,
-  Menu,
-  Package,
-  Search,
-  Settings,
-} from "lucide-react";
+import { Building2, Loader2, Menu, Package, Search } from "lucide-react";
 import {
   useEffect,
   useId,
@@ -358,13 +351,6 @@ export default function DashboardHeader() {
 
       <div className="flex items-center gap-2">
         <NotificationsBell />
-        <button
-          type="button"
-          className="hidden size-10 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-sidebar-foreground sm:inline-flex"
-          aria-label="Settings"
-        >
-          <Settings className="size-4" />
-        </button>
 
         <ProfileCard />
       </div>

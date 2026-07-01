@@ -4,7 +4,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Archive, ChevronLeft, ChevronRight, Package, X } from "lucide-react";
 
-import StorageUsedCard from "@/components/shared/StorageCard";
 import { useSidebar } from "@/components/layout/DashboardShell";
 import { useAuthStore } from "@/stores/auth-store";
 import { cn } from "@/lib/utils";
@@ -175,7 +174,7 @@ export default function DashboardSidebar() {
                           onClick={closeMobile}
                           aria-current={active ? "page" : undefined}
                           className={cn(
-                            "block rounded-md border-l-4 py-1.5 pl-4 text-sm transition-colors",
+                            "block border-l-4 py-1.5 pl-4 text-sm transition-colors",
                             active
                               ? "border-primary bg-sidebar-accent text-primary"
                               : "border-transparent text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground",
