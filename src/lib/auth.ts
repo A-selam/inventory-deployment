@@ -9,8 +9,9 @@ export type LoginRequest = {
 
 export type LoginData = {
   access_token: string;
+  refresh_token: string;
   token_type: string;
-  // user: User;
+  user: User;
 };
 
 export type LoginResponse = ApiSuccessResponse<LoginData>;
@@ -64,6 +65,18 @@ function normalizeLoginResponse(payload: unknown): LoginResponse {
         : typeof raw.token_type === "string"
           ? raw.token_type
           : "bearer";
+    const refresh_token =
+      typeof rawData?.refresh_token === "string"
+        ? rawData.refresh_token
+        : typeof raw.refresh_token === "string"
+          ? raw.refresh_token
+          : undefined;
+    const user =
+      typeof rawData?.user === "object"
+        ? rawData.user
+        : typeof raw.user === "object"
+          ? raw.user
+          : undefined;
 
     if (access_token) {
       return {
@@ -72,6 +85,8 @@ function normalizeLoginResponse(payload: unknown): LoginResponse {
         data: {
           access_token,
           token_type,
+          refresh_token: refresh_token ?? "",
+          user: user ?? ({} as User),
         },
       };
     }
