@@ -45,15 +45,23 @@ export const useAuthStore = create<AuthState>()(
     (set) => ({
       access_token: null,
       token_type: null,
+      refresh_token: null,
       user: null,
       persistSession: false,
-      setAuth: (access_token, token_type, user, persistSession = true) => {
-        set({ access_token, token_type, user, persistSession });
+      setAuth: (
+        access_token,
+        token_type,
+        refresh_token,
+        user,
+        persistSession = true,
+      ) => {
+        set({ access_token, token_type, refresh_token, user, persistSession });
       },
       logout: () => {
         set({
           access_token: null,
           token_type: null,
+          refresh_token: null,
           user: null,
           persistSession: false,
         });
@@ -66,6 +74,7 @@ export const useAuthStore = create<AuthState>()(
       partialize: (state) => ({
         access_token: state.access_token,
         token_type: state.token_type,
+        refresh_token: state.refresh_token,
         user: state.user,
         persistSession: state.persistSession,
       }),

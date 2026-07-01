@@ -22,7 +22,13 @@ export function useAuth() {
       setAuth(
         res.data.access_token,
         res.data.token_type,
-        { id: "string", name: "string", email: "string", role: "admin" },
+        res.data.refresh_token,
+        {
+          id: res.data.user.id,
+          name: res.data.user.name,
+          email: res.data.user.email,
+          role: res.data.user.role,
+        },
         variables?.persistSession ?? false,
       );
     },
