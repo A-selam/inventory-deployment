@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { RefreshCw, UserPlus } from "lucide-react";
 
-import PageHeader from "@/components/shared/PageHeader";
 import UsersFiltersBar from "@/components/users/UsersFiltersBar";
 import UsersPagination from "@/components/users/UsersPagination";
 import UsersTable from "@/components/users/UsersTable";
@@ -117,20 +116,16 @@ export default function UsersPageClient() {
 
   return (
     <div className="space-y-8">
-      <PageHeader
-        title="Users"
-        description="Manage workspace members, roles, and pending invitations."
-        actions={
-          <Button
-            type="button"
-            className="h-11 gap-2 rounded-xl px-5"
-            onClick={() => setInviteOpen(true)}
-          >
-            <UserPlus className="size-4" />
-            Invite User
-          </Button>
-        }
-      />
+      <div className="flex flex-wrap items-center justify-end gap-3">
+        <Button
+          type="button"
+          className="h-11 gap-2 rounded-xl px-5"
+          onClick={() => setInviteOpen(true)}
+        >
+          <UserPlus className="size-4" />
+          Invite User
+        </Button>
+      </div>
 
       <UsersFiltersBar
         role={role}

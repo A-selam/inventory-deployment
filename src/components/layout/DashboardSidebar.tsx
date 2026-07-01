@@ -2,9 +2,10 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Archive, ChevronLeft, ChevronRight, Package, X } from "lucide-react";
+import { Archive, ChevronRight, Package, X } from "lucide-react";
 
 import { useSidebar } from "@/components/layout/DashboardShell";
+import ProfileCard from "@/components/shared/ProfileCard";
 import { useAuthStore } from "@/stores/auth-store";
 import { cn } from "@/lib/utils";
 
@@ -51,7 +52,7 @@ function DashboardNavLink({
 
 export default function DashboardSidebar() {
   const pathname = usePathname();
-  const { collapsed, setCollapsed, mobileOpen, setMobileOpen } = useSidebar();
+  const { collapsed, mobileOpen, setMobileOpen } = useSidebar();
   const userRole = useAuthStore((state) => state.user?.role);
 
   const navItems = DASHBOARD_NAV_LINKS.filter(
@@ -78,7 +79,7 @@ export default function DashboardSidebar() {
 
       <aside
         className={cn(
-          "fixed inset-y-0 left-0 z-50 flex shrink-0 flex-col border-r border-border bg-sidebar text-sidebar-foreground transition-all duration-200 lg:static lg:z-auto",
+          "fixed inset-y-0 left-0 z-50 flex h-dvh shrink-0 flex-col border-r border-border bg-sidebar text-sidebar-foreground transition-all duration-200 lg:static lg:z-auto",
           collapsed ? "w-18" : "w-64",
           mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0",
         )}
@@ -207,21 +208,8 @@ export default function DashboardSidebar() {
 
         {/* {!collapsed ? <StorageUsedCard /> : null} */}
 
-        <div className="hidden border-t border-border p-3 lg:block">
-          <button
-            type="button"
-            onClick={() => setCollapsed(!collapsed)}
-            className="flex w-full items-center justify-center gap-2 rounded-md px-3 py-2 text-sm text-muted-foreground hover:bg-sidebar-accent"
-          >
-            {collapsed ? (
-              <ChevronRight className="size-4" />
-            ) : (
-              <>
-                <ChevronLeft className="size-4" />
-                <span>Collapse</span>
-              </>
-            )}
-          </button>
+        <div className={cn("border-t border-border p-3", collapsed && "px-2")}>
+          <ProfileCard collapsed={collapsed} />
         </div>
       </aside>
     </>

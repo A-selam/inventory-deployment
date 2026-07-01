@@ -7,7 +7,6 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Button from "@/components/ui/button";
 import Card from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import PageHeader from "@/components/shared/PageHeader";
 import { useCategoriesList } from "@/hooks/useCategories";
 import { useReplenishment } from "@/hooks/useReplenishment";
 
@@ -172,11 +171,6 @@ export default function ReplenishmentPageClient() {
 
   return (
     <div className="space-y-8">
-      <PageHeader
-        title="Inventory Replenishment"
-        description="Review low-stock items, group orders by vendor, and keep critical items moving before they become stockouts."
-      />
-
       {replenishmentQuery.isLoading ? (
         <ReplenishmentLoadingState />
       ) : replenishmentQuery.isError ? (

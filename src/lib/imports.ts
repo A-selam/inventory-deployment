@@ -7,7 +7,10 @@ type ApiSuccessEnvelope<T> = {
 
 function unwrapSuccessEnvelope<T>(payload: unknown): unknown {
   if (!payload || typeof payload !== "object") return payload;
-  if (!("success" in payload) || (payload as { success?: unknown }).success !== true)
+  if (
+    !("success" in payload) ||
+    (payload as { success?: unknown }).success !== true
+  )
     return payload;
   if (!("data" in payload)) return payload;
   return (payload as ApiSuccessEnvelope<T>).data;
@@ -21,12 +24,13 @@ export type ImportCsvError = {
 
 export type ImportCsvResult =
   | {
-      status: "success" | string;
+      status: "success";
       records: number;
     }
   | {
-      status: "failed" | string;
+      status: "failed";
       errors: ImportCsvError[];
+      rawStatus?: string;
     };
 
 export type ImportHistoryEntry = {
@@ -53,7 +57,10 @@ export async function importCsv(file: File): Promise<ImportCsvResult> {
 
   const raw = unwrapSuccessEnvelope(res.data);
   if (!raw || typeof raw !== "object") {
-    return { status: "failed", errors: [{ row: 0, field: "", message: "Invalid response" }] };
+    return {
+      status: "failed",
+      errors: [{ row: 0, field: "", message: "Invalid response" }],
+    };
   }
 
   const status =
@@ -66,7 +73,7 @@ export async function importCsv(file: File): Promise<ImportCsvResult> {
       typeof (raw as { records?: unknown }).records === "number"
         ? (raw as { records: number }).records
         : 0;
-    return { status, records };
+    return { status: "success", records };
   }
 
   const errorsRaw = (raw as { errors?: unknown }).errors;
@@ -91,7 +98,7 @@ export async function importCsv(file: File): Promise<ImportCsvResult> {
         .filter((entry): entry is ImportCsvError => Boolean(entry))
     : [];
 
-  return { status, errors };
+  return { status: "failed", rawStatus: status, errors };
 }
 
 export async function getImportHistory(
@@ -127,7 +134,9 @@ export async function getImportHistory(
 
         return { file_name, date, records, status, file_link };
       })
-      .filter((entry): entry is ImportHistoryEntry => Boolean(entry?.file_name));
+      .filter((entry): entry is ImportHistoryEntry =>
+        Boolean(entry?.file_name),
+      );
   }
 
   return [];
