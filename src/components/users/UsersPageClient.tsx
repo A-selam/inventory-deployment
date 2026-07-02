@@ -116,30 +116,31 @@ export default function UsersPageClient() {
 
   return (
     <div className="space-y-8">
-      <div className="flex flex-wrap items-center justify-end gap-3">
-        <Button
-          type="button"
-          className="h-11 gap-2 rounded-xl px-5"
-          onClick={() => setInviteOpen(true)}
-        >
-          <UserPlus className="size-4" />
-          Invite User
-        </Button>
+      <div className="flex items-center justify-between gap-4">
+        <UsersFiltersBar
+          role={role}
+          onRoleChange={(nextRole) =>
+            router.push(
+              buildUsersHref(searchParams, {
+                role: nextRole,
+                search: search || undefined,
+                page: DEFAULT_PAGE,
+                limit,
+              }),
+            )
+          }
+        />
+        <div className="flex flex-wrap items-center justify-end gap-3">
+          <Button
+            type="button"
+            className="h-11 gap-2 rounded-xl px-5"
+            onClick={() => setInviteOpen(true)}
+          >
+            <UserPlus className="size-4" />
+            Invite User
+          </Button>
+        </div>
       </div>
-
-      <UsersFiltersBar
-        role={role}
-        onRoleChange={(nextRole) =>
-          router.push(
-            buildUsersHref(searchParams, {
-              role: nextRole,
-              search: search || undefined,
-              page: DEFAULT_PAGE,
-              limit,
-            }),
-          )
-        }
-      />
 
       {query.isError ? (
         <UsersErrorState

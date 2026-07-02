@@ -228,7 +228,7 @@ export default function ItemsTable({
                         </TableCell>
                         <TableCell className="p-2 align-middle whitespace-nowrap has-[[role=checkbox]]:pr-0">
                           <Link
-                            className="font-semibold text-foreground hover:underline"
+                            className="font-semibold text-foreground underline"
                             href={`/inventory/${item.id}`}
                           >
                             {item.name}
