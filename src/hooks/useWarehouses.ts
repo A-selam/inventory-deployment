@@ -9,14 +9,17 @@ import {
   type CreateWarehouseRequest,
   type UpdateWarehouseRequest,
   type Warehouse,
+  type WarehousesListQuery,
+  type WarehousesResponse,
 } from "@/lib/warehouses";
 
-const warehousesListKey = ["warehouses", "list"] as const;
+const warehousesListKey = (params?: WarehousesListQuery) =>
+  ["warehouses", "list", params ?? {}] as const;
 
-export function useWarehousesList() {
-  return useQuery<Warehouse[]>({
-    queryKey: warehousesListKey,
-    queryFn: listWarehouses,
+export function useWarehousesList(params: WarehousesListQuery) {
+  return useQuery<WarehousesResponse>({
+    queryKey: warehousesListKey(params),
+    queryFn: () => listWarehouses(params),
   });
 }
 

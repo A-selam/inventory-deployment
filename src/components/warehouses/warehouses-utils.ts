@@ -1,6 +1,6 @@
 import type { Warehouse } from "@/lib/warehouses";
 
-export type WarehouseSortBy = "name" | "capacity" | "used_capacity" | "created_at";
+export type WarehouseSortBy = "name" | "location";
 
 export type WarehouseSortDir = "asc" | "desc";
 
@@ -8,10 +8,7 @@ export const DEFAULT_WAREHOUSE_SORT_BY: WarehouseSortBy = "name";
 export const DEFAULT_WAREHOUSE_SORT_DIR: WarehouseSortDir = "asc";
 
 export function parseWarehouseSortBy(value: string | null): WarehouseSortBy {
-  if (value === "capacity" || value === "used_capacity" || value === "created_at") {
-    return value;
-  }
-  return DEFAULT_WAREHOUSE_SORT_BY;
+  return value === "location" ? value : DEFAULT_WAREHOUSE_SORT_BY;
 }
 
 export function parseWarehouseSortDir(value: string | null): WarehouseSortDir {
@@ -20,15 +17,15 @@ export function parseWarehouseSortDir(value: string | null): WarehouseSortDir {
 
 export function buildWarehousesHref(
   current: Pick<URLSearchParams, "toString">,
-  updates: Record<string, string | undefined>,
+  updates: Record<string, string | number | undefined>,
 ) {
   const params = new URLSearchParams(current.toString());
 
   Object.entries(updates).forEach(([key, value]) => {
-    if (!value) {
+    if (value === undefined || value === "") {
       params.delete(key);
     } else {
-      params.set(key, value);
+      params.set(key, String(value));
     }
   });
 
@@ -45,18 +42,10 @@ export function sortWarehouses(
   const items = [...warehouses];
 
   items.sort((first, second) => {
-    if (sortBy === "capacity") {
-      return (first.capacity - second.capacity) * direction;
-    }
-    if (sortBy === "used_capacity") {
-      return (first.used_capacity - second.used_capacity) * direction;
-    }
-    if (sortBy === "created_at") {
-      const firstTs = Date.parse(first.created_at || "");
-      const secondTs = Date.parse(second.created_at || "");
-      const safeFirst = Number.isFinite(firstTs) ? firstTs : 0;
-      const safeSecond = Number.isFinite(secondTs) ? secondTs : 0;
-      return (safeFirst - safeSecond) * direction;
+    if (sortBy === "location") {
+      const firstLocation = (first.location ?? "").toLocaleLowerCase();
+      const secondLocation = (second.location ?? "").toLocaleLowerCase();
+      return firstLocation.localeCompare(secondLocation) * direction;
     }
     return first.name.localeCompare(second.name) * direction;
   });

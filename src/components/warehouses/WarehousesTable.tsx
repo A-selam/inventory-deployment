@@ -1,180 +1,219 @@
-import { MapPin, Warehouse as WarehouseIcon } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  MapPin,
+  Plus,
+  SlidersHorizontal,
+  Warehouse as WarehouseIcon,
+} from "lucide-react";
 
+import Button from "@/components/ui/button";
 import Card from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import type { Warehouse } from "@/lib/warehouses";
 
-import {
-  formatWarehouseDate,
-  getWarehouseUtilizationPercent,
-} from "./warehouses-utils";
 import WarehouseRowActions from "./WarehouseRowActions";
 
 type WarehousesTableProps = {
   warehouses: Warehouse[];
   isLoading?: boolean;
+  page?: number;
+  totalPages?: number;
+  limit?: number;
+  totalWarehouses?: number;
+  title?: string;
+  filters?: React.ReactNode;
+  filtersOpen?: boolean;
+  onToggleFilters?: () => void;
+  onAddWarehouse?: () => void;
+  onPageChange?: (page: number) => void;
 };
 
-function WarehousesTableSkeleton() {
+function PaginationButton({
+  children,
+  disabled,
+  onClick,
+}: {
+  children: React.ReactNode;
+  disabled?: boolean;
+  onClick: () => void;
+}) {
   return (
-    <Card className="overflow-hidden rounded-[12px] border-border bg-card p-0 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
-      <div className="border-b border-border px-5 py-4">
-        <div className="h-5 w-56 animate-pulse rounded bg-muted" />
-      </div>
-      <div className="divide-y divide-border">
-        {Array.from({ length: 6 }).map((_, index) => (
-          <div
-            key={index}
-            className="grid grid-cols-1 items-center gap-4 px-5 py-4 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.9fr)_120px_120px_120px_170px_220px]"
-          >
-            <div className="flex items-center gap-3">
-              <div className="size-9 animate-pulse rounded-[10px] bg-muted" />
-              <div className="h-4 w-52 animate-pulse rounded bg-muted" />
-            </div>
-            <div className="h-4 w-40 animate-pulse rounded bg-muted" />
-            <div className="h-4 w-20 animate-pulse rounded bg-muted" />
-            <div className="h-4 w-20 animate-pulse rounded bg-muted" />
-            <div className="h-4 w-20 animate-pulse rounded bg-muted" />
-            <div className="h-4 w-32 animate-pulse rounded bg-muted" />
-            <div className="h-9 w-44 animate-pulse rounded bg-muted" />
-          </div>
-        ))}
-      </div>
-    </Card>
-  );
-}
-
-function WarehousesEmptyState() {
-  return (
-    <Card className="rounded-[12px] border-border bg-card p-10 text-center shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
-      <div className="mx-auto flex size-14 items-center justify-center rounded-[14px] border border-border bg-muted text-muted-foreground">
-        <WarehouseIcon className="size-6" />
-      </div>
-      <h2 className="mt-5 text-xl font-semibold tracking-tight text-foreground">
-        No warehouses found
-      </h2>
-      <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-muted-foreground">
-        Try a different search term or clear the filters to return to the full
-        warehouse list.
-      </p>
-    </Card>
+    <Button
+      type="button"
+      variant="outline"
+      size="sm"
+      disabled={disabled}
+      className="h-9 gap-2 px-3"
+      onClick={onClick}
+    >
+      {children}
+    </Button>
   );
 }
 
 export default function WarehousesTable({
   warehouses,
   isLoading = false,
+  page = 1,
+  totalPages = 1,
+  limit = 20,
+  totalWarehouses = 0,
+  title = "List of warehouses",
+  filters,
+  filtersOpen = false,
+  onToggleFilters,
+  onAddWarehouse,
+  onPageChange,
 }: WarehousesTableProps) {
-  if (isLoading) return <WarehousesTableSkeleton />;
-
-  if (warehouses.length === 0) return <WarehousesEmptyState />;
-
   return (
-    <Card className="overflow-hidden rounded-[12px] border-border bg-card p-0 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
-      <div className="flex flex-col gap-1 border-b border-border bg-card px-5 py-4 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <h2 className="text-lg font-semibold tracking-tight text-foreground">
-            Warehouse directory
-          </h2>
-          <p className="text-sm text-muted-foreground">
-            Connected to the Warehouses API response.
-          </p>
+    <Card className="rounded-[12px] border border-border p-0 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
+      <div className="overflow-hidden rounded-md bg-card shadow-sm">
+        <div className="flex flex-col gap-3 border-b border-border bg-background px-4 py-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="min-w-0">
+            <h2 className="truncate text-base font-semibold text-foreground">
+              {title}
+            </h2>
+            <p className="text-xs text-muted-foreground">
+              Showing page {page} of {totalPages} • {totalWarehouses} total
+              warehouses • {limit} per page
+            </p>
+          </div>
+
+          <div className="flex items-center gap-2 self-start sm:self-auto">
+            <Button
+              type="button"
+              variant={filtersOpen ? "default" : "outline"}
+              size="sm"
+              className="h-9 gap-2"
+              onClick={onToggleFilters}
+              disabled={!filters || !onToggleFilters}
+            >
+              <SlidersHorizontal className="size-4" />
+              Filters
+            </Button>
+
+            <Button
+              type="button"
+              size="sm"
+              className="h-9 gap-2"
+              onClick={onAddWarehouse}
+              disabled={!onAddWarehouse}
+            >
+              <Plus className="size-4" />
+              Add Warehouse
+            </Button>
+          </div>
         </div>
-        <div className="label-caps">{warehouses.length} records</div>
-      </div>
 
-      <div className="overflow-x-auto">
-        <table className="w-full min-w-[1100px] text-left">
-          <thead className="bg-muted/60">
-            <tr>
-              <th className="px-5 py-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                Warehouse
-              </th>
-              <th className="px-5 py-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                Location
-              </th>
-              <th className="px-5 py-3 text-right text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                Capacity
-              </th>
-              <th className="px-5 py-3 text-right text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                Used
-              </th>
-              <th className="px-5 py-3 text-right text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                Available
-              </th>
-              <th className="px-5 py-3 text-right text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                Created
-              </th>
-              <th className="px-5 py-3 text-right text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-border">
-            {warehouses.map((warehouse) => {
-              const utilization = getWarehouseUtilizationPercent(warehouse);
-              const location = warehouse.location?.trim() || "—";
+        {filtersOpen && filters ? (
+          <div className="border-b border-border bg-background px-4 py-3">
+            {filters}
+          </div>
+        ) : null}
 
-              return (
-                <tr
-                  key={warehouse.id}
-                  className="transition-colors hover:bg-muted/45"
-                >
-                  <td className="px-5 py-4">
-                    <div className="flex items-center gap-3">
-                      <div className="flex size-9 items-center justify-center rounded-[10px] bg-muted text-foreground">
-                        <WarehouseIcon className="size-4" />
-                      </div>
-                      <div>
-                        <div className="flex flex-wrap items-center gap-2">
-                          <div className="font-semibold text-foreground">
-                            {warehouse.name}
+        {isLoading ? (
+          <div className="flex items-center justify-center p-12">
+            <p className="text-muted-foreground">Loading warehouses...</p>
+          </div>
+        ) : !warehouses || warehouses.length === 0 ? (
+          <div className="flex flex-col items-center justify-center gap-3 p-12 text-center">
+            <div className="flex size-14 items-center justify-center rounded-[14px] border border-border bg-muted text-muted-foreground">
+              <WarehouseIcon className="size-6" />
+            </div>
+            <p className="text-muted-foreground">No warehouses found</p>
+          </div>
+        ) : (
+          <>
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader className="sticky top-0 z-10 bg-background shadow-sm [&_tr]:border-b">
+                  <TableRow className="border-b">
+                    <TableHead className="p-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                      Warehouse
+                    </TableHead>
+                    <TableHead className="p-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                      Location
+                    </TableHead>
+                    <TableHead className="p-2 text-center text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                      Actions
+                    </TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {warehouses.map((warehouse) => {
+                    const location = warehouse.location?.trim() || "—";
+                    const description = warehouse.description?.trim() || "";
+
+                    return (
+                      <TableRow
+                        key={warehouse.id}
+                        className="border-b transition-colors hover:bg-[#F8FAFC] dark:hover:bg-muted"
+                      >
+                        <TableCell className="p-2 align-middle whitespace-nowrap">
+                          <div className="flex items-center gap-3">
+                            <div className="flex size-9 items-center justify-center rounded-[10px] bg-muted text-foreground">
+                              <WarehouseIcon className="size-4" />
+                            </div>
+                            <div className="min-w-0">
+                              <div className="truncate font-semibold text-foreground">
+                                {warehouse.name}
+                              </div>
+                              {/* {description ? (
+                                <div className="truncate text-xs text-muted-foreground">
+                                  {description}
+                                </div>
+                              ) : null}
+                              <div className="truncate font-mono text-xs text-muted-foreground">
+                                {warehouse.id}
+                              </div> */}
+                            </div>
                           </div>
-                          {utilization !== null ? (
-                            <span className="inline-flex items-center rounded-full bg-secondary px-2.5 py-1 text-xs font-semibold text-secondary-foreground">
-                              {Math.round(utilization)}%
-                            </span>
-                          ) : null}
-                        </div>
-                        <div className="font-mono text-xs text-muted-foreground">
-                          {warehouse.id}
-                        </div>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-5 py-4">
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <MapPin className="size-4" />
-                      <span className="truncate">{location}</span>
-                    </div>
-                  </td>
-                  <td className="px-5 py-4 text-right">
-                    <span className="font-mono font-semibold text-foreground">
-                      {warehouse.capacity > 0
-                        ? warehouse.capacity.toLocaleString()
-                        : "—"}
-                    </span>
-                  </td>
-                  <td className="px-5 py-4 text-right">
-                    <span className="font-mono font-semibold text-foreground">
-                      {warehouse.used_capacity.toLocaleString()}
-                    </span>
-                  </td>
-                  <td className="px-5 py-4 text-right">
-                    <span className="font-mono font-semibold text-foreground">
-                      {warehouse.available_capacity.toLocaleString()}
-                    </span>
-                  </td>
-                  <td className="px-5 py-4 text-right text-sm text-muted-foreground">
-                    {formatWarehouseDate(warehouse.created_at)}
-                  </td>
-                  <td className="px-5 py-4 text-right">
-                    <WarehouseRowActions warehouse={warehouse} />
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+                        </TableCell>
+                        <TableCell className="p-2 align-middle whitespace-nowrap">
+                          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                            <MapPin className="size-4" />
+                            <span className="truncate">{location}</span>
+                          </div>
+                        </TableCell>
+                        <TableCell className="p-2 align-middle text-center">
+                          <WarehouseRowActions warehouse={warehouse} />
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            </div>
+
+            <div className="flex flex-col gap-3 border-t border-border bg-background px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex items-center gap-2 self-end sm:self-auto">
+                <PaginationButton
+                  disabled={page <= 1}
+                  onClick={() => onPageChange?.(page - 1)}
+                >
+                  <ChevronLeft className="size-4" />
+                  Previous
+                </PaginationButton>
+
+                <PaginationButton
+                  disabled={page >= totalPages}
+                  onClick={() => onPageChange?.(page + 1)}
+                >
+                  Next
+                  <ChevronRight className="size-4" />
+                </PaginationButton>
+              </div>
+            </div>
+          </>
+        )}
       </div>
     </Card>
   );

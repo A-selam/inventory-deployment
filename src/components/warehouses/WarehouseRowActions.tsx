@@ -23,8 +23,8 @@ export default function WarehouseRowActions({
 
   return (
     <>
-      <div className="flex items-center justify-end gap-2">
-        <Button
+      <div className="flex items-center justify-center gap-2">
+        {/* <Button
           type="button"
           variant="outline"
           size="sm"
@@ -33,7 +33,7 @@ export default function WarehouseRowActions({
         >
           <Eye className="size-4" />
           View
-        </Button>
+        </Button> */}
         <Button
           type="button"
           variant="outline"
@@ -75,4 +75,3 @@ export default function WarehouseRowActions({
     </>
   );
 }
-
