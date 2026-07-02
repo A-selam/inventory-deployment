@@ -16,7 +16,7 @@ import CreateVendorContactSection from "./CreateVendorContactSection";
 import CreateVendorLocationSection from "./CreateVendorLocationSection";
 
 const createVendorSchema = z.object({
-  name: z.string().min(1, { message: "Vendor name is required" }),
+  name: z.string().min(1, { message: "Supplier name is required" }),
   contact_person: z.object({
     first_name: z.string().min(1, { message: "First name is required" }),
     last_name: z.string().min(1, { message: "Last name is required" }),
@@ -185,7 +185,7 @@ export default function CreateVendorForm({
         await updateVendorMutation.mutateAsync(payload);
 
         toast({
-          title: "Vendor updated",
+          title: "Supplier updated",
           description: `${values.name} has been successfully updated.`,
           variant: "success",
         });
@@ -193,7 +193,7 @@ export default function CreateVendorForm({
         await createVendorMutation.mutateAsync(payload);
 
         toast({
-          title: "Vendor created",
+          title: "Supplier created",
           description: `${values.name} has been successfully added to the network.`,
           variant: "success",
         });
@@ -202,7 +202,7 @@ export default function CreateVendorForm({
       onSuccess();
     } catch (error) {
       toast({
-        title: isEdit ? "Failed to update vendor" : "Failed to create vendor",
+        title: isEdit ? "Failed to update supplier" : "Failed to create supplier",
         description: getApiErrorMessage(error),
         variant: "error",
       });
@@ -254,7 +254,7 @@ export default function CreateVendorForm({
           <p className="text-sm text-destructive">
             {getApiErrorMessage(
               activeMutation.error,
-              isEdit ? "Failed to update vendor" : "Failed to create vendor",
+              isEdit ? "Failed to update supplier" : "Failed to create supplier",
             )}
           </p>
         ) : null}

@@ -150,7 +150,7 @@ export default function WarehousesTable({
                 <TableBody>
                   {warehouses.map((warehouse) => {
                     const location = warehouse.location?.trim() || "—";
-                    const description = warehouse.description?.trim() || "";
+                    // const description = warehouse.description?.trim() || "";
 
                     return (
                       <TableRow
