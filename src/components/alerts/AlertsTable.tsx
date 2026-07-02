@@ -1,6 +1,12 @@
-import { AlertTriangle } from "lucide-react";
+import {
+  AlertTriangle,
+  ChevronLeft,
+  ChevronRight,
+  RefreshCw,
+} from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
+import Button from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
   Table,
@@ -25,10 +31,80 @@ function severityIconClass(severity: Alert["severity"]) {
     : "bg-amber-50 text-amber-700";
 }
 
-export default function AlertsTable({ rows }: { rows: Alert[] }) {
+function PaginationButton({
+  children,
+  disabled,
+  onClick,
+}: {
+  children: React.ReactNode;
+  disabled?: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <Button
+      type="button"
+      variant="outline"
+      size="sm"
+      disabled={disabled}
+      className="h-9 gap-2 px-3"
+      onClick={onClick}
+    >
+      {children}
+    </Button>
+  );
+}
+
+type AlertsTableProps = {
+  rows: Alert[];
+  page: number;
+  totalPages: number;
+  limit: number;
+  totalItems: number;
+  isFetching?: boolean;
+  lastUpdatedLabel?: string | null;
+  onRefresh?: () => void;
+  onPageChange?: (page: number) => void;
+};
+
+export default function AlertsTable({
+  rows,
+  page,
+  totalPages,
+  limit,
+  totalItems,
+  isFetching = false,
+  lastUpdatedLabel,
+  onRefresh,
+  onPageChange,
+}: AlertsTableProps) {
   return (
     <Card className="rounded-[12px] border border-border p-0 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
       <div className="overflow-hidden rounded-md bg-card shadow-sm">
+        <div className="flex flex-col gap-3 border-b border-border bg-background px-4 py-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="min-w-0">
+            <h2 className="truncate text-base font-semibold text-foreground">
+              List of alerts
+            </h2>
+            <p className="text-xs text-muted-foreground">
+              Showing page {page} of {totalPages} - {totalItems} total alerts -{" "}
+              {limit} per page
+              {lastUpdatedLabel ? ` - Updated ${lastUpdatedLabel}` : ""}
+            </p>
+          </div>
+
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            className="h-9 gap-2 self-start sm:self-auto"
+            onClick={onRefresh}
+            disabled={!onRefresh || isFetching}
+          >
+            <RefreshCw className={cn("size-4", isFetching && "animate-spin")} />
+            Refresh
+          </Button>
+        </div>
+
         <div className="max-h-[70vh] overflow-auto">
           <Table>
             <TableHeader className="sticky top-0 z-10 bg-background shadow-sm [&_tr]:border-b">
@@ -126,6 +202,26 @@ export default function AlertsTable({ rows }: { rows: Alert[] }) {
               })}
             </TableBody>
           </Table>
+        </div>
+
+        <div className="flex flex-col gap-3 border-t border-border bg-background px-4 py-3 sm:flex-row sm:items-center sm:justify-end">
+          <div className="flex items-center gap-2 self-end sm:self-auto">
+            <PaginationButton
+              disabled={page <= 1}
+              onClick={() => onPageChange?.(page - 1)}
+            >
+              <ChevronLeft className="size-4" />
+              Previous
+            </PaginationButton>
+
+            <PaginationButton
+              disabled={page >= totalPages}
+              onClick={() => onPageChange?.(page + 1)}
+            >
+              Next
+              <ChevronRight className="size-4" />
+            </PaginationButton>
+          </div>
         </div>
       </div>
     </Card>

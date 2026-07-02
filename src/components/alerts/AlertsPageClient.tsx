@@ -1,14 +1,12 @@
 "use client";
 
-import { useMemo } from "react";
-import { AlertCircle, AlertTriangle, RefreshCw } from "lucide-react";
+import { useMemo, useState } from "react";
+import { AlertCircle, AlertTriangle } from "lucide-react";
 
 import EmptyState from "@/components/shared/EmptyState";
-import Button from "@/components/ui/button";
 import Card from "@/components/ui/card";
 // import { Skeleton } from "@/components/ui/skeleton";
 import { useAlerts } from "@/hooks/useAlerts";
-import { cn } from "@/lib/utils";
 import type { Alert } from "@/lib/alerts";
 
 import AlertsStatsCards from "./AlertsStatsCards";
@@ -47,10 +45,12 @@ function severityRank(severity: Alert["severity"]) {
 }
 
 export default function AlertsPageClient() {
-  const query = useAlerts();
+  const [page, setPage] = useState(1);
+  const limit = 20;
+  const query = useAlerts({ page, limit });
 
   const rows = useMemo(() => {
-    const normalized = normalizeAlerts(query.data?.data);
+    const normalized = normalizeAlerts(query.data?.data.alerts);
     return [...normalized].sort((a, b) => {
       const severityDelta =
         severityRank(a.severity as Alert["severity"]) -
@@ -63,7 +63,7 @@ export default function AlertsPageClient() {
 
       return a.item_name.localeCompare(b.item_name);
     });
-  }, [query.data?.data]);
+  }, [query.data?.data.alerts]);
 
   const stats = useMemo(() => {
     let critical = 0;
@@ -74,8 +74,14 @@ export default function AlertsPageClient() {
       else warning += 1;
     });
 
-    return { total: rows.length, critical, warning };
+    return { critical, warning };
   }, [rows]);
+
+  const pagination = query.data?.data;
+  const totalItems = pagination?.total ?? rows.length;
+  const currentPage = pagination?.page ?? page;
+  const pageLimit = pagination?.limit ?? limit;
+  const totalPages = Math.max(1, Math.ceil(totalItems / pageLimit));
 
   const lastUpdatedLabel = useMemo(() => {
     if (!query.dataUpdatedAt) return null;
@@ -93,29 +99,9 @@ export default function AlertsPageClient() {
 
   return (
     <div className="space-y-8">
-      <div className="flex flex-wrap items-center justify-end gap-3">
-        {lastUpdatedLabel ? (
-          <div className="hidden text-xs text-muted-foreground sm:block">
-            Updated {lastUpdatedLabel}
-          </div>
-        ) : null}
-        <Button
-          type="button"
-          variant="outline"
-          className="h-11 gap-2 rounded-xl px-5"
-          onClick={() => query.refetch()}
-          disabled={query.isFetching}
-        >
-          <RefreshCw
-            className={cn("size-4", query.isFetching && "animate-spin")}
-          />
-          Refresh
-        </Button>
-      </div>
-
       <AlertsStatsCards
         isLoading={query.isLoading}
-        total={stats.total}
+        total={totalItems}
         critical={stats.critical}
         warning={stats.warning}
       />
@@ -141,7 +127,17 @@ export default function AlertsPageClient() {
           description="All items are currently above their configured thresholds."
         />
       ) : (
-        <AlertsTable rows={rows as Alert[]} />
+        <AlertsTable
+          rows={rows as Alert[]}
+          page={currentPage}
+          totalPages={totalPages}
+          limit={pageLimit}
+          totalItems={totalItems}
+          isFetching={query.isFetching}
+          lastUpdatedLabel={lastUpdatedLabel}
+          onRefresh={() => query.refetch()}
+          onPageChange={setPage}
+        />
       )}
     </div>
   );
