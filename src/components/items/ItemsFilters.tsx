@@ -76,7 +76,7 @@ export default function ItemsFilters() {
       </div>
 
       <div>
-        <Label className="mb-1 text-[11px]">Vendor</Label>
+        <Label className="mb-1 text-[11px]">Supplier</Label>
         <div className="relative">
           <select
             value={vendor}
@@ -86,7 +86,7 @@ export default function ItemsFilters() {
             className="h-9 w-full appearance-none rounded-md border border-input bg-card px-2 pr-9 text-sm text-foreground outline-none transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
           >
             <option value="">
-              {vendorsQuery.isLoading ? "Loading vendors…" : "All vendors"}
+              {vendorsQuery.isLoading ? "Loading suppliers…" : "All suppliers"}
             </option>
             {vendors.map((vend) => (
               <option key={vend.id} value={vend.id}>

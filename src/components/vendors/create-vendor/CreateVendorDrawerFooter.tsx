@@ -14,7 +14,7 @@ export default function CreateVendorDrawerFooter({
   formId,
   isSubmitting,
   onCancel,
-  submitLabel = "Create Vendor",
+  submitLabel = "Create Supplier",
 }: CreateVendorDrawerFooterProps) {
   return (
     <div className="flex items-center gap-3 border-t border-border bg-card px-6 py-5">

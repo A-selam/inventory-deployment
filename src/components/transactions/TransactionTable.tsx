@@ -1,6 +1,12 @@
 "use client";
 
-import { ChevronLeft, ChevronRight, Package } from "lucide-react";
+import { useState, type ReactNode } from "react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Package,
+  SlidersHorizontal,
+} from "lucide-react";
 
 import Button from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -13,6 +19,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import TransactionFilters from "@/components/transactions/TransactionFilters";
 import type { Transaction } from "@/lib/transactions";
 
 type TransactionRow = Transaction & {
@@ -39,7 +46,7 @@ function PaginationButton({
   disabled,
   onClick,
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
   disabled?: boolean;
   onClick: () => void;
 }) {
@@ -135,9 +142,7 @@ function getItemName(transaction: TransactionRow) {
   if (typeof name === "string" && name.trim()) return name;
 
   const fallbackId = transaction.item_id ?? transaction.id;
-  return (
-    `Item ${fallbackId.slice(0, 8).toUpperCase()}`
-  );
+  return `Item ${fallbackId.slice(0, 8).toUpperCase()}`;
 }
 
 function getSku(transaction: TransactionRow) {
@@ -156,6 +161,7 @@ export default function TransactionTable({
   onPageChange,
 }: TransactionTableProps) {
   const rows = transactions as TransactionRow[];
+  const [filtersOpen, setFiltersOpen] = useState(false);
 
   if (isLoading) {
     return (
@@ -169,7 +175,38 @@ export default function TransactionTable({
 
   return (
     <Card className="rounded-[12px] border border-border p-0 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
-      <div className="border border-border rounded-md bg-card shadow-sm overflow-hidden">
+      <div className="overflow-hidden rounded-md bg-card shadow-sm">
+        <div className="flex flex-col gap-3 border-b border-border bg-background px-4 py-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="min-w-0">
+            <h2 className="truncate text-base font-semibold text-foreground">
+              List of transactions
+            </h2>
+            <p className="text-xs text-muted-foreground">
+              Showing page {page} of {totalPages} • {totalItems} total items •{" "}
+              {limit} per page
+            </p>
+          </div>
+
+          <div className="flex items-center gap-2 self-start sm:self-auto">
+            <Button
+              type="button"
+              variant={filtersOpen ? "default" : "outline"}
+              size="sm"
+              className="h-9 gap-2"
+              onClick={() => setFiltersOpen((current) => !current)}
+            >
+              <SlidersHorizontal className="size-4" />
+              Filters
+            </Button>
+          </div>
+        </div>
+
+        {filtersOpen ? (
+          <div className="border-b border-border bg-background px-4 py-3">
+            <TransactionFilters variant="panel" />
+          </div>
+        ) : null}
+
         <div className="max-h-[70vh] overflow-auto">
           <Table>
             <TableHeader className="sticky top-0 z-10 bg-background shadow-sm [&_tr]:border-b">
@@ -258,30 +295,25 @@ export default function TransactionTable({
             </TableBody>
           </Table>
         </div>
-      </div>
 
-      <div className="flex flex-col gap-3 border-t border-border bg-background px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
-        <p className="text-sm text-muted-foreground">
-          Showing page {page} of {totalPages} • {totalItems} total items •{" "}
-          {limit} per page
-        </p>
+        <div className="flex flex-col gap-3 border-t border-border bg-background px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-center gap-2 self-end sm:self-auto">
+            <PaginationButton
+              disabled={page <= 1}
+              onClick={() => onPageChange?.(page - 1)}
+            >
+              <ChevronLeft className="size-4" />
+              Previous
+            </PaginationButton>
 
-        <div className="flex items-center gap-2 self-end sm:self-auto">
-          <PaginationButton
-            disabled={page <= 1}
-            onClick={() => onPageChange?.(page - 1)}
-          >
-            <ChevronLeft className="size-4" />
-            Previous
-          </PaginationButton>
-
-          <PaginationButton
-            disabled={page >= totalPages}
-            onClick={() => onPageChange?.(page + 1)}
-          >
-            Next
-            <ChevronRight className="size-4" />
-          </PaginationButton>
+            <PaginationButton
+              disabled={page >= totalPages}
+              onClick={() => onPageChange?.(page + 1)}
+            >
+              Next
+              <ChevronRight className="size-4" />
+            </PaginationButton>
+          </div>
         </div>
       </div>
     </Card>

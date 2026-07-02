@@ -1,7 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Loader2, RefreshCw, Trash2 } from "lucide-react";
+import {
+  Loader2,
+  Plus,
+  RefreshCw,
+  SlidersHorizontal,
+  Trash2,
+} from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import Button from "@/components/ui/button";
@@ -14,7 +20,6 @@ import { useToast } from "@/providers/ToastProvider";
 
 import VendorFilters from "./VendorFilters";
 import VendorGrid from "./VendorGrid";
-import VendorHeader from "./VendorHeader";
 // import VendorPagination from "./VendorPagination";
 import CreateVendorDrawer from "./create-vendor/CreateVendorDrawer";
 
@@ -68,7 +73,7 @@ function VendorsErrorState({
     <Card className="rounded-[12px] border-border bg-card p-6 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
-          <div className="label-caps">Vendors unavailable</div>
+          <div className="label-caps">Suppliers unavailable</div>
           <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">
             {message}
           </p>
@@ -87,6 +92,7 @@ export default function VendorsPageClient() {
   const searchParams = useSearchParams();
   const { toast } = useToast();
   const deleteVendorMutation = useDeleteVendor();
+  const [filtersOpen, setFiltersOpen] = useState(false);
   const [isCreateDrawerOpen, setIsCreateDrawerOpen] = useState(false);
   const [isEditDrawerOpen, setIsEditDrawerOpen] = useState(false);
   const [vendorToEdit, setVendorToEdit] = useState<Vendor | null>(null);
@@ -142,7 +148,7 @@ export default function VendorsPageClient() {
     try {
       await deleteVendorMutation.mutateAsync(vendorToDelete.id);
       toast({
-        title: "Vendor deleted",
+        title: "Supplier deleted",
         description: `"${vendorToDelete.name}" has been removed.`,
         variant: "success",
       });
@@ -150,7 +156,7 @@ export default function VendorsPageClient() {
       setVendorToDelete(null);
     } catch (error) {
       toast({
-        title: "Failed to delete vendor",
+        title: "Failed to delete supplier",
         description: getApiErrorMessage(error, "Please try again."),
         variant: "error",
       });
@@ -185,44 +191,70 @@ export default function VendorsPageClient() {
 
   return (
     <div className="space-y-8">
-      <VendorHeader onAddClick={() => setIsCreateDrawerOpen(true)} />
-
-      <VendorFilters
-        search={search}
-        sortBy={sortBy}
-        sortDir={sortDir}
-        onSearchChange={(value) =>
-          replaceWithResetPage({ search: value || undefined })
-        }
-        onSortByChange={(value) => replaceWithResetPage({ sort_by: value })}
-        onSortDirChange={(value) => replaceWithResetPage({ sort_dir: value })}
-        onClear={() => router.push("/vendors")}
-      />
-
       {vendorsQuery.isError ? (
         <VendorsErrorState
           message={
-            vendorsQuery.error.message || "We could not load vendors right now."
+            vendorsQuery.error.message ||
+            "We could not load suppliers right now."
           }
           onRetry={() => vendorsQuery.refetch()}
         />
       ) : (
-        <section className="space-y-5">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <div>
-              <h2 className="text-lg font-semibold tracking-tight text-foreground">
-                Supplier network
-              </h2>
-              <p className="text-sm text-muted-foreground">
-                {search
-                  ? `Filtered by "${search}"`
-                  : "Showing vendors from the connected API"}
-              </p>
+        <section className="space-y-4">
+          <Card className="rounded-[12px] border border-border bg-card p-0 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
+            <div className="flex flex-col gap-3 border-b border-border bg-background px-4 py-4 sm:flex-row sm:items-center sm:justify-between">
+              <div className="min-w-0">
+                <h2 className="truncate text-base font-semibold text-foreground">
+                  List of suppliers
+                </h2>
+                <p className="text-xs text-muted-foreground">
+                  {search
+                    ? `Filtered by "${search}"`
+                    : "Showing suppliers from the connected API"}{" "}
+                  • Sorted by {sortBy.replace("_", " ")} ({sortDir})
+                </p>
+              </div>
+
+              <div className="flex items-center gap-2 self-start sm:self-auto">
+                <Button
+                  type="button"
+                  variant={filtersOpen ? "default" : "outline"}
+                  size="sm"
+                  className="h-9 gap-2"
+                  onClick={() => setFiltersOpen((prev) => !prev)}
+                >
+                  <SlidersHorizontal className="size-4" />
+                  Filters
+                </Button>
+
+                <Button
+                  type="button"
+                  size="sm"
+                  className="h-9 gap-2"
+                  onClick={() => setIsCreateDrawerOpen(true)}
+                >
+                  <Plus className="size-4" />
+                  Add Supplier
+                </Button>
+              </div>
             </div>
-            <div className="label-caps">
-              Sorted by {sortBy.replace("_", " ")} - {sortDir}
-            </div>
-          </div>
+
+            {filtersOpen ? (
+              <div className="bg-background px-4 py-3">
+                <VendorFilters
+                  sortBy={sortBy}
+                  sortDir={sortDir}
+                  onSortByChange={(value) =>
+                    replaceWithResetPage({ sort_by: value })
+                  }
+                  onSortDirChange={(value) =>
+                    replaceWithResetPage({ sort_dir: value })
+                  }
+                  onClear={() => router.push("/vendors")}
+                />
+              </div>
+            ) : null}
+          </Card>
 
           <VendorGrid
             vendors={vendors}
@@ -270,7 +302,7 @@ export default function VendorsPageClient() {
           setIsDeleteModalOpen(false);
           setVendorToDelete(null);
         }}
-        title="Delete Vendor"
+        title="Delete Supplier"
         description={
           vendorToDelete
             ? `This will permanently delete "${vendorToDelete.name}".`

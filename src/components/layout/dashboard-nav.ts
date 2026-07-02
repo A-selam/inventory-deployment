@@ -34,7 +34,7 @@ export const DASHBOARD_NAV_LINKS: DashboardNavItem[] = [
     ],
   },
   { label: "Transactions", href: "/transactions", icon: ArrowRightLeft },
-  { label: "Vendors", href: "/vendors", icon: Building2 },
+  { label: "Suppliers", href: "/vendors", icon: Building2 },
   // { label: "Replenishment", href: "/replenishment", icon: RefreshCw },
   { label: "Alerts", href: "/alerts", icon: AlertTriangle },
   { label: "Users", href: "/users", icon: Users, adminOnly: true },

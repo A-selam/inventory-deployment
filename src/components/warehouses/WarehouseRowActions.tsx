@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Eye, Pencil, Trash2 } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { Pencil, Trash2 } from "lucide-react";
+// import { useRouter } from "next/navigation";
 
 import Button from "@/components/ui/button";
 import type { Warehouse } from "@/lib/warehouses";
@@ -17,7 +17,7 @@ type WarehouseRowActionsProps = {
 export default function WarehouseRowActions({
   warehouse,
 }: WarehouseRowActionsProps) {
-  const router = useRouter();
+  // const router = useRouter();
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 

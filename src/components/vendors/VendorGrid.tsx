@@ -48,11 +48,10 @@ function VendorEmptyState() {
         <Building2 className="size-6" />
       </div>
       <h2 className="mt-5 text-xl font-semibold tracking-tight text-foreground">
-        No vendors found
+        No suppliers found
       </h2>
       <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-muted-foreground">
-        Try a different search term or clear the filters to return to the full
-        supplier list.
+        Clear the filters to return to the full supplier list.
       </p>
     </Card>
   );

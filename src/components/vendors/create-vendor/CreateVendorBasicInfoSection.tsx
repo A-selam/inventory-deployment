@@ -23,7 +23,7 @@ export default function CreateVendorBasicInfoSection({
           htmlFor="create-vendor-name"
           className="label-caps text-foreground"
         >
-          Vendor Name
+          Supplier Name
         </Label>
         <Input
           id="create-vendor-name"

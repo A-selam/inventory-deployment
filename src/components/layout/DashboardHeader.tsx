@@ -44,7 +44,7 @@ function getDashboardPageTitle(pathname: string) {
   if (pathname.startsWith("/categories")) return "Categories";
   if (pathname.startsWith("/warehouses")) return "Warehouses";
   if (pathname.startsWith("/transactions")) return "Transactions";
-  if (pathname.startsWith("/vendors")) return "Vendors";
+  if (pathname.startsWith("/vendors")) return "Suppliers";
   if (pathname.startsWith("/imports")) return "Imports";
   if (pathname.startsWith("/alerts")) return "Alerts";
   if (pathname.startsWith("/users")) return "Users";
@@ -230,8 +230,8 @@ export default function DashboardHeader() {
         <div className="relative w-full max-w-xl">
           <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
           <Input
-            aria-label="Search inventory and vendors"
-            placeholder="Search inventory and vendors..."
+            aria-label="Search inventory and suppliers"
+            placeholder="Search inventory and suppliers..."
             className="h-10 bg-muted pl-10 pr-10 text-foreground"
             value={query}
             onFocus={() => {
@@ -271,7 +271,7 @@ export default function DashboardHeader() {
 
               {query.trim().length < 2 ? (
                 <div className="px-4 py-4 text-sm text-muted-foreground">
-                  Search across inventory items and vendors.
+                  Search across inventory items and suppliers.
                 </div>
               ) : searchQuery.isError ? (
                 <div className="px-4 py-4 text-sm text-rose-600">
@@ -339,7 +339,7 @@ export default function DashboardHeader() {
                   {vendors.length > 0 ? (
                     <div>
                       <div className="px-4 pt-4 pb-2 text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-                        Vendors
+                        Suppliers
                       </div>
                       <div className="px-2 pb-3">
                         {vendors.map((vendor) => {

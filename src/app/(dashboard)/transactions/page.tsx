@@ -4,7 +4,6 @@ import { useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import { useTransactionsList } from "@/hooks/useTransactions";
-import TransactionFilters from "@/components/transactions/TransactionFilters";
 import TransactionStats from "@/components/transactions/TransactionStats";
 import TransactionTable from "@/components/transactions/TransactionTable";
 
@@ -58,14 +57,13 @@ export default function TransactionsPage() {
   const hasPagination =
     typeof transactionsData?.total === "number" &&
     typeof transactionsData?.page === "number" &&
-    typeof transactionsData?.limit === "number" &&
-    typeof transactionsData?.total_pages === "number";
+    typeof transactionsData?.limit === "number";
 
   const totalItems = hasPagination
     ? transactionsData.total
     : allTransactions.length;
   const totalPages = hasPagination
-    ? transactionsData.total_pages
+    ? Math.max(1, Math.ceil((transactionsData.total ?? 0) / limit))
     : Math.max(1, Math.ceil((totalItems ?? 0) / limit));
   const currentPage = Math.min(page, Math.max(totalPages ?? 0, 1));
   const transactions = hasPagination
@@ -81,8 +79,6 @@ export default function TransactionsPage() {
 
   return (
     <div className="space-y-8">
-      <TransactionFilters />
-
       <TransactionStats
         totalMovements={transactionsData?.total_movement || 0}
         inbound24h={transactionsData?.inbound_24h || 0}

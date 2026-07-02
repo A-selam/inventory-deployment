@@ -13,7 +13,7 @@ export default function VendorHeader({ onAddClick }: VendorHeaderProps) {
         className="h-11 shrink-0 gap-2 px-4 font-semibold"
       >
         <Plus className="size-5" />
-        Add Vendor
+        Add Supplier
       </Button>
     </div>
   );

@@ -24,7 +24,7 @@ export default function VendorPagination({
   return (
     <div className="flex flex-col gap-3 border-t border-border py-5 sm:flex-row sm:items-center sm:justify-between">
       <p className="text-sm text-muted-foreground">
-        Showing {shownItems} of {totalItems} vendors - page {page} of{" "}
+        Showing {shownItems} of {totalItems} suppliers - page {page} of{" "}
         {totalPages} - {limit} per page
       </p>
 

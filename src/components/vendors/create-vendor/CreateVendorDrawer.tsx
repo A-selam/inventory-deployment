@@ -27,7 +27,7 @@ export default function CreateVendorDrawer({
     <Drawer
       open={open}
       onClose={onClose}
-      title={isEdit ? "Edit Vendor" : "Add New Vendor"}
+      title={isEdit ? "Edit Supplier" : "Add New Supplier"}
       description={
         isEdit
           ? "Update the supplier details below."
@@ -46,7 +46,7 @@ export default function CreateVendorDrawer({
         formId={formId}
         isSubmitting={isSubmitting}
         onCancel={onClose}
-        submitLabel={isEdit ? "Update Vendor" : "Create Vendor"}
+        submitLabel={isEdit ? "Update Supplier" : "Create Supplier"}
       />
     </Drawer>
   );
