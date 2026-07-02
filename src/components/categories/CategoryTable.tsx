@@ -1,5 +1,6 @@
-import { FolderKanban } from "lucide-react";
+import { FolderKanban, Plus, SlidersHorizontal } from "lucide-react";
 
+import Button from "@/components/ui/button";
 import Card from "@/components/ui/card";
 import type { Category } from "@/lib/categories";
 
@@ -8,6 +9,11 @@ import CategoryRowActions from "./CategoryRowActions";
 type CategoryTableProps = {
   categories: Category[];
   isLoading?: boolean;
+  title?: string;
+  filters?: React.ReactNode;
+  filtersOpen?: boolean;
+  onToggleFilters?: () => void;
+  onAddCategory?: () => void;
 };
 
 function CategoryTableSkeleton() {
@@ -44,8 +50,7 @@ function CategoryEmptyState() {
         No categories found
       </h2>
       <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-muted-foreground">
-        Try a different search term or clear the filters to return to the full
-        category list.
+        Add a category to get started.
       </p>
     </Card>
   );
@@ -54,6 +59,11 @@ function CategoryEmptyState() {
 export default function CategoryTable({
   categories,
   isLoading = false,
+  title = "List of categories",
+  filters,
+  filtersOpen = false,
+  onToggleFilters,
+  onAddCategory,
 }: CategoryTableProps) {
   if (isLoading) return <CategoryTableSkeleton />;
 
@@ -61,17 +71,47 @@ export default function CategoryTable({
 
   return (
     <Card className="overflow-hidden rounded-[12px] border-border bg-card p-0 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
-      <div className="flex flex-col gap-1 border-b border-border bg-card px-5 py-4 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <h2 className="text-lg font-semibold tracking-tight text-foreground">
-            Category directory
+      <div className="flex flex-col gap-3 border-b border-border bg-background px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="min-w-0">
+          <h2 className="truncate text-base font-semibold text-foreground">
+            {title}
           </h2>
-          <p className="text-sm text-muted-foreground">
-            Connected to the raw categories API response.
+          <p className="text-xs text-muted-foreground">
+            {categories.length} categories
           </p>
         </div>
-        <div className="label-caps">{categories.length} records</div>
+
+        <div className="flex items-center gap-2 self-start sm:self-auto">
+          <Button
+            type="button"
+            variant={filtersOpen ? "default" : "outline"}
+            size="sm"
+            className="h-9 gap-2"
+            onClick={onToggleFilters}
+            disabled={!filters || !onToggleFilters}
+          >
+            <SlidersHorizontal className="size-4" />
+            Filters
+          </Button>
+
+          <Button
+            type="button"
+            size="sm"
+            className="h-9 gap-2"
+            onClick={onAddCategory}
+            disabled={!onAddCategory}
+          >
+            <Plus className="size-4" />
+            Add Category
+          </Button>
+        </div>
       </div>
+
+      {filtersOpen && filters ? (
+        <div className="border-b border-border bg-background px-5 py-3">
+          {filters}
+        </div>
+      ) : null}
 
       <div className="overflow-x-auto">
         <table className="w-full min-w-150 text-left">
