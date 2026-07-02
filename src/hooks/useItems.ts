@@ -34,6 +34,9 @@ export function useItem(id?: string) {
     queryKey: itemDetailKey(id ?? ""),
     queryFn: () => getItem(id as string),
     enabled: Boolean(id),
+    staleTime: 60_000,
+    gcTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 }
 

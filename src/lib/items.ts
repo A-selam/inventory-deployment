@@ -131,11 +131,86 @@ function normalizeCheckSkuResult(payload: unknown): CheckSkuResult | null {
   return null;
 }
 
+function normalizeItemsListResponse(
+  payload: unknown,
+  fallback: { page: number; limit: number },
+): ItemsListResponse | null {
+  if (!payload) return null;
+
+  const first = isRecord(payload) ? payload : null;
+  const envelope =
+    first && first.success === true && "data" in first
+      ? first
+      : first && isRecord(first.data) && first.data.success === true
+        ? (first.data as Record<string, unknown>)
+        : null;
+
+  if (!envelope || envelope.success !== true) return null;
+
+  const message =
+    typeof envelope.message === "string" ? envelope.message : "Success";
+
+  const envelopeData = envelope.data;
+  const dataRoot =
+    isRecord(envelopeData) &&
+    isRecord(envelopeData.data) &&
+    (isRecord(envelopeData.data.summary) ||
+      Array.isArray(envelopeData.data.data) ||
+      typeof envelopeData.data.page === "number" ||
+      typeof envelopeData.data.total === "number")
+      ? envelopeData.data
+      : envelopeData;
+
+  const rootRecord = isRecord(dataRoot) ? dataRoot : null;
+  if (!rootRecord) return null;
+
+  const summary = isRecord(rootRecord.summary) ? rootRecord.summary : null;
+  const activeSkus =
+    summary && typeof summary.active_skus === "number"
+      ? summary.active_skus
+      : 0;
+  const belowThreshold =
+    summary && typeof summary.below_threshold === "number"
+      ? summary.below_threshold
+      : 0;
+
+  const items = Array.isArray(rootRecord.data)
+    ? rootRecord.data
+    : ([] as unknown[]);
+
+  const page =
+    typeof rootRecord.page === "number" ? rootRecord.page : fallback.page;
+  const limit =
+    typeof rootRecord.limit === "number" ? rootRecord.limit : fallback.limit;
+  const total = typeof rootRecord.total === "number" ? rootRecord.total : 0;
+  const totalPages =
+    limit > 0 && total > 0 ? Math.max(1, Math.ceil(total / limit)) : 1;
+
+  return {
+    success: true,
+    message,
+    data: {
+      data: items as Item[],
+      page,
+      limit,
+      total,
+      total_pages: totalPages,
+      active_skus: activeSkus,
+      below_threshold: belowThreshold,
+    },
+  };
+}
+
 export async function listItems(
   params: ItemsListQuery,
 ): Promise<ItemsListResponse> {
   const res = await apiClient.get("/items", { params });
-  return res.data as ItemsListResponse;
+  const fallback = {
+    page: params.page ?? 1,
+    limit: params.limit ?? 20,
+  };
+  const normalized = normalizeItemsListResponse(res.data as unknown, fallback);
+  return normalized ?? (res.data as ItemsListResponse);
 }
 
 export async function getItem(id: string): Promise<ItemDetailResponse> {
@@ -160,7 +235,9 @@ export async function createItem(
   return res.data as CreateItemResponse;
 }
 
-export async function checkSkuAvailability(sku: string): Promise<CheckSkuResult> {
+export async function checkSkuAvailability(
+  sku: string,
+): Promise<CheckSkuResult> {
   const res = await apiClient.get("/items/check-sku", {
     params: { sku },
   });

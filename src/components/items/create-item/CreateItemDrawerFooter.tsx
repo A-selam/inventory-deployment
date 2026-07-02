@@ -16,11 +16,11 @@ export default function CreateItemDrawerFooter({
   onCancel,
 }: CreateItemDrawerFooterProps) {
   return (
-    <div className="flex items-center gap-3 border-t border-border bg-card px-6 py-5">
+    <div className="flex items-center gap-2 border-t border-border bg-card px-5 py-4">
       <Button
         type="button"
         variant="outline"
-        className="h-11 flex-1 rounded-[10px]"
+        className="h-9 flex-1 rounded-md"
         onClick={onCancel}
         disabled={isSubmitting}
       >
@@ -29,7 +29,7 @@ export default function CreateItemDrawerFooter({
       <Button
         type="submit"
         form={formId}
-        className="h-11 flex-1 gap-2 rounded-[10px]"
+        className="h-9 flex-1 gap-2 rounded-md"
         disabled={isSubmitting}
       >
         {isSubmitting ? <Loader2 className="size-4 animate-spin" /> : null}

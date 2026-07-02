@@ -28,12 +28,12 @@ function CurrencyInput({
   registerProps: ReturnType<UseFormRegister<CreateItemFormValues>>;
 }) {
   return (
-    <div className="space-y-2">
+    <div className="space-y-1.5">
       <Label htmlFor={id} className="label-caps text-foreground">
         {label}
       </Label>
       <div className="relative">
-        <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">
+        <span className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">
           $
         </span>
         <Input
@@ -42,7 +42,7 @@ function CurrencyInput({
           step="0.01"
           min={0}
           placeholder={placeholder}
-          className="h-11 rounded-[10px] pl-7 pr-4"
+          className="h-9 rounded-md pl-6 pr-3"
           aria-invalid={Boolean(error)}
           disabled={disabled}
           {...registerProps}
@@ -59,9 +59,9 @@ export default function CreateItemStockPricingSection({
   disabled,
 }: CreateItemStockPricingSectionProps) {
   return (
-    <section className="space-y-6">
-      <div className="grid grid-cols-2 gap-4">
-        <div className="space-y-2">
+    <section className="space-y-4">
+      <div className="grid grid-cols-2 gap-3">
+        <div className="space-y-1.5">
           <Label
             htmlFor="create-item-initial-stock"
             className="label-caps text-foreground"
@@ -73,7 +73,7 @@ export default function CreateItemStockPricingSection({
             type="number"
             min={0}
             step="1"
-            className="h-11 rounded-[10px] px-4"
+            className="h-9 rounded-md px-3"
             aria-invalid={Boolean(errors.initial_stock)}
             disabled={disabled}
             {...register("initial_stock")}
@@ -85,7 +85,7 @@ export default function CreateItemStockPricingSection({
           ) : null}
         </div>
 
-        <div className="space-y-2">
+        <div className="space-y-1.5">
           <Label
             htmlFor="create-item-min-stock"
             className="label-caps text-foreground"
@@ -97,7 +97,7 @@ export default function CreateItemStockPricingSection({
             type="number"
             min={0}
             step="1"
-            className="h-11 rounded-[10px] px-4"
+            className="h-9 rounded-md px-3"
             aria-invalid={Boolean(errors.minimum_stock_level)}
             disabled={disabled}
             {...register("minimum_stock_level")}
@@ -110,7 +110,7 @@ export default function CreateItemStockPricingSection({
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 gap-3">
         <CurrencyInput
           id="create-item-cost-price"
           label="Cost Price"

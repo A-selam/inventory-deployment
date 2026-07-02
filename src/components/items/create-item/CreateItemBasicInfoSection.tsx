@@ -42,15 +42,15 @@ export default function CreateItemBasicInfoSection({
   skuStatusTone = "muted",
 }: CreateItemBasicInfoSectionProps) {
   return (
-    <section className="space-y-4">
-      <div className="space-y-2">
+    <section className="space-y-3">
+      <div className="space-y-1.5">
         <Label htmlFor="create-item-sku" className="label-caps text-foreground">
           SKU
         </Label>
         <Input
           id="create-item-sku"
           placeholder="e.g. SKU-001"
-          className="h-11 rounded-[10px] px-4"
+          className="h-9 rounded-md px-3"
           aria-invalid={Boolean(errors.sku)}
           disabled={disabled}
           {...(skuField ?? register("sku"))}
@@ -72,14 +72,14 @@ export default function CreateItemBasicInfoSection({
         ) : null}
       </div>
 
-      <div className="space-y-2">
+      <div className="space-y-1.5">
         <Label htmlFor="create-item-name" className="label-caps text-foreground">
           Name
         </Label>
         <Input
           id="create-item-name"
           placeholder="Item name"
-          className="h-11 rounded-[10px] px-4"
+          className="h-9 rounded-md px-3"
           aria-invalid={Boolean(errors.name)}
           disabled={disabled}
           {...register("name")}
@@ -89,7 +89,7 @@ export default function CreateItemBasicInfoSection({
         ) : null}
       </div>
 
-      <div className="space-y-2">
+      <div className="space-y-1.5">
         <Label
           htmlFor="create-item-description"
           className="label-caps text-foreground"
@@ -100,7 +100,7 @@ export default function CreateItemBasicInfoSection({
           id="create-item-description"
           rows={3}
           placeholder="Brief description of the item"
-          className="w-full resize-none rounded-[10px] border border-input bg-transparent px-4 py-2 text-sm text-foreground shadow-xs outline-none transition-[color,box-shadow] placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40"
+          className="w-full resize-none rounded-md border border-input bg-transparent px-3 py-2 text-sm text-foreground shadow-xs outline-none transition-[color,box-shadow] placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40"
           aria-invalid={Boolean(errors.description)}
           disabled={disabled}
           {...register("description")}

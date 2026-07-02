@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import { useItemsList } from "@/hooks/useItems";
-import ItemsHeader from "@/components/items/ItemsHeader";
 import ItemsTable from "@/components/items/ItemsTable";
 import ItemsFilters from "@/components/items/ItemsFilters";
 import CreateItemDrawer from "@/components/items/create-item/CreateItemDrawer";
@@ -54,12 +53,17 @@ export default function InventoryPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [createItemOpen, setCreateItemOpen] = useState(false);
+  const [filtersOpen, setFiltersOpen] = useState(() => {
+    const category = searchParams.get("category") ?? "";
+    const vendor = searchParams.get("vendor") ?? "";
+    const lowStock = parseBoolean(searchParams.get("low_stock"));
+    return Boolean(category || vendor || lowStock);
+  });
 
   const page = parsePositiveInt(searchParams.get("page"), DEFAULT_PAGE);
   const limit = parsePositiveInt(searchParams.get("limit"), DEFAULT_LIMIT);
   const category = searchParams.get("category") ?? "";
   const vendor = searchParams.get("vendor") ?? "";
-  const search = searchParams.get("search") ?? "";
   const lowStock = parseBoolean(searchParams.get("low_stock"));
 
   useEffect(() => {
@@ -82,7 +86,6 @@ export default function InventoryPage() {
     limit,
     category: category || undefined,
     vendor: vendor || undefined,
-    search: search || undefined,
     low_stock: lowStock ? true : undefined,
   });
 
@@ -106,7 +109,10 @@ export default function InventoryPage() {
     status: it.status ?? "unknown",
   }));
 
-  const totalPages = itemsData?.total_pages ?? 1;
+  const totalItems = itemsData?.total ?? 0;
+  const totalPages =
+    itemsData?.total_pages ??
+    Math.max(1, Math.ceil(totalItems / Math.max(1, limit)));
   const currentPage = Math.min(page, Math.max(totalPages, 1));
 
   const updatePage = (nextPage: number) => {
@@ -118,21 +124,18 @@ export default function InventoryPage() {
 
   return (
     <div className="space-y-8">
-      <ItemsHeader
-        activeSkus={itemsData?.active_skus ?? 0}
-        belowThreshold={itemsData?.below_threshold ?? 0}
-        onAddItem={() => setCreateItemOpen(true)}
-      />
-
-      <ItemsFilters />
-
       <ItemsTable
         items={mappedItems}
         isLoading={isLoading}
         page={currentPage}
         totalPages={totalPages}
         limit={limit}
-        totalItems={itemsData?.total ?? 0}
+        totalItems={totalItems}
+        filtersOpen={filtersOpen}
+        onToggleFilters={() => setFiltersOpen((prev) => !prev)}
+        filters={<ItemsFilters />}
+        onImport={() => router.push("/imports")}
+        onAddItem={() => setCreateItemOpen(true)}
         onPageChange={updatePage}
       />
 

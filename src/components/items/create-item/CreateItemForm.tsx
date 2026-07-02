@@ -234,9 +234,9 @@ export default function CreateItemForm({
     <form
       id={formId}
       onSubmit={handleSubmit(onSubmit)}
-      className="flex-1 overflow-y-auto px-6 py-6"
+      className="flex-1 overflow-y-auto px-5 py-5"
     >
-      <div className="space-y-6">
+      <div className="space-y-5">
         <CreateItemBasicInfoSection
           register={register}
           skuField={register("sku", {

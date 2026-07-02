@@ -5,7 +5,6 @@ import {
   Building2,
   LayoutDashboard,
   Package,
-  Upload,
   Users,
 } from "lucide-react";
 
@@ -37,7 +36,6 @@ export const DASHBOARD_NAV_LINKS: DashboardNavItem[] = [
   { label: "Transactions", href: "/transactions", icon: ArrowRightLeft },
   { label: "Vendors", href: "/vendors", icon: Building2 },
   // { label: "Replenishment", href: "/replenishment", icon: RefreshCw },
-  { label: "Imports", href: "/imports", icon: Upload },
   { label: "Alerts", href: "/alerts", icon: AlertTriangle },
   { label: "Users", href: "/users", icon: Users, adminOnly: true },
 ];
