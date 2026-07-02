@@ -3,33 +3,27 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Archive, Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import logo from "../../assets/logo.png";
 
-const NAV_LINKS = [
-  { label: "Home", href: "/" },
-  { label: "About Us", href: "/about" },
-];
+const NAV_LINKS = [{ label: "Home", href: "/home" }];
 
 export default function PublicNav() {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
+  const isActive = (href: string) => pathname === href;
 
   return (
     <header className="sticky top-0 z-50 border-b border-slate-200/60 bg-white/80 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
         {/* Logo */}
-        <Link href="/" className="flex shrink-0 items-center gap-2.5">
-          <Image
-            src={logo}
-            alt="StockLogic Logo"
-            width={36}
-            height={36}
-            className="size-9 object-contain"
-          />
-          <span className="text-base font-semibold tracking-tight text-slate-900">
+        <Link href="/home" className="flex shrink-0 items-center gap-2.5">
+          <div className="flex size-8 shrink-0 items-center justify-center self-center rounded-sm bg-primary text-primary-foreground shadow-sm">
+            <Archive className="size-4" />
+          </div>
+          <span className="text-lg font-semibold tracking-tight text-slate-900">
             StockLogic
           </span>
         </Link>
@@ -37,7 +31,7 @@ export default function PublicNav() {
         {/* Desktop nav */}
         <nav className="hidden items-center gap-6 md:flex">
           {NAV_LINKS.map((link) => {
-            const active = pathname === link.href;
+            const active = isActive(link.href);
             return (
               <Link
                 key={link.href}
@@ -57,12 +51,6 @@ export default function PublicNav() {
 
         {/* Desktop CTA buttons */}
         <div className="hidden items-center gap-3 md:flex">
-          <Link
-            href="/login"
-            className="rounded-md px-4 py-2 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-100"
-          >
-            Sign In
-          </Link>
           <Link
             href="/login"
             className="rounded-md bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-slate-700"
@@ -91,7 +79,7 @@ export default function PublicNav() {
       >
         <nav className="flex flex-col gap-1 px-4">
           {NAV_LINKS.map((link) => {
-            const active = pathname === link.href;
+            const active = isActive(link.href);
             return (
               <Link
                 key={link.href}
