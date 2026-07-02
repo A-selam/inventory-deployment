@@ -14,7 +14,6 @@ import type {
 } from "@/lib/categories";
 
 import CategoryFilters from "./CategoryFilters";
-import CategoryHeader from "./CategoryHeader";
 import CategoryStats from "./CategoryStats";
 import CategoryTable from "./CategoryTable";
 import CreateCategoryModal from "./CreateCategoryModal";
@@ -93,16 +92,21 @@ export default function CategoriesPageClient() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [filtersOpen, setFiltersOpen] = useState(false);
 
-  const search = searchParams.get("search") ?? "";
   const sortBy = parseSortBy(searchParams.get("sort_by"));
   const sortDir = parseSortDir(searchParams.get("sort_dir"));
 
   useEffect(() => {
     const normalizedSortBy = searchParams.get("sort_by");
     const normalizedSortDir = searchParams.get("sort_dir");
+    const normalizedSearch = searchParams.get("search");
 
-    if (normalizedSortBy === sortBy && normalizedSortDir === sortDir) {
+    if (
+      normalizedSortBy === sortBy &&
+      normalizedSortDir === sortDir &&
+      !normalizedSearch
+    ) {
       return;
     }
 
@@ -110,6 +114,7 @@ export default function CategoriesPageClient() {
       buildCategoriesHref(searchParams, {
         sort_by: sortBy,
         sort_dir: sortDir,
+        search: undefined,
       }),
     );
   }, [router, searchParams, sortBy, sortDir]);
@@ -121,14 +126,8 @@ export default function CategoriesPageClient() {
   );
 
   const visibleCategories = useMemo(() => {
-    const filtered = search
-      ? categories.filter((category) =>
-          category.name.toLowerCase().includes(search.toLowerCase()),
-        )
-      : categories;
-
-    return sortCategories(filtered, sortBy, sortDir);
-  }, [categories, search, sortBy, sortDir]);
+    return sortCategories(categories, sortBy, sortDir);
+  }, [categories, sortBy, sortDir]);
 
   const totalVendors = categories.reduce(
     (sum, category) => sum + category.vendor_total,
@@ -144,7 +143,6 @@ export default function CategoriesPageClient() {
 
   return (
     <div className="space-y-8">
-      <CategoryHeader onAddCategory={() => setIsCreateModalOpen(true)} />
       <CreateCategoryModal
         open={isCreateModalOpen}
         onClose={() => setIsCreateModalOpen(false)}
@@ -154,16 +152,6 @@ export default function CategoriesPageClient() {
         totalCategories={categories.length}
         totalVendors={totalVendors}
         assignedCategories={assignedCategories}
-      />
-
-      <CategoryFilters
-        search={search}
-        sortBy={sortBy}
-        sortDir={sortDir}
-        onSearchChange={(value) => updateParams({ search: value || undefined })}
-        onSortByChange={(value) => updateParams({ sort_by: value })}
-        onSortDirChange={(value) => updateParams({ sort_dir: value })}
-        onClear={() => router.push("/categories")}
       />
 
       {categoriesQuery.isError ? (
@@ -178,6 +166,19 @@ export default function CategoriesPageClient() {
         <CategoryTable
           categories={visibleCategories}
           isLoading={categoriesQuery.isLoading}
+          title="List of categories"
+          filtersOpen={filtersOpen}
+          onToggleFilters={() => setFiltersOpen((prev) => !prev)}
+          filters={
+            <CategoryFilters
+              sortBy={sortBy}
+              sortDir={sortDir}
+              onSortByChange={(value) => updateParams({ sort_by: value })}
+              onSortDirChange={(value) => updateParams({ sort_dir: value })}
+              onClear={() => router.push("/categories")}
+            />
+          }
+          onAddCategory={() => setIsCreateModalOpen(true)}
         />
       )}
     </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowDownAZ, Search, X } from "lucide-react";
+import { ArrowDownAZ, ChevronDown, Search, X } from "lucide-react";
 
 import Button from "@/components/ui/button";
 import Card from "@/components/ui/card";
@@ -48,15 +48,20 @@ export default function VendorFilters({
           <label className="mb-1 block text-xs font-medium text-muted-foreground">
             Sort by
           </label>
-          <select
-            value={sortBy}
-            onChange={(event) => onSortByChange(event.target.value as VendorSortBy)}
-            className="h-11 w-full rounded-[10px] border border-input bg-card px-3 text-sm text-foreground outline-none transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
-          >
-            <option value="name">Name</option>
-            <option value="contact_person">Contact person</option>
-            <option value="lead_time">Lead time</option>
-          </select>
+          <div className="relative">
+            <select
+              value={sortBy}
+              onChange={(event) =>
+                onSortByChange(event.target.value as VendorSortBy)
+              }
+              className="h-11 w-full appearance-none rounded-[10px] border border-input bg-card px-3 pr-10 text-sm text-foreground outline-none transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+            >
+              <option value="name">Name</option>
+              <option value="contact_person">Contact person</option>
+              <option value="lead_time">Lead time</option>
+            </select>
+            <ChevronDown className="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+          </div>
         </div>
 
         <div>

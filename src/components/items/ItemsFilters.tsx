@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
+import { ChevronDown } from "lucide-react";
 
 import { useCategoriesList } from "@/hooks/useCategories";
 import { useVendorsList } from "@/hooks/useVendors";
@@ -51,38 +52,50 @@ export default function ItemsFilters() {
     <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-[220px_220px_auto_auto] lg:items-end">
       <div>
         <Label className="mb-1 text-[11px]">Category</Label>
-        <select
-          value={category}
-          onChange={(event) => updateParam("category", event.target.value || null)}
-          className="h-9 w-full rounded-md border border-input bg-card px-2 text-sm text-foreground outline-none transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
-        >
-          <option value="">
-            {categoriesQuery.isLoading ? "Loading categories…" : "All categories"}
-          </option>
-          {categories.map((cat) => (
-            <option key={cat.id} value={cat.id}>
-              {cat.name}
+        <div className="relative">
+          <select
+            value={category}
+            onChange={(event) =>
+              updateParam("category", event.target.value || null)
+            }
+            className="h-9 w-full appearance-none rounded-md border border-input bg-card px-2 pr-9 text-sm text-foreground outline-none transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+          >
+            <option value="">
+              {categoriesQuery.isLoading
+                ? "Loading categories…"
+                : "All categories"}
             </option>
-          ))}
-        </select>
+            {categories.map((cat) => (
+              <option key={cat.id} value={cat.id}>
+                {cat.name}
+              </option>
+            ))}
+          </select>
+          <ChevronDown className="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+        </div>
       </div>
 
       <div>
         <Label className="mb-1 text-[11px]">Vendor</Label>
-        <select
-          value={vendor}
-          onChange={(event) => updateParam("vendor", event.target.value || null)}
-          className="h-9 w-full rounded-md border border-input bg-card px-2 text-sm text-foreground outline-none transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
-        >
-          <option value="">
-            {vendorsQuery.isLoading ? "Loading vendors…" : "All vendors"}
-          </option>
-          {vendors.map((vend) => (
-            <option key={vend.id} value={vend.id}>
-              {vend.name}
+        <div className="relative">
+          <select
+            value={vendor}
+            onChange={(event) =>
+              updateParam("vendor", event.target.value || null)
+            }
+            className="h-9 w-full appearance-none rounded-md border border-input bg-card px-2 pr-9 text-sm text-foreground outline-none transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+          >
+            <option value="">
+              {vendorsQuery.isLoading ? "Loading vendors…" : "All vendors"}
             </option>
-          ))}
-        </select>
+            {vendors.map((vend) => (
+              <option key={vend.id} value={vend.id}>
+                {vend.name}
+              </option>
+            ))}
+          </select>
+          <ChevronDown className="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+        </div>
       </div>
 
       <Button
