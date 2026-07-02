@@ -64,7 +64,7 @@ export default function CreateItemForm({
   const { toast } = useToast();
   const createItemMutation = useCreateItem();
   const categoriesQuery = useCategoriesList();
-  const warehousesQuery = useWarehousesList();
+  const warehousesQuery = useWarehousesList({ page: 1, limit: 250 });
   const vendorsQuery = useVendorsList({
     page: 1,
     limit: 250,
@@ -207,7 +207,7 @@ export default function CreateItemForm({
 
   const categories = categoriesQuery.data ?? [];
   const vendors = vendorsQuery.data?.data ?? [];
-  const warehouses = warehousesQuery.data ?? [];
+  const warehouses = warehousesQuery.data?.data.data ?? [];
 
   const skuStatusMessage = (() => {
     if (!normalizedSku) return undefined;

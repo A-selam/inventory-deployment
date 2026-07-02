@@ -1,12 +1,9 @@
-import { Boxes, ChartPie, Warehouse as WarehouseIcon } from "lucide-react";
+import { Warehouse as WarehouseIcon } from "lucide-react";
 
 import Card from "@/components/ui/card";
 
 type WarehouseStatsCardsProps = {
   totalWarehouses: number;
-  totalCapacityConfigured: number;
-  totalUsedCapacity: number;
-  totalAvailableCapacity: number;
 };
 
 const statCards = [
@@ -16,37 +13,13 @@ const statCards = [
     icon: WarehouseIcon,
     helper: "Active storage locations",
   },
-  {
-    label: "Configured capacity",
-    key: "totalCapacityConfigured",
-    icon: Boxes,
-    helper: "Sum of defined capacity",
-  },
-  {
-    label: "Used capacity",
-    key: "totalUsedCapacity",
-    icon: ChartPie,
-    helper: "Current utilization",
-  },
-  {
-    label: "Available capacity",
-    key: "totalAvailableCapacity",
-    icon: Boxes,
-    helper: "Remaining capacity",
-  },
 ] as const;
 
 export default function WarehouseStatsCards({
   totalWarehouses,
-  totalCapacityConfigured,
-  totalUsedCapacity,
-  totalAvailableCapacity,
 }: WarehouseStatsCardsProps) {
   const values = {
     totalWarehouses,
-    totalCapacityConfigured,
-    totalUsedCapacity,
-    totalAvailableCapacity,
   };
 
   return (

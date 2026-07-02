@@ -7,11 +7,9 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Button from "@/components/ui/button";
 import Card from "@/components/ui/card";
 import { useWarehousesList } from "@/hooks/useWarehouses";
-import type { Warehouse } from "@/lib/warehouses";
 
 import CreateWarehouseModal from "./CreateWarehouseModal";
 import WarehouseFilters from "./WarehouseFilters";
-import WarehouseHeader from "./WarehouseHeader";
 import WarehouseStatsCards from "./WarehouseStatsCards";
 import WarehousesTable from "./WarehousesTable";
 import {
@@ -23,20 +21,13 @@ import {
   type WarehouseSortDir,
 } from "./warehouses-utils";
 
-function filterWarehouses(warehouses: Warehouse[], search: string) {
-  const query = search.trim().toLowerCase();
-  if (!query) return warehouses;
+const DEFAULT_PAGE = 1;
+const DEFAULT_LIMIT = 20;
 
-  return warehouses.filter((warehouse) => {
-    const haystack = [
-      warehouse.name,
-      warehouse.location ?? "",
-      warehouse.description ?? "",
-    ]
-      .join(" ")
-      .toLowerCase();
-    return haystack.includes(query);
-  });
+function parsePositiveInt(value: string | null, fallback: number) {
+  if (!value) return fallback;
+  const parsed = Number.parseInt(value, 10);
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
 }
 
 function WarehousesErrorState({
@@ -68,86 +59,72 @@ export default function WarehousesPageClient() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const [filtersOpen, setFiltersOpen] = useState(false);
 
-  const search = searchParams.get("search") ?? "";
+  const page = parsePositiveInt(searchParams.get("page"), DEFAULT_PAGE);
+  const limit = parsePositiveInt(searchParams.get("limit"), DEFAULT_LIMIT);
   const sortBy = parseWarehouseSortBy(searchParams.get("sort_by"));
   const sortDir = parseWarehouseSortDir(searchParams.get("sort_dir"));
 
   useEffect(() => {
+    const normalizedPage = searchParams.get("page");
+    const normalizedLimit = searchParams.get("limit");
     const normalizedSortBy = searchParams.get("sort_by");
     const normalizedSortDir = searchParams.get("sort_dir");
 
-    if (normalizedSortBy === sortBy && normalizedSortDir === sortDir) {
+    if (
+      normalizedPage === String(page) &&
+      normalizedLimit === String(limit) &&
+      normalizedSortBy === sortBy &&
+      normalizedSortDir === sortDir
+    ) {
       return;
     }
 
     router.replace(
       buildWarehousesHref(searchParams, {
+        page,
+        limit,
         sort_by: sortBy,
         sort_dir: sortDir,
       }),
     );
-  }, [router, searchParams, sortBy, sortDir]);
+  }, [limit, page, router, searchParams, sortBy, sortDir]);
 
-  const warehousesQuery = useWarehousesList();
-  const warehouses = useMemo(
-    () => warehousesQuery.data ?? [],
-    [warehousesQuery.data],
+  const warehousesQuery = useWarehousesList({ page, limit });
+  const warehousesData = warehousesQuery.data?.data;
+  const warehouses = useMemo(() => warehousesData?.data ?? [], [warehousesData]);
+
+  const visibleWarehouses = useMemo(
+    () => sortWarehouses(warehouses, sortBy, sortDir),
+    [warehouses, sortBy, sortDir],
   );
 
-  const visibleWarehouses = useMemo(() => {
-    const filtered = filterWarehouses(warehouses, search);
-    return sortWarehouses(filtered, sortBy, sortDir);
-  }, [warehouses, search, sortBy, sortDir]);
+  const totalWarehouses = warehousesData?.total ?? 0;
+  const totalPages =
+    warehousesData?.total_pages ??
+    Math.max(1, Math.ceil(totalWarehouses / Math.max(1, limit)));
+  const currentPage = Math.min(page, Math.max(totalPages, 1));
 
-  const totals = useMemo(() => {
-    const totalWarehouses = warehouses.length;
-    const totalCapacityConfigured = warehouses.reduce(
-      (sum, warehouse) => sum + (warehouse.capacity > 0 ? warehouse.capacity : 0),
-      0,
-    );
-    const totalUsedCapacity = warehouses.reduce(
-      (sum, warehouse) => sum + warehouse.used_capacity,
-      0,
-    );
-    const totalAvailableCapacity = warehouses.reduce(
-      (sum, warehouse) => sum + warehouse.available_capacity,
-      0,
-    );
-
-    return {
-      totalWarehouses,
-      totalCapacityConfigured,
-      totalUsedCapacity,
-      totalAvailableCapacity,
-    };
-  }, [warehouses]);
-
-  const updateParams = (updates: Record<string, string | undefined>) => {
+  const updateParams = (updates: Record<string, string | number | undefined>) => {
     router.replace(buildWarehousesHref(searchParams, updates));
+  };
+
+  const replaceWithResetPage = (
+    updates: Record<string, string | number | undefined>,
+  ) => {
+    updateParams({ ...updates, page: DEFAULT_PAGE, limit });
+  };
+
+  const updatePage = (nextPage: number) => {
+    updateParams({ page: nextPage, limit, sort_by: sortBy, sort_dir: sortDir });
   };
 
   return (
     <div className="space-y-8">
-      <WarehouseHeader onAddWarehouse={() => setIsCreateOpen(true)} />
       <CreateWarehouseModal open={isCreateOpen} onClose={() => setIsCreateOpen(false)} />
 
-      <WarehouseStatsCards
-        totalWarehouses={totals.totalWarehouses}
-        totalCapacityConfigured={totals.totalCapacityConfigured}
-        totalUsedCapacity={totals.totalUsedCapacity}
-        totalAvailableCapacity={totals.totalAvailableCapacity}
-      />
-
-      <WarehouseFilters
-        search={search}
-        sortBy={sortBy as WarehouseSortBy}
-        sortDir={sortDir as WarehouseSortDir}
-        onSearchChange={(value) => updateParams({ search: value || undefined })}
-        onSortByChange={(value) => updateParams({ sort_by: value })}
-        onSortDirChange={(value) => updateParams({ sort_dir: value })}
-        onClear={() => router.push("/warehouses")}
-      />
+      <WarehouseStatsCards totalWarehouses={totalWarehouses} />
 
       {warehousesQuery.isError ? (
         <WarehousesErrorState
@@ -161,6 +138,26 @@ export default function WarehousesPageClient() {
         <WarehousesTable
           warehouses={visibleWarehouses}
           isLoading={warehousesQuery.isLoading}
+          page={currentPage}
+          totalPages={totalPages}
+          limit={limit}
+          totalWarehouses={totalWarehouses}
+          title="List of warehouses"
+          filtersOpen={filtersOpen}
+          onToggleFilters={() => setFiltersOpen((prev) => !prev)}
+          filters={
+            <WarehouseFilters
+              sortBy={sortBy as WarehouseSortBy}
+              sortDir={sortDir as WarehouseSortDir}
+              onSortByChange={(value) => replaceWithResetPage({ sort_by: value })}
+              onSortDirChange={(value) =>
+                replaceWithResetPage({ sort_dir: value })
+              }
+              onClear={() => router.push("/warehouses")}
+            />
+          }
+          onAddWarehouse={() => setIsCreateOpen(true)}
+          onPageChange={updatePage}
         />
       )}
     </div>
