@@ -1,5 +1,6 @@
 "use client";
 
+import { ChevronDown } from "lucide-react";
 import type { FieldErrors, UseFormRegister } from "react-hook-form";
 
 import Label from "@/components/ui/label";
@@ -32,84 +33,96 @@ export default function CreateItemLogisticsSection({
   isLoadingVendors,
   isLoadingWarehouses,
 }: CreateItemLogisticsSectionProps) {
+  const selectClassName =
+    "h-9 w-full appearance-none rounded-md border border-input bg-transparent px-3 pr-9 text-sm text-foreground shadow-xs outline-none transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40";
+
   return (
-    <section className="space-y-4">
-      <div className="space-y-2">
+    <section className="space-y-3">
+      <div className="space-y-1.5">
         <Label
           htmlFor="create-item-category"
           className="label-caps text-foreground"
         >
           Category
         </Label>
-        <select
-          id="create-item-category"
-          className="h-11 w-full rounded-[10px] border border-input bg-transparent px-3 text-sm text-foreground shadow-xs outline-none transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40"
-          aria-invalid={Boolean(errors.category_id)}
-          disabled={disabled || isLoadingCategories}
-          {...register("category_id")}
-        >
-          <option value="">
-            {isLoadingCategories ? "Loading categories…" : "Select category"}
-          </option>
-          {categories.map((category) => (
-            <option key={category.id} value={category.id}>
-              {category.name}
+        <div className="relative">
+          <select
+            id="create-item-category"
+            className={selectClassName}
+            aria-invalid={Boolean(errors.category_id)}
+            disabled={disabled || isLoadingCategories}
+            {...register("category_id")}
+          >
+            <option value="">
+              {isLoadingCategories ? "Loading categories…" : "Select category"}
             </option>
-          ))}
-        </select>
+            {categories.map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.name}
+              </option>
+            ))}
+          </select>
+          <ChevronDown className="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+        </div>
         {errors.category_id ? (
           <p className="text-xs text-destructive">{errors.category_id.message}</p>
         ) : null}
       </div>
 
-      <div className="space-y-2">
+      <div className="space-y-1.5">
         <Label htmlFor="create-item-vendor" className="label-caps text-foreground">
           Vendor
         </Label>
-        <select
-          id="create-item-vendor"
-          className="h-11 w-full rounded-[10px] border border-input bg-transparent px-3 text-sm text-foreground shadow-xs outline-none transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40"
-          aria-invalid={Boolean(errors.vendor_id)}
-          disabled={disabled || isLoadingVendors}
-          {...register("vendor_id")}
-        >
-          <option value="">
-            {isLoadingVendors ? "Loading vendors…" : "Select vendor"}
-          </option>
-          {vendors.map((vendor) => (
-            <option key={vendor.id} value={vendor.id}>
-              {vendor.name}
+        <div className="relative">
+          <select
+            id="create-item-vendor"
+            className={selectClassName}
+            aria-invalid={Boolean(errors.vendor_id)}
+            disabled={disabled || isLoadingVendors}
+            {...register("vendor_id")}
+          >
+            <option value="">
+              {isLoadingVendors ? "Loading vendors…" : "Select vendor"}
             </option>
-          ))}
-        </select>
+            {vendors.map((vendor) => (
+              <option key={vendor.id} value={vendor.id}>
+                {vendor.name}
+              </option>
+            ))}
+          </select>
+          <ChevronDown className="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+        </div>
         {errors.vendor_id ? (
           <p className="text-xs text-destructive">{errors.vendor_id.message}</p>
         ) : null}
       </div>
 
-      <div className="space-y-2">
+      <div className="space-y-1.5">
         <Label
           htmlFor="create-item-warehouse"
           className="label-caps text-foreground"
         >
           Warehouse
         </Label>
-        <select
-          id="create-item-warehouse"
-          className="h-11 w-full rounded-[10px] border border-input bg-transparent px-3 text-sm text-foreground shadow-xs outline-none transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40"
-          aria-invalid={Boolean(errors.warehouse_id)}
-          disabled={disabled || isLoadingWarehouses}
-          {...register("warehouse_id")}
-        >
-          <option value="">
-            {isLoadingWarehouses ? "Loading warehouses…" : "Select warehouse"}
-          </option>
-          {warehouses.map((warehouse) => (
-            <option key={warehouse.id} value={warehouse.id}>
-              {warehouse.name}
+        <div className="relative">
+          <select
+            id="create-item-warehouse"
+            className={selectClassName}
+            aria-invalid={Boolean(errors.warehouse_id)}
+            disabled={disabled || isLoadingWarehouses}
+            {...register("warehouse_id")}
+          >
+            <option value="">
+              {isLoadingWarehouses ? "Loading warehouses…" : "Select warehouse"}
             </option>
-          ))}
-        </select>
+            {warehouses.map((warehouse) => (
+              <option key={warehouse.id} value={warehouse.id}>
+                {warehouse.name}
+              </option>
+            ))}
+          </select>
+          <ChevronDown className="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+        </div>
         {errors.warehouse_id ? (
           <p className="text-xs text-destructive">
             {errors.warehouse_id.message}
@@ -117,28 +130,32 @@ export default function CreateItemLogisticsSection({
         ) : null}
       </div>
 
-      <div className="space-y-2">
+      <div className="space-y-1.5">
         <Label
           htmlFor="create-item-item-type"
           className="label-caps text-foreground"
         >
           Item Type
         </Label>
-        <select
-          id="create-item-item-type"
-          className="h-11 w-full rounded-[10px] border border-input bg-transparent px-3 text-sm text-foreground shadow-xs outline-none transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40"
-          aria-invalid={Boolean(errors.Itemtypes)}
-          disabled={disabled}
-          {...register("Itemtypes")}
-        >
-          <option value="SALLABLE">SALLABLE</option>
-        </select>
+        <div className="relative">
+          <select
+            id="create-item-item-type"
+            className={selectClassName}
+            aria-invalid={Boolean(errors.Itemtypes)}
+            disabled={disabled}
+            {...register("Itemtypes")}
+          >
+            <option value="SALLABLE">SALLABLE</option>
+            <option value="NOT_SALLABLE">NOT SALLABLE</option>
+          </select>
+          <ChevronDown className="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+        </div>
         {errors.Itemtypes ? (
           <p className="text-xs text-destructive">{errors.Itemtypes.message}</p>
         ) : null}
       </div>
 
-      <div className="space-y-2">
+      <div className="space-y-1.5">
         <Label
           htmlFor="create-item-bin-location"
           className="label-caps text-foreground"
@@ -148,7 +165,7 @@ export default function CreateItemLogisticsSection({
         <Input
           id="create-item-bin-location"
           placeholder="e.g. A-12-04"
-          className="h-11 rounded-[10px] px-4"
+          className="h-9 rounded-md px-3"
           aria-invalid={Boolean(errors.bin_location)}
           disabled={disabled}
           {...register("bin_location")}

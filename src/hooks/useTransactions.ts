@@ -1,4 +1,9 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  keepPreviousData,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import {
   createTransaction,
   getTransactionHistory,
@@ -25,6 +30,10 @@ export function useTransactionsList(params: TransactionsListQuery) {
   return useQuery<TransactionsListResponse>({
     queryKey: transactionsListKey(params),
     queryFn: () => listTransactions(params),
+    placeholderData: keepPreviousData,
+    staleTime: 60_000,
+    gcTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 }
 
@@ -36,6 +45,10 @@ export function useTransactionsListEnabled(
     queryKey: transactionsListKey(params),
     queryFn: () => listTransactions(params),
     enabled,
+    placeholderData: keepPreviousData,
+    staleTime: 60_000,
+    gcTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 }
 

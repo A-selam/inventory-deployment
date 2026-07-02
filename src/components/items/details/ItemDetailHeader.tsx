@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, PackagePlus, RefreshCw, Trash } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
+import Button from "@/components/ui/button";
 import type { ItemDetail } from "@/types/items";
 import { cn } from "@/lib/utils";
 
@@ -11,12 +12,18 @@ type ItemDetailHeaderProps = {
   item: ItemDetail;
   statusLabel: string;
   statusClassName: string;
+  onUpdate?: () => void;
+  onDelete?: () => void;
+  onCreateTransaction?: () => void;
 };
 
 export default function ItemDetailHeader({
   item,
   statusLabel,
   statusClassName,
+  onUpdate,
+  onDelete,
+  onCreateTransaction,
 }: ItemDetailHeaderProps) {
   return (
     <section className="space-y-4">
@@ -30,8 +37,8 @@ export default function ItemDetailHeader({
         </Link>
       </div>
 
-      <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
-        <div className="space-y-3">
+      <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
+        <div className="min-w-0 space-y-3">
           <div className="space-y-2">
             <h1 className="text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
               {item.name}
@@ -59,6 +66,43 @@ export default function ItemDetailHeader({
               {item.bin_location}
             </Badge>
           </div>
+        </div>
+
+        <div className="flex flex-wrap items-center justify-start gap-2 lg:justify-end">
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            className="h-9 gap-2 border-amber-200 bg-amber-50 text-amber-900 hover:bg-amber-100"
+            onClick={onUpdate}
+            disabled={!onUpdate}
+          >
+            <RefreshCw className="size-4" />
+            Update
+          </Button>
+
+          <Button
+            type="button"
+            variant="default"
+            size="sm"
+            className="h-9 gap-2 bg-rose-600 text-white hover:bg-rose-700"
+            onClick={onDelete}
+            disabled={!onDelete}
+          >
+            <Trash className="size-4" />
+            Delete
+          </Button>
+
+          <Button
+            type="button"
+            size="sm"
+            className="h-9 gap-2"
+            onClick={onCreateTransaction}
+            disabled={!onCreateTransaction}
+          >
+            <PackagePlus className="size-4" />
+            Transaction
+          </Button>
         </div>
       </div>
     </section>

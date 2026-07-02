@@ -8,12 +8,14 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
 import EmptyState from "@/components/shared/EmptyState";
 import { History } from "lucide-react";
 import type { Transaction } from "@/lib/transactions";
 
 type ItemActivityTableProps = {
   transactions: Transaction[];
+  isLoading?: boolean;
 };
 
 function parseDate(value: string | number | null | undefined) {
@@ -76,7 +78,31 @@ function typeLabel(transaction: Transaction) {
 
 export default function ItemActivityTable({
   transactions,
+  isLoading = false,
 }: ItemActivityTableProps) {
+  if (isLoading && !transactions.length) {
+    return (
+      <Card className="rounded-[12px] border-border p-0 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
+        <div className="border-b border-border px-6 py-4">
+          <h3 className="text-lg font-semibold tracking-tight text-foreground">
+            Recent activity
+          </h3>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Loading the latest transactions for this item…
+          </p>
+        </div>
+
+        <div className="space-y-3 px-6 py-5">
+          <Skeleton className="h-10 w-full" />
+          <Skeleton className="h-10 w-full" />
+          <Skeleton className="h-10 w-full" />
+          <Skeleton className="h-10 w-full" />
+          <Skeleton className="h-10 w-full" />
+        </div>
+      </Card>
+    );
+  }
+
   if (!transactions.length) {
     return (
       <EmptyState

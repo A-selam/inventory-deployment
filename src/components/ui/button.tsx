@@ -24,7 +24,7 @@ export function Button({
         "inline-flex items-center justify-center rounded-md font-semibold transition-colors disabled:opacity-60 disabled:cursor-not-allowed",
         {
           // Variants
-          "bg-primary px-4 py-3 text-base text-primary-foreground shadow hover:bg-opacity-90":
+          "bg-primary px-4 py-3 text-base text-primary-foreground shadow hover:bg-primary/90":
             variant === "default",
           "border border-border bg-card px-4 py-3 text-base text-foreground hover:bg-muted":
             variant === "outline",

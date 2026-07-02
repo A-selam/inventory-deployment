@@ -28,6 +28,9 @@ export function useVendor(id?: string) {
     queryKey: vendorDetailKey(id ?? ""),
     queryFn: () => getVendor(id as string),
     enabled: Boolean(id),
+    staleTime: 60_000,
+    gcTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
 }
 
