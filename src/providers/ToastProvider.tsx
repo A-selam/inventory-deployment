@@ -28,10 +28,11 @@ type ToastContextValue = {
 const ToastContext = createContext<ToastContextValue | null>(null);
 
 const variantStyles: Record<ToastVariant, string> = {
-  success: "border-border bg-card",
-  error: "border-destructive/30 bg-card",
+  success: "border-green-500/30 bg-green-500/5",
+  error: "border-destructive/40 bg-destructive/10",
   info: "border-border bg-card",
 };
+
 
 export function ToastProvider({ children }: { children: ReactNode }) {
   const [toasts, setToasts] = useState<Toast[]>([]);

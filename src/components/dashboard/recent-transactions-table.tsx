@@ -154,7 +154,7 @@ export default function RecentTransactionsTable({
         </div>
       </div>
 
-      <div className="border border-border rounded-md bg-card shadow-sm overflow-hidden">
+      {/* <div className="border border-border rounded-md bg-card shadow-sm overflow-hidden">
         <div className="max-h-[70vh] overflow-auto">
           <Table>
             <TableHeader className="sticky top-0 z-10 bg-background shadow-sm [&_tr]:border-b">
@@ -228,7 +228,7 @@ export default function RecentTransactionsTable({
             </TableBody>
           </Table>
         </div>
-      </div>
+      </div> */}
     </Card>
   );
 }
