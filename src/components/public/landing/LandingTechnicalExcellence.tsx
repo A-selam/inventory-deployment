@@ -6,27 +6,27 @@ export default function LandingTechnicalExcellence() {
   const highlights = [
     {
       icon: Gauge,
-      title: 'Instant Results',
-      metric: 'Lightning Fast',
-      description: 'Search and update your inventory instantly. No more waiting around for systems to catch up.',
+      title: 'Zero Data Loss',
+      metric: 'Immutable Ledger',
+      description: 'Every inventory change is recorded permanently and cannot be deleted. The complete history of every transaction is always available for audit.',
     },
     {
       icon: Box,
-      title: 'Deploy Anywhere',
-      metric: 'Your Choice',
-      description: 'Run it on your own servers, in the cloud, or split across multiple locations. You\'re in control.',
+      title: 'Deploy On Your Terms',
+      metric: 'Self-Hosted',
+      description: 'Install on your servers or private cloud. Your data never leaves your infrastructure. No dependency on third-party services.',
     },
     {
       icon: Database,
-      title: 'Rock-Solid Reliability',
-      metric: 'Enterprise Grade',
-      description: 'Trusted database technology that powers the world\'s biggest companies. Your data is safe.',
+      title: 'Atomic Accuracy',
+      metric: 'Guaranteed Consistency',
+      description: 'Stock can never go negative. Every transaction is fully processed or rejected—no partial updates, no lost data.',
     },
     {
       icon: Code,
-      title: 'Works With Everything',
-      metric: 'Easy Integration',
-      description: 'Connect to your existing tools and systems. Our open design means you\'re never locked in.',
+      title: 'Complete System',
+      metric: 'End-to-End',
+      description: 'Everything you need is built in: user roles, item management, transaction tracking, low-stock alerts, and reporting. No gaps to fill.',
     },
   ];
 
@@ -35,10 +35,10 @@ export default function LandingTechnicalExcellence() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-16 text-center">
           <h2 className="text-balance text-3xl font-semibold tracking-tight text-primary sm:text-4xl lg:text-5xl">
-            Designed to Last
+            Complete System, Zero Gaps
           </h2>
           <p className="mt-4 text-lg text-muted-foreground">
-            Fast, reliable, and built to grow with your business.
+            Everything required to run inventory operations is built-in and battle-tested.
           </p>
         </div>
 
@@ -63,46 +63,46 @@ export default function LandingTechnicalExcellence() {
           })}
         </div>
 
-        {/* Key benefits */}
+        {/* Key capabilities */}
         <div className="mt-12 grid gap-6 md:grid-cols-2">
           <div className="rounded-lg border border-border bg-gradient-to-br from-card to-muted p-8">
-            <h3 className="mb-4 text-xl font-semibold text-primary">Works With Your Tools</h3>
+            <h3 className="mb-4 text-xl font-semibold text-primary">Complete Item Management</h3>
             <p className="mb-4 text-sm text-muted-foreground">
-              Plug into your accounting software, e-commerce platform, or custom systems. Built to work alongside the tools you already trust.
+              Manage your entire inventory from one unified system. Track SKUs, vendors, warehouse locations, and cost/selling prices. Bulk CSV import for quick data loading.
             </p>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li className="flex items-center gap-2">
                 <span className="size-1.5 rounded-full bg-ring" />
-                Connect to what you already use
+                Per-item vendor and location tracking
               </li>
               <li className="flex items-center gap-2">
                 <span className="size-1.5 rounded-full bg-ring" />
-                Automatic real-time syncing
+                Bulk CSV import with validation
               </li>
               <li className="flex items-center gap-2">
                 <span className="size-1.5 rounded-full bg-ring" />
-                No complicated setup required
+                Automatic low-stock alerts and reorder reports
               </li>
             </ul>
           </div>
 
           <div className="rounded-lg border border-border bg-gradient-to-br from-card to-muted p-8">
-            <h3 className="mb-4 text-xl font-semibold text-primary">Protect Your Business</h3>
+            <h3 className="mb-4 text-xl font-semibold text-primary">Built-In Security &amp; Compliance</h3>
             <p className="mb-4 text-sm text-muted-foreground">
-              Control exactly who can access what. See every change that happens. Prevent fraud and mistakes with built-in safeguards.
+              Role-based access control ensures only authorized users can view or modify inventory. Every action is logged and fully auditable for compliance.
             </p>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li className="flex items-center gap-2">
                 <span className="size-1.5 rounded-full bg-ring" />
-                Know who did what and when
+                Three role levels: Admin, Operator, Viewer
               </li>
               <li className="flex items-center gap-2">
                 <span className="size-1.5 rounded-full bg-ring" />
-                Prevent unauthorized access
+                Complete audit trail of all transactions
               </li>
               <li className="flex items-center gap-2">
                 <span className="size-1.5 rounded-full bg-ring" />
-                Data encrypted everywhere
+                Encrypted data at rest and in transit
               </li>
             </ul>
           </div>

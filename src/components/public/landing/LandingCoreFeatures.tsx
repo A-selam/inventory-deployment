@@ -6,33 +6,33 @@ export default function LandingCoreFeatures() {
   const features = [
     {
       icon: Database,
-      title: 'Complete Record History',
-      description: 'Every inventory change is recorded forever. See exactly what happened, when it happened, and who made the change. Perfect for audits and investigations.',
+      title: 'Immutable Transaction Ledger',
+      description: 'Every inventory movement is recorded permanently and never deleted. Complete audit trail showing what changed, when, and who did it. Essential for compliance and investigations.',
     },
     {
       icon: Zap,
-      title: 'No More Mistakes',
-      description: 'Our system prevents impossible situations like negative stock. Every transaction is either completed fully or not at all—no partial updates.',
+      title: 'Atomic Accuracy Guaranteed',
+      description: 'Inventory quantity can never go negative. Stock movements are all-or-nothing—either the entire transaction succeeds or it fails completely. No partial updates, no data inconsistency.',
     },
     {
       icon: Lock,
-      title: 'Control Who Does What',
-      description: 'Managers, warehouse workers, and viewers each see what they need. Prevent unauthorized changes while keeping operations flowing.',
+      title: 'Role-Based Access Control',
+      description: 'Three built-in roles—Admin, Operator, Viewer—give each team member exactly the access they need. Fine-grained permissions prevent unauthorized changes.',
     },
     {
       icon: Upload,
-      title: 'Quick Bulk Updates',
-      description: 'Upload thousands of items at once using Excel or CSV files. If anything looks wrong, we tell you exactly what needs fixing.',
+      title: 'Bulk CSV Operations',
+      description: 'Load thousands of items at once with CSV import. Entire upload is validated before any data is saved. If any row has errors, the whole batch is rejected with detailed error reporting.',
     },
     {
       icon: Bell,
-      title: 'Smart Stock Alerts',
-      description: 'Get notified when items run low. See automatic reorder suggestions grouped by supplier so you can plan ahead.',
+      title: 'Automatic Reorder Alerts',
+      description: 'Intelligent low-stock detection evaluates items against minimum thresholds. Automatic reorder report grouped by vendor so you know exactly what to buy and from whom.',
     },
     {
       icon: TrendingUp,
-      title: 'See Your Business in Real-Time',
-      description: 'Beautiful charts show what&apos;s selling, what&apos;s sitting, and where your money is tied up. Make decisions based on actual data.',
+      title: 'Real-Time Dashboard &amp; Reporting',
+      description: 'Live inventory visibility with charts, movement analysis, and vendor reports. Make data-driven decisions about stock levels, cash flow, and procurement priorities.',
     },
   ];
 
@@ -41,10 +41,10 @@ export default function LandingCoreFeatures() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-16 text-center">
           <h2 className="text-balance text-3xl font-semibold tracking-tight text-primary sm:text-4xl lg:text-5xl">
-            Built for the Way You Work
+            Full-Stack Inventory System
           </h2>
           <p className="mt-4 text-lg text-muted-foreground">
-            Smart tools that solve real inventory problems without getting in the way.
+            Everything required for enterprise inventory control. No missing pieces, no compromises.
           </p>
         </div>
 

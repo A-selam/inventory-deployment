@@ -32,10 +32,10 @@ export default function LandingHero() {
           <div className="flex flex-col gap-6">
             <div className="space-y-4">
               <h1 className="text-balance text-4xl font-semibold tracking-tight text-primary sm:text-5xl lg:text-6xl">
-                Inventory Management Your Team Can Trust
+                Enterprise Inventory Management, Built Complete
               </h1>
               <p className="text-balance text-lg text-muted-foreground sm:text-xl">
-                Stop losing track of what you have. See your entire inventory in one place, catch problems before they cost you money, and make smarter decisions with real-time visibility.
+                A full-stack inventory system that runs entirely on your infrastructure. Track every transaction, enforce accuracy, and maintain complete control over your stock—no middleware, no plugins, no compromises.
               </p>
             </div>
 
@@ -60,15 +60,15 @@ export default function LandingHero() {
             <div className="flex gap-4 pt-4 flex-wrap text-sm text-muted-foreground">
               <div className="flex items-center gap-2">
                 <div className="size-1.5 rounded-full bg-ring" />
-                <span>Instant search results</span>
+                <span>Complete system included</span>
               </div>
               <div className="flex items-center gap-2">
                 <div className="size-1.5 rounded-full bg-ring" />
-                <span>Deploy on your servers</span>
+                <span>Immutable transaction ledger</span>
               </div>
               <div className="flex items-center gap-2">
                 <div className="size-1.5 rounded-full bg-ring" />
-                <span>Never lose an audit trail</span>
+                <span>Full audit compliance built-in</span>
               </div>
             </div>
           </div>

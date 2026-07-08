@@ -6,18 +6,18 @@ export default function LandingSelfHostedAdvantage() {
   const advantages = [
     {
       icon: Lock,
-      title: 'Your Data, Your Control',
-      description: 'No cloud middleman. Your inventory data stays on your servers, behind your firewall. You decide who sees it.',
+      title: 'Your Data Stays Yours',
+      description: 'Complete data sovereignty. Runs entirely on your infrastructure—your servers, your database, your firewall. Zero reliance on cloud vendors.',
     },
     {
       icon: Server,
-      title: 'Run It Anywhere',
-      description: 'Your office servers, your cloud, or split across locations. One simple installation and you\'re up and running.',
+      title: 'No Vendor Lock-In',
+      description: 'Deploy on your on-premises servers, private cloud, or hybrid infrastructure. Migrate freely without losing access to historical data or audit trails.',
     },
     {
       icon: DollarSign,
-      title: 'No Per-Person Costs',
-      description: 'Pay once for the software. Add as many team members as you need. No surprise bills when your team grows.',
+      title: 'Flat Pricing, Unlimited Users',
+      description: 'One license covers your entire team—no per-seat fees, no surprise costs as you scale. Hire as many people as you need.',
     },
   ];
 

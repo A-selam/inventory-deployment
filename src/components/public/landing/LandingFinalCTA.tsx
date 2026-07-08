@@ -8,10 +8,10 @@ export default function LandingFinalCTA() {
       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
         <div className="rounded-2xl border border-border bg-gradient-to-br from-card to-muted p-8 md:p-12 lg:p-16 text-center">
           <h2 className="text-balance text-3xl font-semibold tracking-tight text-primary sm:text-4xl lg:text-5xl mb-4">
-            Stop Guessing About Your Stock
+            Take Control of Your Inventory
           </h2>
           <p className="text-lg text-muted-foreground mb-8">
-            See your inventory clearly, make decisions with confidence, and keep your business running smoothly.
+            Deploy a complete inventory system that never loses a transaction, guarantees accuracy, and gives you the compliance audit trail you need.
           </p>
 
           <div className="flex flex-col gap-3 sm:flex-row sm:justify-center sm:gap-4">
