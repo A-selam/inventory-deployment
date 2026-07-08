@@ -6,33 +6,33 @@ export default function LandingCoreFeatures() {
   const features = [
     {
       icon: Database,
-      title: 'Immutable Ledger',
-      description: 'Every stock change is an immutable transaction. Full auditability, historical traceability, and data consistency.',
+      title: 'Complete Record History',
+      description: 'Every inventory change is recorded forever. See exactly what happened, when it happened, and who made the change. Perfect for audits and investigations.',
     },
     {
       icon: Zap,
-      title: 'Atomic Transactions',
-      description: 'No partial writes. Guaranteed stock consistency preventing negative balances at the database level.',
+      title: 'No More Mistakes',
+      description: 'Our system prevents impossible situations like negative stock. Every transaction is either completed fully or not at all—no partial updates.',
     },
     {
       icon: Lock,
-      title: 'Role-Based Access (RBAC)',
-      description: 'Granular control with Admin, Operator, and Viewer roles. Fine-tune permissions per user and warehouse.',
+      title: 'Control Who Does What',
+      description: 'Managers, warehouse workers, and viewers each see what they need. Prevent unauthorized changes while keeping operations flowing.',
     },
     {
       icon: Upload,
-      title: 'Bulk CSV Operations',
-      description: 'All-or-nothing atomic CSV imports with precise error reporting. Safely load thousands of items at once.',
+      title: 'Quick Bulk Updates',
+      description: 'Upload thousands of items at once using Excel or CSV files. If anything looks wrong, we tell you exactly what needs fixing.',
     },
     {
       icon: Bell,
-      title: 'Smart Alerts & Replenishment',
-      description: 'Real-time low-stock evaluation and automated reorder insights grouped by vendor.',
+      title: 'Smart Stock Alerts',
+      description: 'Get notified when items run low. See automatic reorder suggestions grouped by supplier so you can plan ahead.',
     },
     {
       icon: TrendingUp,
-      title: 'Real-Time Analytics',
-      description: 'Live inventory dashboards with trend analysis, movement patterns, and predictive insights.',
+      title: 'See Your Business in Real-Time',
+      description: 'Beautiful charts show what&apos;s selling, what&apos;s sitting, and where your money is tied up. Make decisions based on actual data.',
     },
   ];
 
@@ -41,10 +41,10 @@ export default function LandingCoreFeatures() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-16 text-center">
           <h2 className="text-balance text-3xl font-semibold tracking-tight text-primary sm:text-4xl lg:text-5xl">
-            Core Features Built for Enterprise
+            Built for the Way You Work
           </h2>
           <p className="mt-4 text-lg text-muted-foreground">
-            Everything you need to manage inventory with confidence and precision.
+            Smart tools that solve real inventory problems without getting in the way.
           </p>
         </div>
 

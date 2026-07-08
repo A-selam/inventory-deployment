@@ -6,27 +6,27 @@ export default function LandingTechnicalExcellence() {
   const highlights = [
     {
       icon: Gauge,
-      title: 'Lightning-Fast Performance',
-      metric: '<200ms',
-      description: 'CRUD response target for maximum operational efficiency.',
+      title: 'Instant Results',
+      metric: 'Lightning Fast',
+      description: 'Search and update your inventory instantly. No more waiting around for systems to catch up.',
     },
     {
       icon: Box,
-      title: 'Containerized',
-      metric: 'Docker',
-      description: 'Deploy anywhere. On-premises, cloud, or hybrid infrastructure.',
+      title: 'Deploy Anywhere',
+      metric: 'Your Choice',
+      description: 'Run it on your own servers, in the cloud, or split across multiple locations. You\'re in control.',
     },
     {
       icon: Database,
-      title: 'Database-Backed',
-      metric: 'PostgreSQL',
-      description: 'Reliable, scalable SQL database with enterprise support.',
+      title: 'Rock-Solid Reliability',
+      metric: 'Enterprise Grade',
+      description: 'Trusted database technology that powers the world\'s biggest companies. Your data is safe.',
     },
     {
       icon: Code,
-      title: 'Robust API',
-      metric: 'FastAPI',
-      description: 'RESTful JSON standard responses for seamless integrations.',
+      title: 'Works With Everything',
+      metric: 'Easy Integration',
+      description: 'Connect to your existing tools and systems. Our open design means you\'re never locked in.',
     },
   ];
 
@@ -35,10 +35,10 @@ export default function LandingTechnicalExcellence() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-16 text-center">
           <h2 className="text-balance text-3xl font-semibold tracking-tight text-primary sm:text-4xl lg:text-5xl">
-            Built for Performance & Reliability
+            Designed to Last
           </h2>
           <p className="mt-4 text-lg text-muted-foreground">
-            Modern architecture designed for operational excellence.
+            Fast, reliable, and built to grow with your business.
           </p>
         </div>
 
@@ -63,46 +63,46 @@ export default function LandingTechnicalExcellence() {
           })}
         </div>
 
-        {/* Technical details bento grid */}
+        {/* Key benefits */}
         <div className="mt-12 grid gap-6 md:grid-cols-2">
           <div className="rounded-lg border border-border bg-gradient-to-br from-card to-muted p-8">
-            <h3 className="mb-4 text-xl font-semibold text-primary">API-First Architecture</h3>
+            <h3 className="mb-4 text-xl font-semibold text-primary">Works With Your Tools</h3>
             <p className="mb-4 text-sm text-muted-foreground">
-              Built on FastAPI with full OpenAPI documentation. Integrate with any system, build custom applications, and extend functionality with our comprehensive REST API.
+              Plug into your accounting software, e-commerce platform, or custom systems. Built to work alongside the tools you already trust.
             </p>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li className="flex items-center gap-2">
                 <span className="size-1.5 rounded-full bg-ring" />
-                Comprehensive OpenAPI docs
+                Connect to what you already use
               </li>
               <li className="flex items-center gap-2">
                 <span className="size-1.5 rounded-full bg-ring" />
-                JSON standard responses
+                Automatic real-time syncing
               </li>
               <li className="flex items-center gap-2">
                 <span className="size-1.5 rounded-full bg-ring" />
-                Webhook support for events
+                No complicated setup required
               </li>
             </ul>
           </div>
 
           <div className="rounded-lg border border-border bg-gradient-to-br from-card to-muted p-8">
-            <h3 className="mb-4 text-xl font-semibold text-primary">Enterprise Security</h3>
+            <h3 className="mb-4 text-xl font-semibold text-primary">Protect Your Business</h3>
             <p className="mb-4 text-sm text-muted-foreground">
-              Role-based access control, encrypted data in transit and at rest, audit logging of all operations, and compliance-ready security controls.
+              Control exactly who can access what. See every change that happens. Prevent fraud and mistakes with built-in safeguards.
             </p>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li className="flex items-center gap-2">
                 <span className="size-1.5 rounded-full bg-ring" />
-                Full audit trail logging
+                Know who did what and when
               </li>
               <li className="flex items-center gap-2">
                 <span className="size-1.5 rounded-full bg-ring" />
-                Granular RBAC
+                Prevent unauthorized access
               </li>
               <li className="flex items-center gap-2">
                 <span className="size-1.5 rounded-full bg-ring" />
-                Encrypted communications
+                Data encrypted everywhere
               </li>
             </ul>
           </div>

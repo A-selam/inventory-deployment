@@ -32,10 +32,10 @@ export default function LandingHero() {
           <div className="flex flex-col gap-6">
             <div className="space-y-4">
               <h1 className="text-balance text-4xl font-semibold tracking-tight text-primary sm:text-5xl lg:text-6xl">
-                Own Your Inventory Completely
+                Inventory Management Your Team Can Trust
               </h1>
               <p className="text-balance text-lg text-muted-foreground sm:text-xl">
-                Deploy a self-hosted, centralized inventory platform with an immutable transaction ledger. Full control over your data. Real-time analytics. Zero recurring seat fees.
+                Stop losing track of what you have. See your entire inventory in one place, catch problems before they cost you money, and make smarter decisions with real-time visibility.
               </p>
             </div>
 
@@ -60,15 +60,15 @@ export default function LandingHero() {
             <div className="flex gap-4 pt-4 flex-wrap text-sm text-muted-foreground">
               <div className="flex items-center gap-2">
                 <div className="size-1.5 rounded-full bg-ring" />
-                <span>Sub-200ms CRUD response</span>
+                <span>Instant search results</span>
               </div>
               <div className="flex items-center gap-2">
                 <div className="size-1.5 rounded-full bg-ring" />
-                <span>Docker containerized</span>
+                <span>Deploy on your servers</span>
               </div>
               <div className="flex items-center gap-2">
                 <div className="size-1.5 rounded-full bg-ring" />
-                <span>PostgreSQL backed</span>
+                <span>Never lose an audit trail</span>
               </div>
             </div>
           </div>

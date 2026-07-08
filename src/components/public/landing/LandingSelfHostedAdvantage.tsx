@@ -6,18 +6,18 @@ export default function LandingSelfHostedAdvantage() {
   const advantages = [
     {
       icon: Lock,
-      title: '100% Data Ownership',
-      description: 'Your data stays under your control. No third-party access. Complete privacy and sovereignty.',
+      title: 'Your Data, Your Control',
+      description: 'No cloud middleman. Your inventory data stays on your servers, behind your firewall. You decide who sees it.',
     },
     {
       icon: Server,
-      title: 'Deploy Anywhere',
-      description: 'Docker-ready containerized application. Deploy to your infrastructure, cloud, or on-premises.',
+      title: 'Run It Anywhere',
+      description: 'Your office servers, your cloud, or split across locations. One simple installation and you\'re up and running.',
     },
     {
       icon: DollarSign,
-      title: 'No Recurring Seat Fees',
-      description: 'One-time license. No per-user costs. Add as many team members as you need.',
+      title: 'No Per-Person Costs',
+      description: 'Pay once for the software. Add as many team members as you need. No surprise bills when your team grows.',
     },
   ];
 
