@@ -1,23 +1,19 @@
-import HomeCapabilities from "@/components/public/home/HomeCapabilities";
-import HomeCompany from "@/components/public/home/HomeCompany";
-import HomeCta from "@/components/public/home/HomeCta";
-import HomeHero from "@/components/public/home/HomeHero";
-import HomePartners from "@/components/public/home/HomePartners";
-import HomeSocials from "@/components/public/home/HomeSocials";
-import HomeStats from "@/components/public/home/HomeStats";
-import HomeTestimonials from "@/components/public/home/HomeTestimonials";
+import LandingHero from "@/components/public/landing/LandingHero";
+import LandingSelfHostedAdvantage from "@/components/public/landing/LandingSelfHostedAdvantage";
+import LandingCoreFeatures from "@/components/public/landing/LandingCoreFeatures";
+import LandingTechnicalExcellence from "@/components/public/landing/LandingTechnicalExcellence";
+import LandingSocialProof from "@/components/public/landing/LandingSocialProof";
+import LandingFinalCTA from "@/components/public/landing/LandingFinalCTA";
 
 export default function HomePage() {
   return (
-    <div className="overflow-x-hidden bg-white">
-      <HomeHero />
-      <HomeStats />
-      <HomeCompany />
-      <HomeCapabilities />
-      <HomePartners />
-      <HomeTestimonials />
-      <HomeCta />
-      {/* <HomeSocials /> */}
+    <div className="overflow-x-hidden">
+      <LandingHero />
+      <LandingSelfHostedAdvantage />
+      <LandingCoreFeatures />
+      <LandingTechnicalExcellence />
+      <LandingSocialProof />
+      <LandingFinalCTA />
     </div>
   );
 }

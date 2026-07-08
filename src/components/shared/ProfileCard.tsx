@@ -127,9 +127,9 @@ function EditProfileModal({
           <Button
             type="submit"
             form="profile-card-edit-form"
-            loading={mutation.isPending}
+            disabled={mutation.isPending}
           >
-            Save changes
+            {mutation.isPending ? 'Saving...' : 'Save changes'}
           </Button>
         </>
       }
@@ -245,9 +245,9 @@ function ChangePasswordModal({
           <Button
             type="submit"
             form="profile-card-pw-form"
-            loading={mutation.isPending}
+            disabled={mutation.isPending}
           >
-            Update password
+            {mutation.isPending ? 'Updating...' : 'Update password'}
           </Button>
         </>
       }
