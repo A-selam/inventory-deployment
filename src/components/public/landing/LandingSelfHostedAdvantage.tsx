@@ -22,7 +22,7 @@ export default function LandingSelfHostedAdvantage() {
   ];
 
   return (
-    <section className="py-20 md:py-28 lg:py-32">
+    <section className="py-20 md:py-28 lg:py-32" id="self-hosted">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="rounded-2xl border border-border bg-gradient-to-br from-card to-muted p-8 md:p-12 lg:p-16 animate-fade-in-up">
           <div className="grid gap-12 md:grid-cols-3">

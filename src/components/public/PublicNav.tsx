@@ -7,9 +7,9 @@ import { Archive, Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const NAV_LINKS = [
-  { label: "Features", href: "#features" },
-  { label: "Docs", href: "#docs" },
-  { label: "Pricing", href: "#pricing" },
+  { label: "Features", href: "#core-features" },
+  { label: "Capabilities", href: "#capabilities" },
+  { label: "Benefits", href: "#self-hosted" },
 ];
 
 export default function PublicNav() {

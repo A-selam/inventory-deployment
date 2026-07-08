@@ -31,7 +31,7 @@ export default function LandingTechnicalExcellence() {
   ];
 
   return (
-    <section className="py-20 md:py-28 lg:py-32">
+    <section className="py-20 md:py-28 lg:py-32" id="capabilities">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-16 text-center animate-fade-in-up">
           <h2 className="text-balance text-3xl font-semibold tracking-tight text-primary sm:text-4xl lg:text-5xl">

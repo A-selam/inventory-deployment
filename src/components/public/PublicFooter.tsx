@@ -2,6 +2,13 @@ import Link from "next/link";
 
 export default function PublicFooter() {
   const year = new Date().getFullYear();
+  
+  const socialLinks = [
+    { text: "𝕏", href: "https://twitter.com", label: "Twitter" },
+    { text: "in", href: "https://linkedin.com", label: "LinkedIn" },
+    { text: "GH", href: "https://github.com", label: "GitHub" },
+    { text: "@", href: "mailto:contact@stocklogic.com", label: "Email" },
+  ];
 
   const footerLinks = [
     { label: "Features", href: "#features" },
@@ -14,7 +21,7 @@ export default function PublicFooter() {
   return (
     <footer className="border-t border-border bg-card">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="py-12 grid gap-8 md:grid-cols-2 lg:grid-cols-4 mb-8">
+        <div className="py-12 grid gap-8 md:grid-cols-2 lg:grid-cols-5 mb-8">
           {/* Brand */}
           <div className="col-span-1">
             <p className="text-sm font-semibold text-primary">StockLogic</p>
@@ -28,40 +35,18 @@ export default function PublicFooter() {
             <p className="text-xs font-semibold text-primary uppercase tracking-wide mb-4">Product</p>
             <ul className="space-y-2">
               <li>
-                <a href="#features" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                <a href="#core-features" className="text-sm text-muted-foreground hover:text-primary transition-colors">
                   Features
                 </a>
               </li>
               <li>
-                <a href="#pricing" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  Pricing
+                <a href="#capabilities" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                  Capabilities
                 </a>
               </li>
               <li>
-                <a href="#docs" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  Documentation
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          {/* Developers */}
-          <div>
-            <p className="text-xs font-semibold text-primary uppercase tracking-wide mb-4">Developers</p>
-            <ul className="space-y-2">
-              <li>
-                <a href="#api" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  API Reference
-                </a>
-              </li>
-              <li>
-                <a href="#docs" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  Integration Guide
-                </a>
-              </li>
-              <li>
-                <a href="#support" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  Support
+                <a href="#self-hosted" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                  Self-Hosted
                 </a>
               </li>
             </ul>
@@ -87,6 +72,47 @@ export default function PublicFooter() {
                 </a>
               </li>
             </ul>
+          </div>
+
+          {/* Support */}
+          <div>
+            <p className="text-xs font-semibold text-primary uppercase tracking-wide mb-4">Support</p>
+            <ul className="space-y-2">
+              <li>
+                <a href="#contact" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                  Contact Sales
+                </a>
+              </li>
+              <li>
+                <a href="mailto:support@stocklogic.com" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                  Support Email
+                </a>
+              </li>
+              <li>
+                <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                  Documentation
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          {/* Social */}
+          <div>
+            <p className="text-xs font-semibold text-primary uppercase tracking-wide mb-4">Connect</p>
+            <div className="flex gap-3">
+              {socialLinks.map((social) => (
+                <a
+                  key={social.label}
+                  href={social.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center justify-center size-9 rounded-lg border border-border text-muted-foreground hover:text-primary hover:border-primary transition-colors font-semibold text-sm"
+                  aria-label={social.label}
+                >
+                  {social.text}
+                </a>
+              ))}
+            </div>
           </div>
         </div>
 
