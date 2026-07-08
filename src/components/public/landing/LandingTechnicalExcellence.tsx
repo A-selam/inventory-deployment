@@ -33,7 +33,7 @@ export default function LandingTechnicalExcellence() {
   return (
     <section className="py-20 md:py-28 lg:py-32">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="mb-16 text-center">
+        <div className="mb-16 text-center animate-fade-in-up">
           <h2 className="text-balance text-3xl font-semibold tracking-tight text-primary sm:text-4xl lg:text-5xl">
             Complete System, Zero Gaps
           </h2>
@@ -48,7 +48,10 @@ export default function LandingTechnicalExcellence() {
             return (
               <div
                 key={idx}
-                className="rounded-lg border border-border bg-card p-6 shadow-sm text-center"
+                className="rounded-lg border border-border bg-card p-6 shadow-sm text-center animate-fade-in-up"
+                style={{
+                  animationDelay: `${idx * 100}ms`,
+                }}
               >
                 <div className="mb-4 flex items-center justify-center size-12 rounded-lg bg-ring/10 mx-auto">
                   <Icon className="size-6 text-ring" />
@@ -65,7 +68,7 @@ export default function LandingTechnicalExcellence() {
 
         {/* Key capabilities */}
         <div className="mt-12 grid gap-6 md:grid-cols-2">
-          <div className="rounded-lg border border-border bg-gradient-to-br from-card to-muted p-8">
+          <div className="rounded-lg border border-border bg-gradient-to-br from-card to-muted p-8 animate-fade-in-left animate-delay-200">
             <h3 className="mb-4 text-xl font-semibold text-primary">Complete Item Management</h3>
             <p className="mb-4 text-sm text-muted-foreground">
               Manage your entire inventory from one unified system. Track SKUs, vendors, warehouse locations, and cost/selling prices. Bulk CSV import for quick data loading.
@@ -86,7 +89,7 @@ export default function LandingTechnicalExcellence() {
             </ul>
           </div>
 
-          <div className="rounded-lg border border-border bg-gradient-to-br from-card to-muted p-8">
+          <div className="rounded-lg border border-border bg-gradient-to-br from-card to-muted p-8 animate-fade-in-right animate-delay-300">
             <h3 className="mb-4 text-xl font-semibold text-primary">Built-In Security &amp; Compliance</h3>
             <p className="mb-4 text-sm text-muted-foreground">
               Role-based access control ensures only authorized users can view or modify inventory. Every action is logged and fully auditable for compliance.

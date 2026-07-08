@@ -13,7 +13,7 @@ export default function LandingSocialProof() {
   return (
     <section className="py-16 md:py-20 lg:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
+        <div className="text-center mb-12 animate-fade-in-up">
           <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">Trusted by leading enterprises</p>
         </div>
         
@@ -21,7 +21,10 @@ export default function LandingSocialProof() {
           {companies.map((company, idx) => (
             <div
               key={idx}
-              className="rounded-lg border border-border bg-card px-4 py-6 sm:px-6 text-center transition-all hover:border-ring/50 hover:shadow-sm"
+              className="rounded-lg border border-border bg-card px-4 py-6 sm:px-6 text-center transition-all hover:border-ring/50 hover:shadow-sm animate-fade-in-up"
+              style={{
+                animationDelay: `${idx * 50}ms`,
+              }}
             >
               <p className="text-xs sm:text-sm font-medium text-muted-foreground">
                 {company}

@@ -39,7 +39,7 @@ export default function LandingCoreFeatures() {
   return (
     <section className="py-20 md:py-28 lg:py-32">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="mb-16 text-center">
+        <div className="mb-16 text-center animate-fade-in-up">
           <h2 className="text-balance text-3xl font-semibold tracking-tight text-primary sm:text-4xl lg:text-5xl">
             Full-Stack Inventory System
           </h2>
@@ -54,7 +54,10 @@ export default function LandingCoreFeatures() {
             return (
               <div
                 key={idx}
-                className="rounded-xl border border-border bg-card p-6 shadow-sm transition-all hover:shadow-md hover:border-ring/50"
+                className="rounded-xl border border-border bg-card p-6 shadow-sm transition-all hover:shadow-md hover:border-ring/50 animate-fade-in-up"
+                style={{
+                  animationDelay: `${idx * 100}ms`,
+                }}
               >
                 <div className="mb-4 flex items-center justify-center size-10 rounded-lg bg-ring/10">
                   <Icon className="size-5 text-ring" />
