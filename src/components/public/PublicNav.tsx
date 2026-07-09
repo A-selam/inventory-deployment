@@ -9,7 +9,9 @@ import { cn } from "@/lib/utils";
 const NAV_LINKS = [
   { label: "Features", href: "#core-features" },
   { label: "Capabilities", href: "#capabilities" },
-  { label: "Benefits", href: "#self-hosted" },
+  // { label: "Self-Hosted", href: "#self-hosted" },
+  { label: "Licensing", href: "#licensing" },
+  { label: "FAQ", href: "#faq" },
 ];
 
 export default function PublicNav() {
@@ -36,7 +38,10 @@ export default function PublicNav() {
             <a
               key={link.href}
               href={link.href}
-              className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+              className={cn(
+                "text-sm font-medium text-muted-foreground transition-colors hover:text-primary",
+                isActive(link.href) ? "underline" : "",
+              )}
             >
               {link.label}
             </a>
@@ -74,7 +79,7 @@ export default function PublicNav() {
       <div
         className={cn(
           "overflow-hidden border-t border-border bg-card/95 backdrop-blur-md transition-all duration-200 md:hidden",
-          open ? "max-h-80 py-4" : "max-h-0",
+          open ? "max-h-96 py-4" : "max-h-0",
         )}
       >
         <nav className="flex flex-col gap-1 px-4">

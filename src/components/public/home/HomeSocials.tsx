@@ -6,7 +6,7 @@ import { socials } from "./home-content";
 export default function HomeSocials() {
   return (
     <section className="bg-white px-4 py-16 sm:px-6">
-      <div className="mx-auto grid max-w-6xl gap-8 rounded-lg border border-slate-200 bg-slate-50 p-6 sm:p-8 lg:grid-cols-[0.82fr_1fr] lg:items-center">
+      <div className="mx-auto grid max-w-6xl gap-8 rounded-lg border border-slate-200 bg-slate-50 p-6 transition-all hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md sm:p-8 lg:grid-cols-[0.82fr_1fr] lg:items-center">
         <div>
           <p className="label-caps text-[#3980f4]">Socials</p>
           <h2 className="mt-3 text-2xl font-semibold tracking-tight text-slate-950 sm:text-3xl">
@@ -22,7 +22,7 @@ export default function HomeSocials() {
               href={social.href}
               target="_blank"
               rel="noreferrer"
-              className="flex items-center justify-between rounded-md border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-800 transition hover:border-slate-300 hover:text-slate-950"
+              className="flex items-center justify-between rounded-md border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-800 transition-all hover:-translate-y-0.5 hover:border-slate-300 hover:text-slate-950 hover:shadow-sm"
             >
               {social.label}
               <ExternalLink className="size-4 text-slate-400" />

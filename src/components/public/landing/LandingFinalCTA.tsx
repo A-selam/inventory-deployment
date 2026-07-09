@@ -1,17 +1,19 @@
-'use client';
+"use client";
 
-import { ArrowRight, FileText } from 'lucide-react';
+import { ArrowRight, FileText } from "lucide-react";
 
 export default function LandingFinalCTA() {
   return (
-    <section className="py-20 md:py-28 lg:py-32" id="contact">
+    <section className="py-6 md:py-10 lg:py-20" id="contact">
       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-        <div className="rounded-2xl border border-border bg-gradient-to-br from-card to-muted p-8 md:p-12 lg:p-16 text-center animate-fade-in-up">
+        <div className="rounded-2xl border border-border bg-linear-to-br from-card to-muted p-8 text-center transition-all hover:-translate-y-1 hover:shadow-xl md:p-12 lg:p-16 animate-fade-in-up">
           <h2 className="text-balance text-3xl font-semibold tracking-tight text-primary sm:text-4xl lg:text-5xl mb-4 animate-fade-in-up">
             Take Control of Your Inventory
           </h2>
           <p className="text-lg text-muted-foreground mb-8 animate-fade-in-up animate-delay-100">
-            Deploy a complete inventory system that never loses a transaction, guarantees accuracy, and gives you the compliance audit trail you need.
+            Deploy a complete inventory system that never loses a transaction,
+            guarantees accuracy, and gives you the compliance audit trail you
+            need.
           </p>
 
           <div className="flex flex-col gap-3 sm:flex-row sm:justify-center sm:gap-4 animate-fade-in-up animate-delay-200">

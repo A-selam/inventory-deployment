@@ -205,6 +205,15 @@
   }
 }
 
+@keyframes partnersMarquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
 @layer utilities {
   .label-caps {
     @apply text-[11px] font-semibold uppercase tracking-wider text-muted-foreground;
@@ -233,6 +242,10 @@
 
   .animate-slide-in-down {
     animation: slideInDown 0.5s ease-out;
+  }
+
+  .animate-partners-marquee {
+    animation: partnersMarquee 24s linear infinite;
   }
 
   /* Stagger animations */

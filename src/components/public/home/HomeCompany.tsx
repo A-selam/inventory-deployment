@@ -22,7 +22,7 @@ export default function HomeCompany() {
           {companyPillars.map(({ icon: Icon, title, description }) => (
             <article
               key={title}
-              className="grid gap-4 rounded-lg border border-slate-200 bg-slate-50 p-5 sm:grid-cols-[2.75rem_1fr]"
+              className="grid gap-4 rounded-lg border border-slate-200 bg-slate-50 p-5 transition-all hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md sm:grid-cols-[2.75rem_1fr]"
             >
               <div className="flex size-11 items-center justify-center rounded-md bg-white text-[#3980f4] shadow-sm">
                 <Icon className="size-5" />
