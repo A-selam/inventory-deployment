@@ -51,12 +51,14 @@ export default function WarehousesTable({
       filters={filters}
       filtersOpen={filtersOpen}
       onToggleFilters={onToggleFilters}
-      addAction={{
-        label: "Add Warehouse",
-        icon: <Plus className="size-4" />,
-        onClick: onAddWarehouse ?? undefined,
-        disabled: !onAddWarehouse,
-      }}
+      addAction={[
+        {
+          label: "Add Warehouse",
+          icon: <Plus className="size-4" />,
+          onClick: onAddWarehouse ?? undefined,
+          disabled: !onAddWarehouse,
+        },
+      ]}
       emptyStateOverride={
         <div className="flex flex-col items-center justify-center gap-3 p-12 text-center">
           <div className="flex size-14 items-center justify-center rounded-[14px] border border-border bg-muted text-muted-foreground">
@@ -71,9 +73,16 @@ export default function WarehousesTable({
       }}
       tableHead={
         <>
-          <StandardTableHeadCell className="whitespace-nowrap has-[[role=checkbox]]:pr-0"> Warehouse</StandardTableHeadCell>
-          <StandardTableHeadCell className="whitespace-nowrap has-[[role=checkbox]]:pr-0">Location</StandardTableHeadCell>
-          <StandardTableHeadCell className="w-24 pr-10 text-center">Actions</StandardTableHeadCell>
+          <StandardTableHeadCell className="whitespace-nowrap has-[[role=checkbox]]:pr-0">
+            {" "}
+            Warehouse
+          </StandardTableHeadCell>
+          <StandardTableHeadCell className="whitespace-nowrap has-[[role=checkbox]]:pr-0">
+            Location
+          </StandardTableHeadCell>
+          <StandardTableHeadCell className="w-24 pr-10 text-center">
+            Actions
+          </StandardTableHeadCell>
         </>
       }
       tableBody={
@@ -115,7 +124,6 @@ export default function WarehousesTable({
             );
           })}
         </>
-
       }
       pagination={{
         onPageChange: onPageChange,
@@ -123,4 +131,3 @@ export default function WarehousesTable({
     />
   );
 }
-

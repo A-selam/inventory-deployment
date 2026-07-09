@@ -1,4 +1,4 @@
-import { FolderKanban } from "lucide-react";
+import { FolderKanban, Plus } from "lucide-react";
 
 import Card from "@/components/ui/card";
 import type { Category } from "@/lib/categories";
@@ -80,40 +80,37 @@ export default function CategoryTable({
       <StandardTableHeadCell className="w-24 pr-10 text-center">
         Actions
       </StandardTableHeadCell>
-
-      
     </>
   );
 
-  const tableBody = (
-    categories.map((category) => (
-      <tr
-        key={category.id}
-        className="border-b transition-colors hover:bg-[#F8FAFC] dark:hover:bg-muted"
-      >
-        <td className="p-2 align-middle whitespace-nowrap has-[[role=checkbox]]:pr-0">
-                  <div className="flex items-center gap-3">
-                    
-                    <div className="min-w-0">
-                      <div className="truncate font-semibold text-foreground">
-                        {category.name}
-                      </div>
-                    </div>
-                  </div>
-                </td>
-        <td className="p-2 align-middle whitespace-nowrap has-[[role=checkbox]]:pr-0">
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <span className="truncate">{category.vendor_total.toLocaleString()}</span>
+  const tableBody = categories.map((category) => (
+    <tr
+      key={category.id}
+      className="border-b transition-colors hover:bg-[#F8FAFC] dark:hover:bg-muted"
+    >
+      <td className="p-2 align-middle whitespace-nowrap has-[[role=checkbox]]:pr-0">
+        <div className="flex items-center gap-3">
+          <div className="min-w-0">
+            <div className="truncate font-semibold text-foreground">
+              {category.name}
+            </div>
           </div>
-        </td>
-        <td className="w-24 p-2 pr-5 align-middle text-center">
-          <div className="flex items-center justify-center">
-            <CategoryRowActions category={category} />
-          </div>
-        </td>
-      </tr>
-    ))
-  );
+        </div>
+      </td>
+      <td className="p-2 align-middle whitespace-nowrap has-[[role=checkbox]]:pr-0">
+        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+          <span className="truncate">
+            {category.vendor_total.toLocaleString()}
+          </span>
+        </div>
+      </td>
+      <td className="w-24 p-2 pr-5 align-middle text-center">
+        <div className="flex items-center justify-center">
+          <CategoryRowActions category={category} />
+        </div>
+      </td>
+    </tr>
+  ));
 
   return (
     <div>
@@ -132,6 +129,14 @@ export default function CategoryTable({
           isLoading={false}
           filters={filters}
           filtersOpen={filtersOpen}
+          addAction={[
+            {
+              label: "Add Category",
+              icon: <Plus className="size-4" />,
+              onClick: onAddCategory ?? undefined,
+              disabled: !onAddCategory,
+            },
+          ]}
           onToggleFilters={onToggleFilters}
           emptyState={{ title: "No categories found" }}
           tableHead={tableHead}
