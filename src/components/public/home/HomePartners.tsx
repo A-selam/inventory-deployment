@@ -21,14 +21,10 @@ export default function HomePartners() {
           {partners.map((partner) => (
             <article
               key={partner.name}
-              className="rounded-lg border border-white/10 bg-white/[0.06] p-5 backdrop-blur"
+              className="rounded-lg border border-white/10 bg-white/6 p-5 backdrop-blur transition-all hover:-translate-y-0.5 hover:border-white/20 hover:shadow-lg"
             >
-              <p className="text-lg font-semibold text-white">
-                {partner.name}
-              </p>
-              <p className="mt-1 text-sm text-slate-400">
-                {partner.category}
-              </p>
+              <p className="text-lg font-semibold text-white">{partner.name}</p>
+              <p className="mt-1 text-sm text-slate-400">{partner.category}</p>
             </article>
           ))}
         </div>

@@ -5,7 +5,10 @@ export default function HomeStats() {
     <section className="border-y border-slate-200 bg-white px-4 py-12 sm:px-6">
       <div className="mx-auto grid max-w-6xl gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {stats.map((stat) => (
-          <article key={stat.label} className="rounded-lg bg-slate-50 p-5">
+          <article
+            key={stat.label}
+            className="rounded-lg bg-slate-50 p-5 transition-all hover:-translate-y-0.5 hover:shadow-md"
+          >
             <p className="text-3xl font-semibold tracking-tight text-slate-950">
               {stat.value}
             </p>

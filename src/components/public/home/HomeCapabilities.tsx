@@ -22,7 +22,7 @@ export default function HomeCapabilities() {
           {capabilities.map(({ icon: Icon, title, description }) => (
             <article
               key={title}
-              className="group rounded-lg border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md"
+              className="group rounded-lg border border-slate-200 bg-white p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-lg"
             >
               <div className="mb-5 flex size-11 items-center justify-center rounded-md bg-slate-100 text-slate-900 transition group-hover:bg-slate-950 group-hover:text-white">
                 <Icon className="size-5" />
