@@ -79,8 +79,10 @@ export default function CreateItemForm({
     setError,
     clearErrors,
     trigger,
+    watch,
     formState: { errors },
   } = useForm<CreateItemFormValues>({
+
     resolver: standardSchemaResolver(createItemSchema) as never,
     defaultValues: {
       sku: "",
@@ -144,6 +146,10 @@ export default function CreateItemForm({
       shouldValidate: true,
     });
 
+    // Clear any previous backend field errors before trying again.
+    clearErrors(["vendor_id", "warehouse_id", "category_id"] as const);
+
+
     if (!skuFormatRegex.test(sku)) {
       setError("sku", {
         type: "validate",
@@ -195,12 +201,64 @@ export default function CreateItemForm({
       });
       onCreated();
     } catch (error) {
+      const payload = (() => {
+        try {
+          if (typeof error === "object" && error && "response" in error) {
+            const anyErr = error as { response?: { data?: unknown } };
+            return anyErr.response?.data;
+          }
+        } catch {
+          // ignore
+        }
+        return undefined;
+      })();
+
+      // Best-effort mapping of backend field errors into react-hook-form.
+      // Supports common shapes like: { detail: { errors: { field: ['msg'] | 'msg' } } }
+      const fieldErrors = (() => {
+        if (!payload || typeof payload !== "object") return undefined;
+        const p = payload as Record<string, unknown>;
+        const detail = p.detail as unknown;
+        if (detail && typeof detail === "object") {
+          const d = detail as Record<string, unknown>;
+          const errors = d.errors as unknown;
+          return errors;
+        }
+        return undefined;
+      })();
+
+      if (fieldErrors && typeof fieldErrors === "object") {
+        const fe = fieldErrors as Record<string, unknown>;
+        const toMessage = (v: unknown): string | undefined => {
+          if (typeof v === "string") return v;
+          if (Array.isArray(v) && v.length > 0 && typeof v[0] === "string") {
+            return v[0] as string;
+          }
+          return undefined;
+        };
+
+        const categoryMsg = toMessage(fe.category_id);
+        if (categoryMsg) setError("category_id", { type: "validate", message: categoryMsg });
+
+        const vendorMsg = toMessage(fe.vendor_id);
+        if (vendorMsg) setError("vendor_id", { type: "validate", message: vendorMsg });
+
+        const warehouseMsg = toMessage(fe.warehouse_id);
+        if (warehouseMsg) {
+          setError("warehouse_id", {
+            type: "validate",
+            message: warehouseMsg,
+          });
+        }
+      }
+
       toast({
         title: "Failed to create item",
         description: getApiErrorMessage(error, "Please try again."),
         variant: "error",
       });
     }
+
   }
 
   const isSubmitting = createItemMutation.isPending;
@@ -278,7 +336,32 @@ export default function CreateItemForm({
           isLoadingCategories={categoriesQuery.isLoading}
           isLoadingVendors={vendorsQuery.isLoading}
           isLoadingWarehouses={warehousesQuery.isLoading}
+          values={{
+            category_id: watch("category_id"),
+            vendor_id: watch("vendor_id"),
+            warehouse_id: watch("warehouse_id"),
+          }}
+          onCategoryChange={(next) => {
+            setValue("category_id", next, {
+              shouldDirty: true,
+              shouldValidate: true,
+            });
+          }}
+          onVendorChange={(next) => {
+            setValue("vendor_id", next, {
+              shouldDirty: true,
+              shouldValidate: true,
+            });
+          }}
+          onWarehouseChange={(next) => {
+            setValue("warehouse_id", next, {
+              shouldDirty: true,
+              shouldValidate: true,
+            });
+          }}
         />
+
+
 
         {createItemMutation.isError ? (
           <p className="text-sm text-destructive">

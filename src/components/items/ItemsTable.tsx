@@ -1,25 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import {
-  ChevronLeft,
-  ChevronRight,
-  Plus,
-  SlidersHorizontal,
-  Upload,
-} from "lucide-react";
+import { Plus, SlidersHorizontal, Upload } from "lucide-react";
 
 import Button from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import type { Item } from "@/lib/items";
+
+import StandardDataTable, {
+  StandardEmptyRow,
+  StandardTableHeadCell,
+} from "@/components/shared/StandardDataTable";
+import label from "../ui/label";
 
 const formatCurrency = (amount: number): string => {
   return new Intl.NumberFormat("en-US", {
@@ -43,29 +34,6 @@ type ItemsTableProps = {
   onAddItem?: () => void;
   onPageChange?: (page: number) => void;
 };
-
-function PaginationButton({
-  children,
-  disabled,
-  onClick,
-}: {
-  children: React.ReactNode;
-  disabled?: boolean;
-  onClick: () => void;
-}) {
-  return (
-    <Button
-      type="button"
-      variant="outline"
-      size="sm"
-      disabled={disabled}
-      className="h-9 gap-2 px-3"
-      onClick={onClick}
-    >
-      {children}
-    </Button>
-  );
-}
 
 function StockStatusBadge({
   quantity,
@@ -110,187 +78,113 @@ export default function ItemsTable({
   onAddItem,
   onPageChange,
 }: ItemsTableProps) {
+  const tableHead = (
+    <>
+      <StandardTableHeadCell className="whitespace-nowrap has-[[role=checkbox]]:pr-0">
+        SKU
+      </StandardTableHeadCell>
+      <StandardTableHeadCell className="whitespace-nowrap has-[[role=checkbox]]:pr-0">
+        Name
+      </StandardTableHeadCell>
+      <StandardTableHeadCell className="whitespace-nowrap has-[[role=checkbox]]:pr-0">
+        Quantity
+      </StandardTableHeadCell>
+      <StandardTableHeadCell className="whitespace-nowrap has-[[role=checkbox]]:pr-0">
+        Status
+      </StandardTableHeadCell>
+      <StandardTableHeadCell className="whitespace-nowrap has-[[role=checkbox]]:pr-0">
+        Cost Price
+      </StandardTableHeadCell>
+      <StandardTableHeadCell className="whitespace-nowrap has-[[role=checkbox]]:pr-0">
+        Selling Price
+      </StandardTableHeadCell>
+      <StandardTableHeadCell className="whitespace-nowrap has-[[role=checkbox]]:pr-0">
+        Location
+      </StandardTableHeadCell>
+    </>
+  );
+
+  const tableBody =
+    !items || items.length === 0 ? (
+      <StandardEmptyRow colSpan={7} title="No items found" />
+    ) : (
+      items.map((item) => {
+        const quantity = item.quantity_on_hand;
+        const minimum = item.minimum_stock_level;
+        const cost = item.cost_price;
+        const selling = item.selling_price;
+        const location = item.bin_location;
+
+        return (
+          <tr
+            key={item.id}
+            className="border-b transition-colors hover:bg-[#F8FAFC] dark:hover:bg-muted"
+          >
+            <td className="p-2 align-middle whitespace-nowrap has-[[role=checkbox]]:pr-0 font-mono text-xs font-semibold text-primary">
+              <Link className="hover:underline" href={`/inventory/${item.id}`}>
+                {item.sku}
+              </Link>
+            </td>
+            <td className="p-2 align-middle whitespace-nowrap has-[[role=checkbox]]:pr-0">
+              <Link
+                className="font-semibold text-foreground underline"
+                href={`/inventory/${item.id}`}
+              >
+                {item.name}
+              </Link>
+            </td>
+            <td className="p-2 align-middle whitespace-nowrap has-[[role=checkbox]]:pr-0">
+              <span className="font-mono font-bold text-foreground">
+                {quantity}
+              </span>
+            </td>
+            <td className="p-2 align-middle whitespace-nowrap has-[[role=checkbox]]:pr-0">
+              <StockStatusBadge quantity={quantity} minimum={minimum} />
+            </td>
+            <td className="p-2 align-middle whitespace-nowrap has-[[role=checkbox]]:pr-0 text-foreground">
+              {formatCurrency(cost)}
+            </td>
+            <td className="p-2 align-middle whitespace-nowrap has-[[role=checkbox]]:pr-0 text-foreground">
+              {formatCurrency(selling)}
+            </td>
+            <td className="p-2 align-middle whitespace-nowrap has-[[role=checkbox]]:pr-0 text-muted-foreground">
+              {location}
+            </td>
+          </tr>
+        );
+      })
+    );
+
   return (
-    <Card className="rounded-[12px] border border-border p-0 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
-      <div className="overflow-hidden rounded-md bg-card shadow-sm">
-        <div className="flex flex-col gap-3 border-b border-border bg-background px-4 py-4 sm:flex-row sm:items-center sm:justify-between">
-          <div className="min-w-0">
-            <h2 className="truncate text-base font-semibold text-foreground">
-              {title}
-            </h2>
-            <p className="text-xs text-muted-foreground">
-              Showing page {page} of {totalPages} • {totalItems} total items •{" "}
-              {limit} per page
-            </p>
-          </div>
-
-          <div className="flex items-center gap-2 self-start sm:self-auto">
-            <Button
-              type="button"
-              variant={filtersOpen ? "default" : "outline"}
-              size="sm"
-              className="h-9 gap-2"
-              onClick={onToggleFilters}
-              disabled={!filters || !onToggleFilters}
-            >
-              <SlidersHorizontal className="size-4" />
-              Filters
-            </Button>
-
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              className="h-9 gap-2"
-              onClick={onImport}
-              disabled={!onImport}
-            >
-              <Upload className="size-4" />
-              Import
-            </Button>
-
-            <Button
-              type="button"
-              size="sm"
-              className="h-9 gap-2"
-              onClick={onAddItem}
-              disabled={!onAddItem}
-            >
-              <Plus className="size-4" />
-              Add Item
-            </Button>
-          </div>
-        </div>
-
-        {filtersOpen && filters ? (
-          <div className="border-b border-border bg-background px-4 py-3">
-            {filters}
-          </div>
-        ) : null}
-
-        {isLoading ? (
-          <div className="flex items-center justify-center p-12">
-            <p className="text-muted-foreground">Loading items...</p>
-          </div>
-        ) : !items || items.length === 0 ? (
-          <div className="flex flex-col items-center justify-center p-12">
-            <p className="text-muted-foreground">No items found</p>
-          </div>
-        ) : (
-          <>
-            <div className="overflow-x-auto">
-              <Table>
-                <TableHeader className="sticky top-0 z-10 bg-background shadow-sm [&_tr]:border-b">
-                  <TableRow className="border-b transition-colors hover:bg-[#F8FAFC] dark:hover:bg-muted">
-                    <TableHead className="sticky top-0 z-10 bg-background p-2 whitespace-nowrap text-foreground has-[[role=checkbox]]:pr-0">
-                      SKU
-                    </TableHead>
-                    <TableHead className="sticky top-0 z-10 bg-background p-2 whitespace-nowrap text-foreground has-[[role=checkbox]]:pr-0">
-                      Name
-                    </TableHead>
-                    <TableHead className="sticky top-0 z-10 bg-background p-2 whitespace-nowrap text-foreground has-[[role=checkbox]]:pr-0">
-                      Quantity
-                    </TableHead>
-                    <TableHead className="sticky top-0 z-10 bg-background p-2 whitespace-nowrap text-foreground has-[[role=checkbox]]:pr-0">
-                      Status
-                    </TableHead>
-                    <TableHead className="sticky top-0 z-10 bg-background p-2 whitespace-nowrap text-foreground has-[[role=checkbox]]:pr-0">
-                      Cost Price
-                    </TableHead>
-                    <TableHead className="sticky top-0 z-10 bg-background p-2 whitespace-nowrap text-foreground has-[[role=checkbox]]:pr-0">
-                      Selling Price
-                    </TableHead>
-                    <TableHead className="sticky top-0 z-10 bg-background p-2 whitespace-nowrap text-foreground has-[[role=checkbox]]:pr-0">
-                      Location
-                    </TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {items.map((item) => {
-                    const quantity = item.quantity_on_hand;
-                    const minimum = item.minimum_stock_level;
-                    const cost = item.cost_price;
-                    const selling = item.selling_price;
-                    const location = item.bin_location;
-
-                    return (
-                      <TableRow
-                        key={item.id}
-                        className="border-b transition-colors hover:bg-[#F8FAFC] dark:hover:bg-muted"
-                      >
-                        <TableCell className="p-2 align-middle whitespace-nowrap has-[[role=checkbox]]:pr-0 font-mono text-xs font-semibold text-primary">
-                          <Link
-                            className="hover:underline"
-                            href={`/inventory/${item.id}`}
-                          >
-                            {item.sku}
-                          </Link>
-                        </TableCell>
-                        <TableCell className="p-2 align-middle whitespace-nowrap has-[[role=checkbox]]:pr-0">
-                          <Link
-                            className="font-semibold text-foreground underline"
-                            href={`/inventory/${item.id}`}
-                          >
-                            {item.name}
-                          </Link>
-                          {/* {item.description && (
-                            <div className="text-xs text-muted-foreground">
-                              {item.description}
-                            </div>
-                          )} */}
-                        </TableCell>
-                        <TableCell className="p-2 align-middle whitespace-nowrap has-[[role=checkbox]]:pr-0">
-                          <span className="font-mono font-bold text-foreground">
-                            {quantity}
-                          </span>
-                          {/* <div className="text-xs text-muted-foreground">
-                            Min: {minimum}
-                          </div> */}
-                        </TableCell>
-                        <TableCell className="p-2 align-middle whitespace-nowrap has-[[role=checkbox]]:pr-0">
-                          <StockStatusBadge
-                            quantity={quantity}
-                            minimum={minimum}
-                          />
-                        </TableCell>
-                        <TableCell className="p-2 align-middle whitespace-nowrap has-[[role=checkbox]]:pr-0 text-foreground">
-                          {formatCurrency(cost)}
-                        </TableCell>
-                        <TableCell className="p-2 align-middle whitespace-nowrap has-[[role=checkbox]]:pr-0 text-foreground">
-                          {formatCurrency(selling)}
-                        </TableCell>
-                        <TableCell className="p-2 align-middle whitespace-nowrap has-[[role=checkbox]]:pr-0 text-muted-foreground">
-                          {location}
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
-                </TableBody>
-              </Table>
-            </div>
-
-            <div className="flex flex-col gap-3 border-t border-border bg-background px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
-              <div className="flex items-center gap-2 self-end sm:self-auto">
-                <PaginationButton
-                  disabled={page <= 1}
-                  onClick={() => onPageChange?.(page - 1)}
-                >
-                  <ChevronLeft className="size-4" />
-                  Previous
-                </PaginationButton>
-
-                <PaginationButton
-                  disabled={page >= totalPages}
-                  onClick={() => onPageChange?.(page + 1)}
-                >
-                  Next
-                  <ChevronRight className="size-4" />
-                </PaginationButton>
-              </div>
-            </div>
-          </>
-        )}
-      </div>
-    </Card>
+    <StandardDataTable
+      title={title}
+      page={page}
+      totalPages={totalPages}
+      totalItems={totalItems}
+      itemsCount={items.length}
+      limit={limit}
+      isLoading={isLoading}
+      filters={filters}
+      filtersOpen={filtersOpen}
+      addAction={[
+        {
+          label: "Add Item",
+          onClick: onAddItem,
+          disabled: false,
+          icon: <Plus className="size-4" />,
+        },
+        {
+          label: "Import Items",
+          onClick: onImport,
+          disabled: false,
+          icon: <Upload className="size-4" />,
+        },
+      ]}
+      onToggleFilters={onToggleFilters}
+      emptyState={{ title: "No items found" }}
+      tableHead={tableHead}
+      tableBody={tableBody}
+      pagination={{ onPageChange }}
+    />
   );
 }

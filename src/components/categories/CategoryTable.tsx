@@ -1,8 +1,12 @@
-import { FolderKanban, Plus, SlidersHorizontal } from "lucide-react";
+import { FolderKanban, Plus } from "lucide-react";
 
-import Button from "@/components/ui/button";
 import Card from "@/components/ui/card";
 import type { Category } from "@/lib/categories";
+
+import StandardDataTable, {
+  StandardEmptyRow,
+  StandardTableHeadCell,
+} from "@/components/shared/StandardDataTable";
 
 import CategoryRowActions from "./CategoryRowActions";
 
@@ -65,103 +69,81 @@ export default function CategoryTable({
   onToggleFilters,
   onAddCategory,
 }: CategoryTableProps) {
-  if (isLoading) return <CategoryTableSkeleton />;
+  const tableHead = (
+    <>
+      <StandardTableHeadCell className="whitespace-nowrap has-[[role=checkbox]]:pr-0">
+        Category
+      </StandardTableHeadCell>
+      <StandardTableHeadCell className="whitespace-nowrap has-[[role=checkbox]]:pr-0">
+        Vendors
+      </StandardTableHeadCell>
+      <StandardTableHeadCell className="w-24 pr-10 text-center">
+        Actions
+      </StandardTableHeadCell>
+    </>
+  );
 
-  if (categories.length === 0) return <CategoryEmptyState />;
+  const tableBody = categories.map((category) => (
+    <tr
+      key={category.id}
+      className="border-b transition-colors hover:bg-[#F8FAFC] dark:hover:bg-muted"
+    >
+      <td className="p-2 align-middle whitespace-nowrap has-[[role=checkbox]]:pr-0">
+        <div className="flex items-center gap-3">
+          <div className="min-w-0">
+            <div className="truncate font-semibold text-foreground">
+              {category.name}
+            </div>
+          </div>
+        </div>
+      </td>
+      <td className="p-2 align-middle whitespace-nowrap has-[[role=checkbox]]:pr-0">
+        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+          <span className="truncate">
+            {category.vendor_total.toLocaleString()}
+          </span>
+        </div>
+      </td>
+      <td className="w-24 p-2 pr-5 align-middle text-center">
+        <div className="flex items-center justify-center">
+          <CategoryRowActions category={category} />
+        </div>
+      </td>
+    </tr>
+  ));
 
   return (
-    <Card className="overflow-hidden rounded-[12px] border-border bg-card p-0 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
-      <div className="flex flex-col gap-3 border-b border-border bg-background px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
-        <div className="min-w-0">
-          <h2 className="truncate text-base font-semibold text-foreground">
-            {title}
-          </h2>
-          <p className="text-xs text-muted-foreground">
-            {categories.length} categories
-          </p>
-        </div>
-
-        <div className="flex items-center gap-2 self-start sm:self-auto">
-          <Button
-            type="button"
-            variant={filtersOpen ? "default" : "outline"}
-            size="sm"
-            className="h-9 gap-2"
-            onClick={onToggleFilters}
-            disabled={!filters || !onToggleFilters}
-          >
-            <SlidersHorizontal className="size-4" />
-            Filters
-          </Button>
-
-          <Button
-            type="button"
-            size="sm"
-            className="h-9 gap-2"
-            onClick={onAddCategory}
-            disabled={!onAddCategory}
-          >
-            <Plus className="size-4" />
-            Add Category
-          </Button>
-        </div>
-      </div>
-
-      {filtersOpen && filters ? (
-        <div className="border-b border-border bg-background px-5 py-3">
-          {filters}
-        </div>
-      ) : null}
-
-      <div className="overflow-x-auto">
-        <table className="w-full min-w-150 text-left">
-          <thead className="bg-muted/60">
-            <tr>
-              <th className="px-5 py-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                Category
-              </th>
-              <th className="px-5 py-3 text-right text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                Vendors
-              </th>
-              <th className="px-5 py-3 text-right text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-border">
-            {categories.map((category) => (
-              <tr
-                key={category.id}
-                className="transition-colors hover:bg-muted/45"
-              >
-                <td className="px-5 py-4">
-                  <div className="flex items-center gap-3">
-                    <div className="flex size-9 items-center justify-center rounded-[10px] bg-muted text-foreground">
-                      <FolderKanban className="size-4" />
-                    </div>
-                    <div>
-                      <div className="font-semibold text-foreground">
-                        {category.name}
-                      </div>
-                      <div className="font-mono text-xs text-muted-foreground">
-                        {category.id}
-                      </div>
-                    </div>
-                  </div>
-                </td>
-                <td className="px-5 py-4 text-right">
-                  <span className="inline-flex min-w-12 items-center justify-center rounded-full bg-secondary px-3 py-1 text-sm font-bold text-secondary-foreground">
-                    {category.vendor_total.toLocaleString()}
-                  </span>
-                </td>
-                <td className="px-5 py-4 text-right">
-                  <CategoryRowActions category={category} />
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </Card>
+    <div>
+      {/* Preserve existing skeleton/empty-state behavior, but standardize layout when data exists */}
+      {isLoading ? (
+        <CategoryTableSkeleton />
+      ) : categories.length === 0 ? (
+        <CategoryEmptyState />
+      ) : (
+        <StandardDataTable
+          title={title}
+          page={1}
+          totalPages={1}
+          totalItems={categories.length}
+          limit={categories.length}
+          isLoading={false}
+          filters={filters}
+          filtersOpen={filtersOpen}
+          addAction={[
+            {
+              label: "Add Category",
+              icon: <Plus className="size-4" />,
+              onClick: onAddCategory ?? undefined,
+              disabled: !onAddCategory,
+            },
+          ]}
+          onToggleFilters={onToggleFilters}
+          emptyState={{ title: "No categories found" }}
+          tableHead={tableHead}
+          tableBody={tableBody}
+          pagination={{ onPageChange: undefined }}
+        />
+      )}
+    </div>
   );
 }

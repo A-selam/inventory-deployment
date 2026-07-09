@@ -2,7 +2,9 @@
 
 import { useEffect, useState } from "react";
 import {
+  Eye,
   Loader2,
+  Pencil,
   Plus,
   RefreshCw,
   SlidersHorizontal,
@@ -19,9 +21,25 @@ import type { Vendor, VendorSortBy, VendorSortDir } from "@/lib/vendors";
 import { useToast } from "@/providers/ToastProvider";
 
 import VendorFilters from "./VendorFilters";
-import VendorGrid from "./VendorGrid";
-// import VendorPagination from "./VendorPagination";
 import CreateVendorDrawer from "./create-vendor/CreateVendorDrawer";
+
+type ComplexContactPerson = {
+  name?: string;
+  first_name?: string;
+  last_name?: string;
+};
+
+type DashboardVendor = Omit<Vendor, "contact_person"> & {
+  contact_person?: string | ComplexContactPerson | null;
+  email?: string;
+  status?: "active" | "inactive" | string;
+  total_items?: number;
+  phone?: string;
+  address?: string;
+  notes?: string;
+  created_at?: string | Date;
+  updated_at?: string | Date;
+};
 
 const DEFAULT_PAGE = 1;
 const DEFAULT_LIMIT = 20;
@@ -30,7 +48,6 @@ const DEFAULT_SORT_DIR: VendorSortDir = "asc";
 
 function parsePositiveInt(value: string | null, fallback: number) {
   if (!value) return fallback;
-
   const parsed = Number.parseInt(value, 10);
   return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
 }
@@ -62,6 +79,18 @@ function buildVendorsHref(
   return query ? `/vendors?${query}` : "/vendors";
 }
 
+function formatContactPerson(contact: DashboardVendor["contact_person"]): string {
+  if (!contact) return "—";
+  if (typeof contact === "string") return contact;
+  
+  if (contact.name) return contact.name;
+  if (contact.first_name || contact.last_name) {
+    return `${contact.first_name ?? ""} ${contact.last_name ?? ""}`.trim();
+  }
+  
+  return "—";
+}
+
 function VendorsErrorState({
   message,
   onRetry,
@@ -87,17 +116,133 @@ function VendorsErrorState({
   );
 }
 
+/* --- Read-Only Vendor Details Modal Component --- */
+function ViewVendorModal({
+  open,
+  vendor,
+  onClose,
+  onEdit,
+}: {
+  open: boolean;
+  vendor: DashboardVendor | null;
+  onClose: () => void;
+  onEdit: () => void;
+}) {
+  if (!vendor) return null;
+
+  return (
+    <Modal
+      open={open}
+      onClose={onClose}
+      title="Supplier Information"
+      className="max-w-2xl overflow-hidden rounded-xl text-left"
+      footer={
+        <>
+          <Button
+            type="button"
+            variant="outline"
+            className="h-11 rounded-xl px-5"
+            onClick={onClose}
+          >
+            Close
+          </Button>
+          <Button
+            type="button"
+            className="h-11 gap-2 rounded-xl px-5"
+            onClick={onEdit}
+          >
+            <Pencil className="size-4" />
+            <span>Edit Profile</span>
+          </Button>
+        </>
+      }
+    >
+      <div className="mt-4 space-y-6 max-h-[60vh] overflow-y-auto pr-2">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div>
+            <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider block">Company Name</span>
+            <span className="text-sm font-medium text-foreground">{vendor.name}</span>
+          </div>
+          <div>
+            <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider block">Status</span>
+            <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium mt-1 ${
+              vendor.status === "active" ? "bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400" : "bg-amber-50 text-amber-700 dark:bg-amber-500/10 dark:text-amber-400"
+            }`}>
+              {vendor.status || "Unknown"}
+            </span>
+          </div>
+        </div>
+
+
+        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+          <div>
+            <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider block">Contact Person</span>
+            <span className="text-sm text-foreground">{formatContactPerson(vendor.contact_person)}</span>
+          </div>
+          <div>
+            <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider block">Phone Number</span>
+            <span className="text-sm text-foreground">{vendor.phone || "—"}</span>
+          </div>
+          <div className="sm:col-span-2">
+            <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider block">Email Address</span>
+            <span className="text-sm text-foreground">{vendor.email || "—"}</span>
+          </div>
+        </div>
+
+        {/* <hr className="border-border" /> */}
+
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div>
+          <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider block mb-1">Physical Address</span>
+          <span className="text-sm text-foreground whitespace-pre-wrap">{vendor.address || "No address provided."}</span>
+        </div>
+        <div>
+          <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider block mb-1">Internal Notes</span>
+          <span className="text-sm text-foreground whitespace-pre-wrap">{vendor.notes || "No operational notes recorded."}</span>
+        </div>
+      </div>
+
+        {/* <hr className="border-border" /> */}
+
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 bg-muted/40 p-4 rounded-xl border border-border">
+          <div>
+            <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider block">Total Items</span>
+            <span className="text-lg font-semibold text-foreground">{vendor.total_items ?? 0}</span>
+          </div>
+          <div>
+            <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider block">Created At</span>
+            <span className="text-xs text-foreground mt-1 block">
+              {vendor.created_at ? new Date(vendor.created_at).toLocaleDateString() : "—"}
+            </span>
+          </div>
+          <div>
+            <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider block">Last Updated</span>
+            <span className="text-xs text-foreground mt-1 block">
+              {vendor.updated_at ? new Date(vendor.updated_at).toLocaleDateString() : "—"}
+            </span>
+          </div>
+        </div>
+      </div>
+    </Modal>
+  );
+}
+
 export default function VendorsPageClient() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { toast } = useToast();
   const deleteVendorMutation = useDeleteVendor();
+  
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [isCreateDrawerOpen, setIsCreateDrawerOpen] = useState(false);
   const [isEditDrawerOpen, setIsEditDrawerOpen] = useState(false);
-  const [vendorToEdit, setVendorToEdit] = useState<Vendor | null>(null);
+  const [vendorToEdit, setVendorToEdit] = useState<DashboardVendor | null>(null);
+  
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const [vendorToView, setVendorToView] = useState<DashboardVendor | null>(null);
+
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [vendorToDelete, setVendorToDelete] = useState<Vendor | null>(null);
+  const [vendorToDelete, setVendorToDelete] = useState<DashboardVendor | null>(null);
 
   const page = parsePositiveInt(searchParams.get("page"), DEFAULT_PAGE);
   const limit = parsePositiveInt(searchParams.get("limit"), DEFAULT_LIMIT);
@@ -138,9 +283,7 @@ export default function VendorsPageClient() {
     sort_dir: sortDir,
   });
 
-  const vendors = vendorsQuery.data?.data ?? [];
-  // const totalPages = 1;
-  // const currentPage = 1;
+  const vendors = (vendorsQuery.data?.data ?? []) as unknown as DashboardVendor[];
 
   const confirmVendorDelete = async () => {
     if (!vendorToDelete) return;
@@ -176,18 +319,6 @@ export default function VendorsPageClient() {
       }),
     );
   };
-
-  // const updatePage = (nextPage: number) => {
-  //   router.push(
-  //     buildVendorsHref(searchParams, {
-  //       page: nextPage,
-  //       limit,
-  //       search: search || undefined,
-  //       sort_by: sortBy,
-  //       sort_dir: sortDir,
-  //     }),
-  //   );
-  // };
 
   return (
     <div className="space-y-8">
@@ -256,31 +387,130 @@ export default function VendorsPageClient() {
             ) : null}
           </Card>
 
-          <VendorGrid
-            vendors={vendors}
-            isLoading={vendorsQuery.isLoading}
-            onEditVendor={(vendor) => {
-              setVendorToEdit(vendor);
-              setIsEditDrawerOpen(true);
-            }}
-            onDeleteVendor={(vendor) => {
-              setVendorToDelete(vendor);
-              setIsDeleteModalOpen(true);
-            }}
-          />
-
-          {/* {!vendorsQuery.isLoading && vendors.length > 0 && (
-            <VendorPagination
-              page={currentPage}
-              totalPages={totalPages}
-              limit={vendors?.limit ?? limit}
-              totalItems={vendors?.total ?? 0}
-              shownItems={vendors.length}
-              onPageChange={updatePage}
-            />
-          )} */}
+          <div className="overflow-hidden rounded-[12px] border border-border bg-card shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
+            <div className="overflow-x-auto">
+              <table className="w-full border-collapse text-left text-sm">
+                <thead className="bg-muted/40 text-xs font-semibold text-muted-foreground uppercase tracking-wider border-b border-border">
+                  <tr>
+                    <th className="px-6 py-4 font-medium">Supplier Name</th>
+                    {/* <th className="px-6 py-4 font-medium">Contact Person</th>
+                    <th className="px-6 py-4 font-medium">Phone</th>
+                    <th className="px-6 py-4 font-medium">Email</th> */}
+                    <th className="px-6 py-4 font-medium">Status</th>
+                    <th className="px-6 py-4 font-medium text-center">Total Items</th>
+                    <th className="px-6 py-4 font-medium text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-border bg-background">
+                  {vendorsQuery.isLoading ? (
+                    <tr>
+                      <td colSpan={7} className="px-6 py-12 text-center text-muted-foreground">
+                        <div className="flex items-center justify-center gap-2">
+                          <Loader2 className="size-5 animate-spin text-primary" />
+                          <span>Retrieving suppliers...</span>
+                        </div>
+                      </td>
+                    </tr>
+                  ) : vendors.length === 0 ? (
+                    <tr>
+                      <td colSpan={7} className="px-6 py-12 text-center text-muted-foreground">
+                        No suppliers found matching your selection.
+                      </td>
+                    </tr>
+                  ) : (
+                    vendors.map((vendor) => (
+                      <tr 
+                        key={vendor.id} 
+                        className="hover:bg-muted/20 transition-colors group cursor-pointer"
+                        onClick={() => {
+                          setVendorToView(vendor);
+                          setIsViewModalOpen(true);
+                        }}
+                      >
+                        <td className="px-6 py-4 font-medium text-foreground group-hover:text-primary transition-colors">
+                          {vendor.name}
+                        </td>
+                        {/*<td className="px-6 py-4 text-muted-foreground">
+                          {formatContactPerson(vendor.contact_person)}
+                        </td>
+                        <td className="px-6 py-4 text-muted-foreground whitespace-nowrap">{vendor.phone || "—"}</td>
+                        <td className="px-6 py-4 text-muted-foreground">{vendor.email || "—"}</td> */}
+                        <td className="px-6 py-4" onClick={(e) => e.stopPropagation()}>
+                          <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${
+                            vendor.status === "active" ? "bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400" : "bg-amber-50 text-amber-700 dark:bg-amber-500/10 dark:text-amber-400"
+                          }`}>
+                            {vendor.status || "Unknown"}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 text-center font-medium text-foreground">{vendor.total_items ?? 0}</td>
+                        <td className="px-6 py-4 text-right" onClick={(e) => e.stopPropagation()}>
+                          <div className="flex items-center justify-end gap-1.5">
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="sm"
+                              className="h-8 w-8 p-0"
+                              title="View Details"
+                              onClick={() => {
+                                setVendorToView(vendor);
+                                setIsViewModalOpen(true);
+                              }}
+                            >
+                              <Eye className="size-4 text-muted-foreground hover:text-foreground" />
+                            </Button>
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="sm"
+                              className="h-8 w-8 p-0"
+                              title="Edit Supplier"
+                              onClick={() => {
+                                setVendorToEdit(vendor);
+                                setIsEditDrawerOpen(true);
+                              }}
+                            >
+                              <Pencil className="size-4 text-muted-foreground hover:text-foreground" />
+                            </Button>
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="sm"
+                              className="h-8 w-8 p-0 text-destructive hover:bg-destructive/10"
+                              title="Delete Supplier"
+                              onClick={() => {
+                                setVendorToDelete(vendor);
+                                setIsDeleteModalOpen(true);
+                              }}
+                            >
+                              <Trash2 className="size-4" />
+                            </Button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
         </section>
       )}
+
+      <ViewVendorModal 
+        open={isViewModalOpen}
+        vendor={vendorToView}
+        onClose={() => {
+          setIsViewModalOpen(false);
+          setVendorToView(null);
+        }}
+        onEdit={() => {
+          if (!vendorToView) return;
+          setVendorToEdit(vendorToView);
+          setIsViewModalOpen(false);
+          setVendorToView(null);
+          setIsEditDrawerOpen(true);
+        }}
+      />
 
       <CreateVendorDrawer
         open={isCreateDrawerOpen}
@@ -289,7 +519,7 @@ export default function VendorsPageClient() {
       <CreateVendorDrawer
         open={isEditDrawerOpen}
         mode="edit"
-        vendor={vendorToEdit ?? undefined}
+        vendor={vendorToEdit as unknown as Vendor | undefined}
         onClose={() => {
           setIsEditDrawerOpen(false);
           setVendorToEdit(null);

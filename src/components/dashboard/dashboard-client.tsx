@@ -13,6 +13,10 @@ import { useAuthStore } from "@/stores/auth-store";
 import OverviewCards from "./overview-cards";
 import RecentTransactionsTable from "./recent-transactions-table";
 import StockChart from "./stock-chart";
+import CategoryPieWrapper from "./CategoryPieWrapper";
+import DashboardWarehousePieWrapper from "./DashboardWarehousePieWrapper";
+
+
 
 function DashboardLoadingState() {
   return (
@@ -123,7 +127,6 @@ export default function DashboardClient() {
   }, [accessToken, isHydrated, router]);
 
   const query = useDashboardOverview({ enabled });
-  console.log("Dashboard overview query:", query);
 
   if (!isHydrated || (isHydrated && !accessToken)) {
     return <DashboardLoadingState />;
@@ -156,7 +159,13 @@ export default function DashboardClient() {
         <StockChart yearlyData={query.data.stock_movement_chart} />
       </div>
 
+      <div className="grid gap-6 xl:grid-cols-2">
+        <CategoryPieWrapper enabled={enabled} />
+        <DashboardWarehousePieWrapper enabled={enabled} />
+      </div>
+
       <RecentTransactionsTable transactions={query.data.recent_transactions} />
+
     </div>
   );
 }
