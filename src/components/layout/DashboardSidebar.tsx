@@ -41,7 +41,10 @@ function DashboardNavLink({
   return (
     <Link
       href={href}
-      onClick={onNavigate}
+      onClick={(e) => {
+        e.stopPropagation();
+        onNavigate?.();
+      }}
       aria-current={active ? "page" : undefined}
       title={collapsed ? label : undefined}
       className={cn(
@@ -100,7 +103,7 @@ export default function DashboardSidebar() {
         )}
         onClick={(e) => {
           e.preventDefault();
-          setSidebarCollapsed(!sidebarCollapsed);
+          setSidebarCollapsed(false);
         }}
       >
         <div
@@ -143,7 +146,10 @@ export default function DashboardSidebar() {
               "ml-4 items-center justify-center rounded-md text-muted-foreground hover:bg-muted ",
               sidebarCollapsed && "hidden",
             )}
-            onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+            onClick={(e) => {
+              e.stopPropagation();
+              setSidebarCollapsed(!sidebarCollapsed);
+            }}
             aria-label={
               sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"
             }
@@ -176,7 +182,7 @@ export default function DashboardSidebar() {
               <div>
                 <Link
                   href={itemsNav.href}
-                  onClick={closeMobile}
+                  onClick={() => closeMobile}
                   title={sidebarCollapsed ? itemsNav.label : undefined}
                   aria-current={
                     itemsNav.children.some((child) =>
@@ -213,7 +219,10 @@ export default function DashboardSidebar() {
                         <Link
                           key={child.label}
                           href={child.href}
-                          onClick={closeMobile}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            closeMobile?.();
+                          }}
                           aria-current={active ? "page" : undefined}
                           className={cn(
                             "block border-l-4 py-1.5 pl-4 text-sm transition-colors",
