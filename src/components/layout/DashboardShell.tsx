@@ -14,7 +14,7 @@ export default function DashboardShell({ children }: { children: ReactNode }) {
 
         <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
           <DashboardHeader />
-          <main className="flex-1 overflow-y-auto overflow-x-hidden p-4 sm:p-6 lg:p-8 max-w-container-max">
+          <main className="flex-1 overflow-y-auto overflow-x-hidden p-4 sm:p-6 lg:p-8 max-w-full">
             {children}
           </main>
         </div>

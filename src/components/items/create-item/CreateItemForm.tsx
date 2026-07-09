@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 import { useQuery } from "@tanstack/react-query";
-import { z } from "zod";
 
 import { useCategoriesList } from "@/hooks/useCategories";
 import { useCreateItem } from "@/hooks/useItems";
@@ -20,35 +19,7 @@ import CreateItemBasicInfoSection, {
 import CreateItemStockPricingSection from "./CreateItemStockPricingSection";
 import CreateItemLogisticsSection from "./CreateItemLogisticsSection";
 
-const skuFormatRegex = /^SKU-\d+$/;
-
-const createItemSchema = z.object({
-  sku: z
-    .string()
-    .min(1, { message: "SKU is required" })
-    .regex(skuFormatRegex, { message: "SKU must be in the format SKU-001" }),
-  name: z.string().min(1, { message: "Name is required" }),
-  description: z.string().optional().default(""),
-  initial_stock: z.coerce
-    .number()
-    .int({ message: "Initial stock must be a whole number" })
-    .min(0, { message: "Initial stock cannot be negative" }),
-  minimum_stock_level: z.coerce
-    .number()
-    .int({ message: "Minimum stock level must be a whole number" })
-    .min(0, { message: "Minimum stock level cannot be negative" }),
-  cost_price: z.coerce
-    .number()
-    .min(0, { message: "Cost price cannot be negative" }),
-  selling_price: z.coerce
-    .number()
-    .min(0, { message: "Selling price cannot be negative" }),
-  category_id: z.string().min(1, { message: "Category is required" }),
-  vendor_id: z.string().min(1, { message: "Vendor is required" }),
-  warehouse_id: z.string().min(1, { message: "Warehouse is required" }),
-  bin_location: z.string().min(1, { message: "Bin location is required" }),
-  Itemtypes: z.string().min(1, { message: "Item type is required" }),
-});
+import { createItemSchema, skuFormatRegex } from "@/schemas/item";
 
 type CreateItemFormProps = {
   formId: string;
@@ -82,7 +53,6 @@ export default function CreateItemForm({
     watch,
     formState: { errors },
   } = useForm<CreateItemFormValues>({
-
     resolver: standardSchemaResolver(createItemSchema) as never,
     defaultValues: {
       sku: "",
@@ -148,7 +118,6 @@ export default function CreateItemForm({
 
     // Clear any previous backend field errors before trying again.
     clearErrors(["vendor_id", "warehouse_id", "category_id"] as const);
-
 
     if (!skuFormatRegex.test(sku)) {
       setError("sku", {
@@ -238,10 +207,12 @@ export default function CreateItemForm({
         };
 
         const categoryMsg = toMessage(fe.category_id);
-        if (categoryMsg) setError("category_id", { type: "validate", message: categoryMsg });
+        if (categoryMsg)
+          setError("category_id", { type: "validate", message: categoryMsg });
 
         const vendorMsg = toMessage(fe.vendor_id);
-        if (vendorMsg) setError("vendor_id", { type: "validate", message: vendorMsg });
+        if (vendorMsg)
+          setError("vendor_id", { type: "validate", message: vendorMsg });
 
         const warehouseMsg = toMessage(fe.warehouse_id);
         if (warehouseMsg) {
@@ -258,7 +229,6 @@ export default function CreateItemForm({
         variant: "error",
       });
     }
-
   }
 
   const isSubmitting = createItemMutation.isPending;
@@ -360,8 +330,6 @@ export default function CreateItemForm({
             });
           }}
         />
-
-
 
         {createItemMutation.isError ? (
           <p className="text-sm text-destructive">

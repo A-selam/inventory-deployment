@@ -60,7 +60,7 @@ export default function WarehouseQtyPieChart({
         </div>
       </div>
 
-      <div className="mt-2 h-[220px] w-full">
+      <div className="mt-2 h-55 w-full">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Tooltip content={<CustomTooltip />} />
@@ -91,4 +91,3 @@ export default function WarehouseQtyPieChart({
     </Card>
   );
 }
-

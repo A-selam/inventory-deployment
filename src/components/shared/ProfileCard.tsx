@@ -2,14 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import {
-  CalendarDays,
-  KeyRound,
-  LogOut,
-  Pencil,
-  User,
-  X,
-} from "lucide-react";
+import { CalendarDays, KeyRound, LogOut, X } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
 
@@ -21,7 +14,11 @@ import { Input } from "@/components/ui/input";
 import Label from "@/components/ui/label";
 import { useAuthStore } from "@/stores/auth-store";
 import { useToast } from "@/providers/ToastProvider";
-import { useProfile, useUpdateProfile, useChangePassword } from "@/hooks/useProfile";
+import {
+  useProfile,
+  useUpdateProfile,
+  useChangePassword,
+} from "@/hooks/useProfile";
 import { getApiErrorMessage } from "@/lib/api-errors";
 import {
   updateProfileSchema,
@@ -129,7 +126,7 @@ function EditProfileModal({
             form="profile-card-edit-form"
             disabled={mutation.isPending}
           >
-            {mutation.isPending ? 'Saving...' : 'Save changes'}
+            {mutation.isPending ? "Saving..." : "Save changes"}
           </Button>
         </>
       }
@@ -247,7 +244,7 @@ function ChangePasswordModal({
             form="profile-card-pw-form"
             disabled={mutation.isPending}
           >
-            {mutation.isPending ? 'Updating...' : 'Update password'}
+            {mutation.isPending ? "Updating..." : "Update password"}
           </Button>
         </>
       }
@@ -283,7 +280,6 @@ function ChangePasswordModal({
 function ProfileOverlay({
   open,
   onClose,
-  onEditProfile,
   onChangePassword,
 }: {
   open: boolean;
@@ -328,11 +324,6 @@ function ProfileOverlay({
     onClose();
     logout();
     router.replace("/login");
-  };
-
-  const handleViewProfile = () => {
-    onClose();
-    router.push("/profile");
   };
 
   if (!open) return null;
@@ -399,7 +390,7 @@ function ProfileOverlay({
         </div>
 
         {/* Meta */}
-        {(createdAt || lastLogin !== undefined) ? (
+        {createdAt || lastLogin !== undefined ? (
           <div className="border-b border-border px-4 py-3 space-y-1.5">
             {createdAt ? (
               <div className="flex items-center gap-2 text-xs text-muted-foreground">
@@ -416,10 +407,12 @@ function ProfileOverlay({
 
         {/* Actions */}
         <div className="p-2">
-          
           <button
             type="button"
-            onClick={() => { onClose(); onChangePassword(); }}
+            onClick={() => {
+              onClose();
+              onChangePassword();
+            }}
             className="flex w-full items-center gap-3 rounded-md px-3 py-2.5 text-sm text-foreground transition-colors hover:bg-muted"
           >
             <KeyRound className="size-4 shrink-0 text-muted-foreground" />
@@ -449,7 +442,10 @@ type ProfileCardProps = {
   className?: string;
 };
 
-export default function ProfileCard({ collapsed, className }: ProfileCardProps) {
+export default function ProfileCard({
+  collapsed,
+  className,
+}: ProfileCardProps) {
   const user = useAuthStore((s) => s.user);
   const initials = getInitials(user?.name);
   const roleLabel = ROLE_LABEL[user?.role ?? ""] ?? "User";
@@ -490,7 +486,10 @@ export default function ProfileCard({ collapsed, className }: ProfileCardProps) 
 
         <Avatar className="size-9 shrink-0 border border-border">
           {profile?.profile_picture ? (
-            <AvatarImage src={profile.profile_picture} alt={user?.name ?? "User"} />
+            <AvatarImage
+              src={profile.profile_picture}
+              alt={user?.name ?? "User"}
+            />
           ) : null}
           <AvatarFallback className="bg-primary text-xs font-semibold text-primary-foreground">
             {initials}
@@ -515,10 +514,7 @@ export default function ProfileCard({ collapsed, className }: ProfileCardProps) 
       />
 
       {/* ── Change Password modal ── */}
-      <ChangePasswordModal
-        open={pwOpen}
-        onClose={() => setPwOpen(false)}
-      />
+      <ChangePasswordModal open={pwOpen} onClose={() => setPwOpen(false)} />
     </>
   );
 }

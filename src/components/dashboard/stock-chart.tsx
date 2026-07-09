@@ -337,85 +337,91 @@ export default function StockChart({
 
   return (
     <Card className="rounded-[12px] border-border shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
-    <div className="flex items-start justify-between gap-4">
-      <div className="space-y-2">
-        <div className="label-caps font-bold text-2xl mb-0">
-          Stock Movement Trends
+      <div className="flex items-start justify-between gap-4">
+        <div className="space-y-2">
+          <div className="label-caps font-bold text-2xl mb-0">
+            Stock Movement Trends
+          </div>
+        </div>
+
+        <div className="flex flex-col items-end gap-3">
+          <div className="flex flex-wrap items-center justify-end gap-2">
+            <Button
+              type="button"
+              size="sm"
+              variant={mode === "week" ? "default" : "outline"}
+              onClick={() => setMode("week")}
+            >
+              This week
+            </Button>
+            <Button
+              type="button"
+              size="sm"
+              variant={mode === "month" ? "default" : "outline"}
+              onClick={() => setMode("month")}
+            >
+              This month
+            </Button>
+            <Button
+              type="button"
+              size="sm"
+              variant={mode === "year" ? "default" : "outline"}
+              onClick={() => setMode("year")}
+            >
+              This year
+            </Button>
+          </div>
+          <ChartLegend />
         </div>
       </div>
 
-      <div className="flex flex-col items-end gap-3">
-        <div className="flex flex-wrap items-center justify-end gap-2">
-          <Button
-            type="button"
-            size="sm"
-            variant={mode === "week" ? "default" : "outline"}
-            onClick={() => setMode("week")}
+      <div className="mt-6 h-50 w-full">
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart
+            data={chartData}
+            barCategoryGap={20}
+            margin={{ left: -10, right: 10 }}
           >
-            This week
-          </Button>
-          <Button
-            type="button"
-            size="sm"
-            variant={mode === "month" ? "default" : "outline"}
-            onClick={() => setMode("month")}
-          >
-            This month
-          </Button>
-          <Button
-            type="button"
-            size="sm"
-            variant={mode === "year" ? "default" : "outline"}
-            onClick={() => setMode("year")}
-          >
-            This year
-          </Button>
-        </div>
-        <ChartLegend />
-      </div>
-    </div>
-
-    <div className="mt-6 h-[200px] w-full">
-      <ResponsiveContainer width="100%" height="100%">
-        <BarChart data={chartData} barCategoryGap={20} margin={{ left: -10, right: 10 }}>
-          <CartesianGrid
-            vertical={false}
-            stroke="#e5e7eb"
-            strokeDasharray="3 3"
-          />
-          <XAxis
-            dataKey="label"
-            axisLine={false}
-            tickLine={false}
-            tick={{ fill: "#3b414a", fontSize: 12 }}
-          />
-          
-          <YAxis 
-            axisLine={false}
-            tickLine={false}
-            tick={{ fill: "#64748b", fontSize: 12 }}
-            width={40} 
+            <CartesianGrid
+              vertical={false}
+              stroke="#e5e7eb"
+              strokeDasharray="3 3"
             />
-          <Tooltip content={<CustomTooltip />} cursor={{  fill: "rgba(15, 23, 42, 0.08)" }} />
-           
-          <Bar
-            dataKey="stock_in"
-            fill="#090a0a"
-            radius={[8, 8, 0, 0]}
-            maxBarSize={26}
-            activeBar={{ fill: "#1e293b" }} 
-          />
-          <Bar
-            dataKey="stock_out"
-            fill="#afafc6"
-            radius={[8, 8, 0, 0]}
-            maxBarSize={26}
-            activeBar={{ fill: "#818a97" }} 
-          />
-        </BarChart>
-      </ResponsiveContainer>
-    </div>
-</Card>
+            <XAxis
+              dataKey="label"
+              axisLine={false}
+              tickLine={false}
+              tick={{ fill: "#3b414a", fontSize: 12 }}
+            />
 
+            <YAxis
+              axisLine={false}
+              tickLine={false}
+              tick={{ fill: "#64748b", fontSize: 12 }}
+              width={40}
+            />
+            <Tooltip
+              content={<CustomTooltip />}
+              cursor={{ fill: "rgba(15, 23, 42, 0.08)" }}
+            />
+
+            <Bar
+              dataKey="stock_in"
+              fill="#090a0a"
+              radius={[8, 8, 0, 0]}
+              maxBarSize={26}
+              activeBar={{ fill: "#1e293b" }}
+            />
+            <Bar
+              dataKey="stock_out"
+              fill="#afafc6"
+              radius={[8, 8, 0, 0]}
+              maxBarSize={26}
+              activeBar={{ fill: "#818a97" }}
+            />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+    </Card>
   );
 }

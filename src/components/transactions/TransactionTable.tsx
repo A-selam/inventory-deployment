@@ -296,7 +296,7 @@ export default function TransactionTable({
           </Table>
         </div>
 
-        <div className="flex flex-col gap-3 border-t border-border bg-background px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-3 border-t border-border bg-background px-4 py-3 md:justify-end sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-2 self-end sm:self-auto">
             <PaginationButton
               disabled={page <= 1}

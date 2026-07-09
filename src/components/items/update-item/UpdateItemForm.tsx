@@ -3,7 +3,6 @@
 import { useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema";
-import { z } from "zod";
 
 import { useCategoriesList } from "@/hooks/useCategories";
 import { useUpdateItem } from "@/hooks/useItems";
@@ -13,6 +12,7 @@ import { useToast } from "@/providers/ToastProvider";
 import { Input } from "@/components/ui/input";
 import Label from "@/components/ui/label";
 import type { ItemDetail } from "@/types/items";
+import { updateItemSchema } from "@/schemas/item";
 
 type UpdateItemFormValues = {
   name: string;
@@ -24,24 +24,6 @@ type UpdateItemFormValues = {
   vendor_id: string;
   bin_location: string;
 };
-
-const updateItemSchema = z.object({
-  name: z.string().min(1, { message: "Name is required" }),
-  description: z.string().optional().default(""),
-  minimum_stock_level: z.coerce
-    .number()
-    .int({ message: "Minimum stock level must be a whole number" })
-    .min(0, { message: "Minimum stock level cannot be negative" }),
-  cost_price: z.coerce
-    .number()
-    .min(0, { message: "Cost price cannot be negative" }),
-  selling_price: z.coerce
-    .number()
-    .min(0, { message: "Selling price cannot be negative" }),
-  category_id: z.string().min(1, { message: "Category is required" }),
-  vendor_id: z.string().min(1, { message: "Vendor is required" }),
-  bin_location: z.string().min(1, { message: "Bin location is required" }),
-});
 
 type UpdateItemFormProps = {
   item: ItemDetail;

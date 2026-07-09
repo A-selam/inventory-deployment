@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowLeft, PackagePlus, RefreshCw, Trash } from "lucide-react";
+import { ArrowLeft, PackagePlus, SquarePen, Trash } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import Button from "@/components/ui/button";
@@ -71,21 +71,21 @@ export default function ItemDetailHeader({
         <div className="flex flex-wrap items-center justify-start gap-2 lg:justify-end">
           <Button
             type="button"
-            variant="outline"
+            variant="default"
             size="sm"
-            className="h-9 gap-2 border-amber-200 bg-amber-50 text-amber-900 hover:bg-amber-100"
+            className="h-9 gap-2 hover:cursor-pointer border-amber-200 bg-amber-50 text-amber-900 hover:bg-amber-100"
             onClick={onUpdate}
             disabled={!onUpdate}
           >
-            <RefreshCw className="size-4" />
-            Update
+            <SquarePen className="size-4" />
+            Edit
           </Button>
 
           <Button
             type="button"
             variant="default"
             size="sm"
-            className="h-9 gap-2 bg-rose-600 text-white hover:bg-rose-700"
+            className="h-9 gap-2 hover:cursor-pointer bg-rose-600 text-white hover:bg-rose-700"
             onClick={onDelete}
             disabled={!onDelete}
           >
@@ -96,7 +96,7 @@ export default function ItemDetailHeader({
           <Button
             type="button"
             size="sm"
-            className="h-9 gap-2"
+            className="h-9 gap-2 hover:cursor-pointer"
             onClick={onCreateTransaction}
             disabled={!onCreateTransaction}
           >

@@ -16,8 +16,6 @@ import StockChart from "./stock-chart";
 import CategoryPieWrapper from "./CategoryPieWrapper";
 import DashboardWarehousePieWrapper from "./DashboardWarehousePieWrapper";
 
-
-
 function DashboardLoadingState() {
   return (
     <div className="space-y-8">
@@ -165,7 +163,6 @@ export default function DashboardClient() {
       </div>
 
       <RecentTransactionsTable transactions={query.data.recent_transactions} />
-
     </div>
   );
 }
