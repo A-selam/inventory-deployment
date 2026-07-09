@@ -31,6 +31,7 @@ const lowStockData = [
   { name: "SKU-001", count: 5 },
   { name: "SKU-042", count: 8 },
   { name: "SKU-089", count: 3 },
+  { name: "SKU-009", count: 6 },
 ];
 
 const stockMixData = [
@@ -161,13 +162,13 @@ export default function LandingHero() {
 
               {/* Card 2: Low Stock Alerts */}
               <div className="grid gap-4 grid-cols-2">
-                <div className="rounded-xl border border-border bg-card p-4 shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg animate-scale-in animate-delay-300">
+                <div className="rounded-xl border border-border bg-card p-4 shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg animate-scale-in animate-delay-300 ">
                   <div className="mb-3 flex items-center justify-between">
                     <h3 className="text-sm font-semibold text-primary">
                       Low Stock Alerts
                     </h3>
                     <span className="rounded bg-destructive/10 px-2 py-1 text-xs font-semibold text-destructive">
-                      3
+                      4
                     </span>
                   </div>
                   <ResponsiveContainer height={120}>

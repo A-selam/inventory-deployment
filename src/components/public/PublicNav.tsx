@@ -39,7 +39,7 @@ export default function PublicNav() {
               key={link.href}
               href={link.href}
               className={cn(
-                "text-sm font-medium text-muted-foreground transition-colors hover:text-primary",
+                "text-md font-medium text-muted-foreground transition-colors hover:text-primary",
                 isActive(link.href) ? "underline" : "",
               )}
             >
@@ -50,12 +50,12 @@ export default function PublicNav() {
 
         {/* Desktop CTA buttons */}
         <div className="hidden items-center gap-3 md:flex">
-          <Link
+          {/* <Link
             href="/login"
             className="rounded-lg px-4 py-2 text-sm font-semibold text-primary border border-border hover:bg-muted transition-colors"
           >
             Sign In
-          </Link>
+          </Link> */}
           <Link
             href="#contact"
             className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-sm transition-colors hover:bg-primary/90"
