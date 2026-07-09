@@ -124,7 +124,7 @@ export default function WarehousesPageClient() {
     <div className="space-y-8">
       <CreateWarehouseModal open={isCreateOpen} onClose={() => setIsCreateOpen(false)} />
 
-      <WarehouseStatsCards totalWarehouses={totalWarehouses} />
+      {/* <WarehouseStatsCards totalWarehouses={totalWarehouses} /> */}
 
       {warehousesQuery.isError ? (
         <WarehousesErrorState

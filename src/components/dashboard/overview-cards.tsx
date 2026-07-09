@@ -47,35 +47,37 @@ function StatCard({
 
 export default function OverviewCards({ data }: { data: DashboardData }) {
   return (
-    <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-      <StatCard
-        title="Total Items"
-        value={new Intl.NumberFormat("en-US").format(data.total_items)}
-        icon={Boxes}
-        iconClassName="bg-slate-100 text-slate-700"
-      />
+    
+      <section className="grid gap-3 sm:grid-cols-4 xl:grid-cols-4  2xl:grid-cols-4 py-0.1 mb-4 px-0.1">
+        <StatCard
+          title="Total Items"
+          value={new Intl.NumberFormat("en-US").format(data.total_items)}
+          icon={Boxes}
+          iconClassName="bg-slate-100 text-slate-700"
+        />
 
-      <StatCard
-        title="Low Stock Alert"
-        value={new Intl.NumberFormat("en-US").format(data.low_stock)}
-        icon={AlertTriangle}
-        iconClassName="bg-orange-50 text-orange-600"
-        borderClassName="border-l-4 border-l-orange-600"
-      />
+        <StatCard
+          title="Low Stock Alert"
+          value={new Intl.NumberFormat("en-US").format(data.low_stock)}
+          icon={AlertTriangle}
+          iconClassName="bg-orange-50 text-orange-600"
+          borderClassName="border-l-4 border-l-orange-600"
+        />
 
-      <StatCard
-        title="Inventory Value"
-        value={formatCurrency(data.inventory_value)}
-        icon={Landmark}
-        iconClassName="bg-slate-100 text-slate-700"
-      />
+        <StatCard
+          title="Inventory Value"
+          value={formatCurrency(data.inventory_value)}
+          icon={Landmark}
+          iconClassName="bg-slate-100 text-slate-700"
+        />
 
-      <StatCard
-        title="Active Vendors"
-        value={new Intl.NumberFormat("en-US").format(data.active_vendors)}
-        icon={Users}
-        iconClassName="bg-slate-100 text-slate-700"
-      />
-    </section>
+        <StatCard
+          title="Active Vendors"
+          value={new Intl.NumberFormat("en-US").format(data.active_vendors)}
+          icon={Users}
+          iconClassName="bg-slate-100 text-slate-700"
+        />
+      </section>
+     
   );
 }

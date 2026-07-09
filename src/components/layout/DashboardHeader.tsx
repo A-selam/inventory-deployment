@@ -1,14 +1,6 @@
 "use client";
 
-import {
-  Building2,
-  CircleChevronLeft,
-  CircleChevronRight,
-  Loader2,
-  Menu,
-  Package,
-  Search,
-} from "lucide-react";
+import { Building2, Loader2, Menu, Package, Search } from "lucide-react";
 import {
   useEffect,
   useId,
