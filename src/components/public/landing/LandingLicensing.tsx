@@ -47,7 +47,7 @@ export default function LandingLicensing() {
               href="#contact"
               className="inline-flex w-full items-center justify-center rounded-lg bg-primary px-6 py-3 text-base font-semibold text-primary-foreground shadow-sm transition-colors hover:bg-primary/90"
             >
-              Get Pricing
+              Contact Sales
             </a>
           </div>
 
