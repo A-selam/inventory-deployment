@@ -76,13 +76,16 @@ export default function UpdateCategoryForm({
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
       <div className="space-y-2">
-        <Label htmlFor="update-category-name" className="label-caps text-foreground">
+        <Label
+          htmlFor="update-category-name"
+          className="label-caps text-foreground"
+        >
           Category Name
         </Label>
         <Input
           id="update-category-name"
           placeholder="e.g. Electronics"
-          className="h-11 rounded-xl px-4"
+          className="h-9 rounded-md px-3"
           autoFocus
           aria-invalid={Boolean(errors.name)}
           disabled={isSubmitting}

@@ -17,7 +17,7 @@ export default function CreateVendorBasicInfoSection({
   disabled,
 }: CreateVendorBasicInfoSectionProps) {
   return (
-    <section className="space-y-4">
+    <section className="grid gap-4 grid-cols-[repeat(auto-fit,minmax(260px,1fr))]">
       <div className="space-y-2">
         <Label
           htmlFor="create-vendor-name"
@@ -31,7 +31,7 @@ export default function CreateVendorBasicInfoSection({
           placeholder="e.g. Lumina Electronics"
           aria-invalid={Boolean(errors.name)}
           disabled={disabled}
-          className="h-11 rounded-[10px] px-4"
+          className="h-9 rounded-md px-3"
         />
         {errors.name && (
           <p className="text-xs text-destructive">{errors.name.message}</p>
@@ -52,7 +52,7 @@ export default function CreateVendorBasicInfoSection({
           placeholder="14"
           aria-invalid={Boolean(errors.lead_time)}
           disabled={disabled}
-          className="h-11 rounded-[10px] px-4"
+          className="h-9 rounded-md px-3"
         />
         {errors.lead_time && (
           <p className="text-xs text-destructive">{errors.lead_time.message}</p>

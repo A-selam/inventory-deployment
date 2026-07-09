@@ -32,7 +32,7 @@ export default function CategoryFilters({
             onChange={(event) =>
               onSortByChange(event.target.value as CategorySortBy)
             }
-            className="h-9 w-full appearance-none rounded-md border border-input bg-card px-2 pr-9 text-sm text-foreground outline-none transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+            className="h-9 w-full appearance-none rounded-md border border-input bg-transparent px-3 pr-9 text-sm text-foreground shadow-xs outline-none transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 dark:bg-input/30"
           >
             <option value="name">Name</option>
             <option value="vendor_total">Vendor total</option>

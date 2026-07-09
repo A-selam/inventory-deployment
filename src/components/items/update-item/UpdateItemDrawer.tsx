@@ -28,7 +28,11 @@ export default function UpdateItemDrawer({
       onClose={onClose}
       title="Update Item"
       description="SKU is immutable. Update the item details below."
-      className="max-w-[450px]"
+      resizable
+      storageKey="drawer-width:update-item"
+      defaultWidth={520}
+      minWidth={420}
+      maxWidth={920}
     >
       <UpdateItemForm
         item={item}

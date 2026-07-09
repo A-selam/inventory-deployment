@@ -33,7 +33,11 @@ export default function CreateVendorDrawer({
           ? "Update the supplier details below."
           : "Enter the details of the new supplier to add them to your network."
       }
-      className="max-w-[450px]"
+      resizable
+      storageKey="drawer-width:vendor"
+      defaultWidth={520}
+      minWidth={420}
+      maxWidth={920}
     >
       <CreateVendorForm
         formId={formId}

@@ -60,7 +60,7 @@ export default function CreateItemStockPricingSection({
 }: CreateItemStockPricingSectionProps) {
   return (
     <section className="space-y-4">
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid gap-3 grid-cols-[repeat(auto-fit,minmax(190px,1fr))]">
         <div className="space-y-1.5">
           <Label
             htmlFor="create-item-initial-stock"
@@ -110,7 +110,7 @@ export default function CreateItemStockPricingSection({
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid gap-3 grid-cols-[repeat(auto-fit,minmax(190px,1fr))]">
         <CurrencyInput
           id="create-item-cost-price"
           label="Cost Price"
@@ -132,4 +132,3 @@ export default function CreateItemStockPricingSection({
     </section>
   );
 }
-

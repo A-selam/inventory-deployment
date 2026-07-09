@@ -37,7 +37,7 @@ export default function CreateItemLogisticsSection({
     "h-9 w-full appearance-none rounded-md border border-input bg-transparent px-3 pr-9 text-sm text-foreground shadow-xs outline-none transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40";
 
   return (
-    <section className="space-y-3">
+    <section className="grid gap-3 grid-cols-[repeat(auto-fit,minmax(220px,1fr))]">
       <div className="space-y-1.5">
         <Label
           htmlFor="create-item-category"
@@ -65,12 +65,17 @@ export default function CreateItemLogisticsSection({
           <ChevronDown className="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
         </div>
         {errors.category_id ? (
-          <p className="text-xs text-destructive">{errors.category_id.message}</p>
+          <p className="text-xs text-destructive">
+            {errors.category_id.message}
+          </p>
         ) : null}
       </div>
 
       <div className="space-y-1.5">
-        <Label htmlFor="create-item-vendor" className="label-caps text-foreground">
+        <Label
+          htmlFor="create-item-vendor"
+          className="label-caps text-foreground"
+        >
           Vendor
         </Label>
         <div className="relative">
@@ -179,4 +184,3 @@ export default function CreateItemLogisticsSection({
     </section>
   );
 }
-
