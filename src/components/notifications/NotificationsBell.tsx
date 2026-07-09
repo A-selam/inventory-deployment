@@ -167,7 +167,7 @@ export default function NotificationsBell() {
                 You’re all caught up.
               </div>
             ) : (
-              <div className="max-h-[420px] overflow-auto py-1">
+              <div className="max-h-105 overflow-auto py-1">
                 {notifications.map((notification) => (
                   <NotificationsListItem
                     key={notification.id}

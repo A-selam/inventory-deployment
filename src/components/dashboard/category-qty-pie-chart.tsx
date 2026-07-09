@@ -68,7 +68,7 @@ export default function CategoryQtyPieChart({
         </div>
       </div>
 
-      <div className="mt-2 h-[220px] w-full">
+      <div className="mt-2 h-55 w-full">
         {safeData.length === 0 ? (
           <div className="flex h-full items-center justify-center rounded-lg border border-dashed border-border text-sm text-muted-foreground">
             No category totals available yet.
@@ -93,7 +93,10 @@ export default function CategoryQtyPieChart({
                 }}
               >
                 {safeData.map((_, idx) => (
-                  <Cell key={`cell-${idx}`} fill={colors[idx % colors.length]} />
+                  <Cell
+                    key={`cell-${idx}`}
+                    fill={colors[idx % colors.length]}
+                  />
                 ))}
               </Pie>
             </PieChart>

@@ -17,7 +17,10 @@ type UpdateCategoryValues = {
 };
 
 const updateCategorySchema = z.object({
-  name: z.string().min(1, { message: "Category name is required" }),
+  name: z
+    .string()
+    .min(1, { message: "Category name is required" })
+    .max(25, { message: "Category name cannot exceed 25 characters" }),
 });
 
 type UpdateCategoryFormProps = {

@@ -40,7 +40,7 @@ export default function ImportsErrorPageClient() {
   const fileName = payload?.file_name ?? null;
 
   const wizardSteps: ImportsWizardStep[] = [
-    { key: "upload", label: "Upload", state: "pending" },
+    { key: "upload", label: "Upload", state: "complete" },
     { key: "validate", label: "Validate", state: "active" },
     { key: "finish", label: "Finish", state: "pending" },
   ];

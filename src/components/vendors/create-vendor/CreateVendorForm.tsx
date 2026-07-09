@@ -14,27 +14,7 @@ import { parseVendorContactInfo } from "../vendor-utils";
 import CreateVendorBasicInfoSection from "./CreateVendorBasicInfoSection";
 import CreateVendorContactSection from "./CreateVendorContactSection";
 import CreateVendorLocationSection from "./CreateVendorLocationSection";
-
-const createVendorSchema = z.object({
-  name: z.string().min(1, { message: "Supplier name is required" }),
-  contact_person: z.object({
-    first_name: z.string().min(1, { message: "First name is required" }),
-    last_name: z.string().min(1, { message: "Last name is required" }),
-  }),
-  contact_info: z.object({
-    primary_phone: z.string().min(1, { message: "Primary phone is required" }),
-    secondary_phone: z.string().optional().default(""),
-    email: z.string().email({ message: "Invalid email address" }),
-  }),
-  location: z.object({
-    city: z.string().min(1, { message: "City is required" }),
-    country: z.string().min(1, { message: "Country is required" }),
-  }),
-  lead_time: z.coerce
-    .number()
-    .int({ message: "Lead time must be a whole number" })
-    .min(0, { message: "Lead time cannot be negative" }),
-});
+import { createVendorSchema } from "@/schemas/vendor";
 
 export type CreateVendorFormValues = z.infer<typeof createVendorSchema>;
 

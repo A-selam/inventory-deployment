@@ -133,7 +133,8 @@ export default function UsersPageClient() {
         <div className="flex flex-wrap items-center justify-end gap-3">
           <Button
             type="button"
-            className="h-11 gap-2 rounded-xl px-5"
+            size="sm"
+            className="h-9 gap-2"
             onClick={() => setInviteOpen(true)}
           >
             <UserPlus className="size-4" />

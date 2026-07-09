@@ -1,16 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { Plus, SlidersHorizontal, Upload } from "lucide-react";
+import { Plus, Upload } from "lucide-react";
 
-import Button from "@/components/ui/button";
 import type { Item } from "@/lib/items";
 
 import StandardDataTable, {
   StandardEmptyRow,
   StandardTableHeadCell,
 } from "@/components/shared/StandardDataTable";
-import label from "../ui/label";
 
 const formatCurrency = (amount: number): string => {
   return new Intl.NumberFormat("en-US", {
@@ -168,16 +166,16 @@ export default function ItemsTable({
       filtersOpen={filtersOpen}
       addAction={[
         {
-          label: "Add Item",
-          onClick: onAddItem,
-          disabled: false,
-          icon: <Plus className="size-4" />,
-        },
-        {
           label: "Import Items",
           onClick: onImport,
           disabled: false,
           icon: <Upload className="size-4" />,
+        },
+        {
+          label: "Add Item",
+          onClick: onAddItem,
+          disabled: false,
+          icon: <Plus className="size-4" />,
         },
       ]}
       onToggleFilters={onToggleFilters}
