@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, Server, Shield, Zap } from "lucide-react";
+import { Check } from "lucide-react";
 
 export default function LandingLicensing() {
   return (
