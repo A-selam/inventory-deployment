@@ -17,7 +17,7 @@ export default function CreateVendorBasicInfoSection({
   disabled,
 }: CreateVendorBasicInfoSectionProps) {
   return (
-    <section className="space-y-4">
+    <section className="grid gap-4 grid-cols-[repeat(auto-fit,minmax(260px,1fr))]">
       <div className="space-y-2">
         <Label
           htmlFor="create-vendor-name"

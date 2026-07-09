@@ -42,7 +42,7 @@ export default function CreateItemBasicInfoSection({
   skuStatusTone = "muted",
 }: CreateItemBasicInfoSectionProps) {
   return (
-    <section className="space-y-3">
+    <section className="grid gap-3 grid-cols-[repeat(auto-fit,minmax(220px,1fr))]">
       <div className="space-y-1.5">
         <Label htmlFor="create-item-sku" className="label-caps text-foreground">
           SKU
@@ -73,7 +73,10 @@ export default function CreateItemBasicInfoSection({
       </div>
 
       <div className="space-y-1.5">
-        <Label htmlFor="create-item-name" className="label-caps text-foreground">
+        <Label
+          htmlFor="create-item-name"
+          className="label-caps text-foreground"
+        >
           Name
         </Label>
         <Input
@@ -89,7 +92,7 @@ export default function CreateItemBasicInfoSection({
         ) : null}
       </div>
 
-      <div className="space-y-1.5">
+      <div className="col-span-full space-y-1.5">
         <Label
           htmlFor="create-item-description"
           className="label-caps text-foreground"
@@ -114,4 +117,3 @@ export default function CreateItemBasicInfoSection({
     </section>
   );
 }
-

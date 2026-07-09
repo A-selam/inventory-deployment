@@ -17,7 +17,7 @@ export default function CreateVendorLocationSection({
   disabled,
 }: CreateVendorLocationSectionProps) {
   return (
-    <section className="grid grid-cols-2 gap-4">
+    <section className="grid gap-4 grid-cols-[repeat(auto-fit,minmax(260px,1fr))]">
       <div className="space-y-2">
         <Label
           htmlFor="create-vendor-city"

@@ -147,7 +147,7 @@ export default function UpdateItemForm({
       onSubmit={handleSubmit(onSubmit)}
       className="flex-1 overflow-y-auto px-6 py-6"
     >
-      <div className="space-y-6">
+      <div className="grid gap-6 grid-cols-[repeat(auto-fit,minmax(260px,1fr))]">
         <div className="space-y-2">
           <Label
             htmlFor="update-item-name"
@@ -168,7 +168,7 @@ export default function UpdateItemForm({
           ) : null}
         </div>
 
-        <div className="space-y-2">
+        <div className="col-span-full space-y-2">
           <Label
             htmlFor="update-item-description"
             className="label-caps text-foreground"
@@ -191,92 +191,88 @@ export default function UpdateItemForm({
           ) : null}
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <Label
-              htmlFor="update-item-min-stock"
-              className="label-caps text-foreground"
-            >
-              Minimum Stock Level
-            </Label>
-            <Input
-              id="update-item-min-stock"
-              type="number"
-              min={0}
-              step="1"
-              className="h-11 rounded-[10px] px-4"
-              aria-invalid={Boolean(errors.minimum_stock_level)}
-              disabled={isSubmitting}
-              {...register("minimum_stock_level")}
-            />
-            {errors.minimum_stock_level ? (
-              <p className="text-xs text-destructive">
-                {errors.minimum_stock_level.message}
-              </p>
-            ) : null}
-          </div>
+        <div className="space-y-2">
+          <Label
+            htmlFor="update-item-min-stock"
+            className="label-caps text-foreground"
+          >
+            Minimum Stock Level
+          </Label>
+          <Input
+            id="update-item-min-stock"
+            type="number"
+            min={0}
+            step="1"
+            className="h-11 rounded-[10px] px-4"
+            aria-invalid={Boolean(errors.minimum_stock_level)}
+            disabled={isSubmitting}
+            {...register("minimum_stock_level")}
+          />
+          {errors.minimum_stock_level ? (
+            <p className="text-xs text-destructive">
+              {errors.minimum_stock_level.message}
+            </p>
+          ) : null}
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <Label
-              htmlFor="update-item-cost-price"
-              className="label-caps text-foreground"
-            >
-              Cost Price
-            </Label>
-            <div className="relative">
-              <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">
-                $
-              </span>
-              <Input
-                id="update-item-cost-price"
-                type="number"
-                step="0.01"
-                min={0}
-                placeholder="0.00"
-                className="h-11 rounded-[10px] pl-7 pr-4"
-                aria-invalid={Boolean(errors.cost_price)}
-                disabled={isSubmitting}
-                {...register("cost_price")}
-              />
-            </div>
-            {errors.cost_price ? (
-              <p className="text-xs text-destructive">
-                {errors.cost_price.message}
-              </p>
-            ) : null}
+        <div className="space-y-2">
+          <Label
+            htmlFor="update-item-cost-price"
+            className="label-caps text-foreground"
+          >
+            Cost Price
+          </Label>
+          <div className="relative">
+            <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">
+              $
+            </span>
+            <Input
+              id="update-item-cost-price"
+              type="number"
+              step="0.01"
+              min={0}
+              placeholder="0.00"
+              className="h-11 rounded-[10px] pl-7 pr-4"
+              aria-invalid={Boolean(errors.cost_price)}
+              disabled={isSubmitting}
+              {...register("cost_price")}
+            />
           </div>
+          {errors.cost_price ? (
+            <p className="text-xs text-destructive">
+              {errors.cost_price.message}
+            </p>
+          ) : null}
+        </div>
 
-          <div className="space-y-2">
-            <Label
-              htmlFor="update-item-selling-price"
-              className="label-caps text-foreground"
-            >
-              Selling Price
-            </Label>
-            <div className="relative">
-              <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">
-                $
-              </span>
-              <Input
-                id="update-item-selling-price"
-                type="number"
-                step="0.01"
-                min={0}
-                placeholder="0.00"
-                className="h-11 rounded-[10px] pl-7 pr-4"
-                aria-invalid={Boolean(errors.selling_price)}
-                disabled={isSubmitting}
-                {...register("selling_price")}
-              />
-            </div>
-            {errors.selling_price ? (
-              <p className="text-xs text-destructive">
-                {errors.selling_price.message}
-              </p>
-            ) : null}
+        <div className="space-y-2">
+          <Label
+            htmlFor="update-item-selling-price"
+            className="label-caps text-foreground"
+          >
+            Selling Price
+          </Label>
+          <div className="relative">
+            <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">
+              $
+            </span>
+            <Input
+              id="update-item-selling-price"
+              type="number"
+              step="0.01"
+              min={0}
+              placeholder="0.00"
+              className="h-11 rounded-[10px] pl-7 pr-4"
+              aria-invalid={Boolean(errors.selling_price)}
+              disabled={isSubmitting}
+              {...register("selling_price")}
+            />
           </div>
+          {errors.selling_price ? (
+            <p className="text-xs text-destructive">
+              {errors.selling_price.message}
+            </p>
+          ) : null}
         </div>
 
         <div className="space-y-2">

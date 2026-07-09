@@ -22,7 +22,11 @@ export default function CreateItemDrawer({ open, onClose }: CreateItemDrawerProp
       onClose={onClose}
       title="Add New Item"
       description="Enter the details of the new inventory item below."
-      className="max-w-[450px]"
+      resizable
+      storageKey="drawer-width:create-item"
+      defaultWidth={520}
+      minWidth={420}
+      maxWidth={920}
     >
       <CreateItemForm
         formId={formId}
