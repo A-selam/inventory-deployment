@@ -104,9 +104,6 @@ export default function UsersTable({
                     <div className="truncate font-medium text-foreground">
                       {user.name}
                     </div>
-                    <div className="truncate text-xs text-muted-foreground">
-                      ID: {user.id}
-                    </div>
                   </div>
                 </div>
               </TableCell>

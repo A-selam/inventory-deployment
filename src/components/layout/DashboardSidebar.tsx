@@ -2,7 +2,14 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Archive, ChevronRight, Package, X } from "lucide-react";
+import {
+  Archive,
+  ChevronRight,
+  CircleChevronLeft,
+  CircleChevronRight,
+  Package,
+  X,
+} from "lucide-react";
 
 import { useSidebar } from "@/components/layout/DashboardShell";
 import ProfileCard from "@/components/shared/ProfileCard";
@@ -52,7 +59,7 @@ function DashboardNavLink({
 
 export default function DashboardSidebar() {
   const pathname = usePathname();
-  const { collapsed, mobileOpen, setMobileOpen } = useSidebar();
+  const { collapsed, mobileOpen, setCollapsed, setMobileOpen } = useSidebar();
   const userRole = useAuthStore((state) => state.user?.role);
 
   const navItems = DASHBOARD_NAV_LINKS.filter(
@@ -104,14 +111,28 @@ export default function DashboardSidebar() {
                 </div>
               </div>
             ) : null}
-            <button
-              type="button"
-              className="ml-auto inline-flex size-8 items-center justify-center rounded-md text-muted-foreground hover:bg-sidebar-accent lg:hidden"
-              onClick={closeMobile}
-              aria-label="Close sidebar"
-            >
-              <X className="size-4" />
-            </button>
+            <div className="ml-auto flex items-center gap-1">
+              <button
+                type="button"
+                className="inline-flex size-8 items-center justify-center rounded-md text-muted-foreground hover:bg-sidebar-accent"
+                onClick={() => setCollapsed(!collapsed)}
+                aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+              >
+                {collapsed ? (
+                  <CircleChevronRight className="size-4" />
+                ) : (
+                  <CircleChevronLeft className="size-4" />
+                )}
+              </button>
+              <button
+                type="button"
+                className="inline-flex size-8 items-center justify-center rounded-md text-muted-foreground hover:bg-sidebar-accent lg:hidden"
+                onClick={closeMobile}
+                aria-label="Close sidebar"
+              >
+                <X className="size-4" />
+              </button>
+            </div>
           </div>
         </div>
 

@@ -1,14 +1,6 @@
 "use client";
 
-import {
-  Building2,
-  CircleChevronLeft,
-  CircleChevronRight,
-  Loader2,
-  Menu,
-  Package,
-  Search,
-} from "lucide-react";
+import { Building2, Loader2, Menu, Package, Search } from "lucide-react";
 import {
   useEffect,
   useId,
@@ -54,7 +46,7 @@ function getDashboardPageTitle(pathname: string) {
 }
 
 export default function DashboardHeader() {
-  const { collapsed, setCollapsed, setMobileOpen } = useSidebar();
+  const { setMobileOpen } = useSidebar();
   const router = useRouter();
   const pathname = usePathname();
   const resultsId = useId();
@@ -202,19 +194,7 @@ export default function DashboardHeader() {
           <Menu className="size-5" />
         </button>
         <div className="flex min-w-0 items-center justify-between">
-          <button
-            type="button"
-            className="hidden size-9 items-center justify-center rounded-md text-muted-foreground hover:bg-muted lg:inline-flex"
-            onClick={() => setCollapsed(!collapsed)}
-            aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-          >
-            {collapsed ? (
-              <CircleChevronRight className="size-5" />
-            ) : (
-              <CircleChevronLeft className="size-5" />
-            )}
-          </button>
-          <div className="min-w-0 truncate text-sm font-semibold tracking-tight text-foreground sm:text-xl">
+          <div className="min-w-0 truncate text-sm font-semibold tracking-tight text-foreground sm:text-xl pl-5">
             {pageTitle}
           </div>
         </div>

@@ -109,7 +109,12 @@ export default function StandardDataTable({
       <div className="overflow-hidden rounded-md bg-card shadow-sm">
         <div className="flex flex-col gap-3 border-b border-border bg-background px-4 py-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="min-w-0">
-            <h2 className="truncate text-base font-semibold text-foreground">{title}</h2>
+            <div className="flex flex-wrap items-center gap-2">
+              <h2 className="truncate text-base font-semibold text-foreground">{title}</h2>
+              <span className="inline-flex items-center rounded-full border border-border bg-muted/50 px-2.5 py-0.5 text-xs font-semibold text-foreground">
+                {totalItems.toLocaleString()} total 
+              </span>
+            </div>
             <p className="text-xs text-muted-foreground">
               Showing page {page} of {totalPages} • {totalItems} total items • {limit} per page
             </p>
