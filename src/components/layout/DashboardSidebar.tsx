@@ -2,12 +2,20 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Archive, ChevronRight, Package, X } from "lucide-react";
+import {
+  Archive,
+  ChevronRight,
+  Package,
+  X,
+  PanelLeftOpen,
+  PanelLeftClose,
+} from "lucide-react";
 
-import { useSidebar } from "@/components/layout/DashboardShell";
 import ProfileCard from "@/components/shared/ProfileCard";
 import { useAuthStore } from "@/stores/auth-store";
 import { cn } from "@/lib/utils";
+
+import { useUiStore } from "@/stores/ui-store";
 
 import {
   DASHBOARD_NAV_LINKS,
@@ -33,7 +41,10 @@ function DashboardNavLink({
   return (
     <Link
       href={href}
-      onClick={onNavigate}
+      onClick={(e) => {
+        e.stopPropagation();
+        onNavigate?.();
+      }}
       aria-current={active ? "page" : undefined}
       title={collapsed ? label : undefined}
       className={cn(
@@ -52,8 +63,13 @@ function DashboardNavLink({
 
 export default function DashboardSidebar() {
   const pathname = usePathname();
-  const { collapsed, mobileOpen, setMobileOpen } = useSidebar();
   const userRole = useAuthStore((state) => state.user?.role);
+  const {
+    sidebarCollapsed,
+    setSidebarCollapsed,
+    mobileSidebarOpen,
+    setMobileSidebarOpen,
+  } = useUiStore();
 
   const navItems = DASHBOARD_NAV_LINKS.filter(
     (item) => !item.adminOnly || userRole === "admin",
@@ -64,11 +80,11 @@ export default function DashboardSidebar() {
     (item) => item.label !== "Dashboard" && !item.children,
   );
 
-  const closeMobile = () => setMobileOpen(false);
+  const closeMobile = () => setMobileSidebarOpen(false);
 
   return (
     <>
-      {mobileOpen ? (
+      {mobileSidebarOpen ? (
         <button
           type="button"
           aria-label="Close navigation"
@@ -80,28 +96,39 @@ export default function DashboardSidebar() {
       <aside
         className={cn(
           "fixed inset-y-0 left-0 z-50 flex h-dvh shrink-0 flex-col border-r border-border bg-sidebar text-sidebar-foreground transition-all duration-200 lg:static lg:z-auto",
-          collapsed ? "w-18" : "w-64",
-          mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0",
+          sidebarCollapsed ? "w-18" : "w-64",
+          mobileSidebarOpen
+            ? "translate-x-0"
+            : "-translate-x-full lg:translate-x-0",
         )}
+        onClick={(e) => {
+          e.preventDefault();
+          setSidebarCollapsed(false);
+        }}
       >
-        <div className={cn("px-5 py-5", collapsed && "px-3")}>
+        <div
+          className={cn(
+            "flex justify-between items-center px-5 py-5",
+            sidebarCollapsed && "px-3 justify-center",
+          )}
+        >
           <div
             className={cn(
-              "flex items-start gap-3",
-              collapsed && "justify-center",
+              "flex items-center gap-3",
+              sidebarCollapsed && "justify-center",
             )}
           >
             <div className="flex size-8 shrink-0 items-center justify-center self-center rounded-sm bg-primary text-primary-foreground shadow-sm">
               <Archive className="size-4" />
             </div>
-            {!collapsed ? (
+            {!sidebarCollapsed ? (
               <div className="leading-none">
                 <div className="text-lg font-semibold tracking-tight text-sidebar-foreground">
                   StockLogic
                 </div>
-                <div className="mt-1 text-[10px] font-medium uppercase tracking-[0.28em] text-sidebar-accent-foreground">
+                {/* <div className="mt-1 text-[10px] font-medium uppercase tracking-[0.28em] text-sidebar-accent-foreground">
                   GLOBAL WAREHOUSE
-                </div>
+                </div> */}
               </div>
             ) : null}
             <button
@@ -113,6 +140,26 @@ export default function DashboardSidebar() {
               <X className="size-4" />
             </button>
           </div>
+          <button
+            type="button"
+            className={cn(
+              "ml-4 items-center justify-center rounded-md text-muted-foreground hover:bg-muted ",
+              sidebarCollapsed && "hidden",
+            )}
+            onClick={(e) => {
+              e.stopPropagation();
+              setSidebarCollapsed(!sidebarCollapsed);
+            }}
+            aria-label={
+              sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"
+            }
+          >
+            {sidebarCollapsed ? (
+              <PanelLeftOpen className="hidden size-5" />
+            ) : (
+              <PanelLeftClose className="size-5" />
+            )}
+          </button>
         </div>
 
         <nav className="flex-1 overflow-y-auto py-2">
@@ -126,7 +173,7 @@ export default function DashboardSidebar() {
                   label={item.label}
                   icon={item.icon}
                   active={isPathActive(pathname, item.href)}
-                  collapsed={collapsed}
+                  collapsed={sidebarCollapsed}
                   onNavigate={closeMobile}
                 />
               ))}
@@ -135,8 +182,8 @@ export default function DashboardSidebar() {
               <div>
                 <Link
                   href={itemsNav.href}
-                  onClick={closeMobile}
-                  title={collapsed ? itemsNav.label : undefined}
+                  onClick={() => closeMobile}
+                  title={sidebarCollapsed ? itemsNav.label : undefined}
                   aria-current={
                     itemsNav.children.some((child) =>
                       isPathActive(pathname, child.href),
@@ -151,11 +198,11 @@ export default function DashboardSidebar() {
                     ) || isPathActive(pathname, itemsNav.href)
                       ? "border-primary bg-sidebar-accent text-primary"
                       : "border-transparent text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground",
-                    collapsed && "justify-center px-2",
+                    sidebarCollapsed && "justify-center px-2",
                   )}
                 >
                   <Package className="size-4 shrink-0" />
-                  {!collapsed ? (
+                  {!sidebarCollapsed ? (
                     <>
                       <span>{itemsNav.label}</span>
                       <ChevronRight className="ml-auto size-4 opacity-40" />
@@ -163,7 +210,7 @@ export default function DashboardSidebar() {
                   ) : null}
                 </Link>
 
-                {!collapsed ? (
+                {!sidebarCollapsed ? (
                   <div className="mt-1 space-y-1 pl-6">
                     {itemsNav.children.map((child) => {
                       const active = isPathActive(pathname, child.href);
@@ -172,7 +219,10 @@ export default function DashboardSidebar() {
                         <Link
                           key={child.label}
                           href={child.href}
-                          onClick={closeMobile}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            closeMobile?.();
+                          }}
                           aria-current={active ? "page" : undefined}
                           className={cn(
                             "block border-l-4 py-1.5 pl-4 text-sm transition-colors",
@@ -199,17 +249,22 @@ export default function DashboardSidebar() {
                   label={item.label}
                   icon={item.icon}
                   active={isPathActive(pathname, item.href)}
-                  collapsed={collapsed}
+                  collapsed={sidebarCollapsed}
                   onNavigate={closeMobile}
                 />
               ))}
           </div>
         </nav>
 
-        {/* {!collapsed ? <StorageUsedCard /> : null} */}
+        {/* {!sidebarCollapsed ? <StorageUsedCard /> : null} */}
 
-        <div className={cn("border-t border-border p-3", collapsed && "px-2")}>
-          <ProfileCard collapsed={collapsed} />
+        <div
+          className={cn(
+            "border-t border-border p-3",
+            sidebarCollapsed && "px-2",
+          )}
+        >
+          <ProfileCard collapsed={sidebarCollapsed} />
         </div>
       </aside>
     </>

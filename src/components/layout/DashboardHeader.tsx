@@ -19,12 +19,13 @@ import {
 } from "react";
 import { usePathname, useRouter } from "next/navigation";
 
-import { useSidebar } from "@/components/layout/DashboardShell";
 import { Input } from "@/components/ui/input";
 import { useDashboardSearch } from "@/hooks/useDashboard";
 import Card from "@/components/ui/card";
 import NotificationsBell from "@/components/notifications/NotificationsBell";
 import { cn } from "@/lib/utils";
+
+import { useUiStore } from "@/stores/ui-store";
 
 const EMPTY_INVENTORY: Array<{
   id: string;
@@ -54,7 +55,8 @@ function getDashboardPageTitle(pathname: string) {
 }
 
 export default function DashboardHeader() {
-  const { collapsed, setCollapsed, setMobileOpen } = useSidebar();
+  const { setMobileSidebarOpen } = useUiStore();
+
   const router = useRouter();
   const pathname = usePathname();
   const resultsId = useId();
@@ -196,24 +198,12 @@ export default function DashboardHeader() {
         <button
           type="button"
           className="inline-flex size-10 items-center justify-center rounded-md text-muted-foreground hover:bg-muted lg:hidden"
-          onClick={() => setMobileOpen(true)}
+          onClick={() => setMobileSidebarOpen(true)}
           aria-label="Open navigation"
         >
           <Menu className="size-5" />
         </button>
-        <div className="flex min-w-0 items-center justify-between">
-          <button
-            type="button"
-            className="hidden size-9 items-center justify-center rounded-md text-muted-foreground hover:bg-muted lg:inline-flex"
-            onClick={() => setCollapsed(!collapsed)}
-            aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-          >
-            {collapsed ? (
-              <CircleChevronRight className="size-5" />
-            ) : (
-              <CircleChevronLeft className="size-5" />
-            )}
-          </button>
+        <div className="flex min-w-0 items-center px-3">
           <div className="min-w-0 truncate text-sm font-semibold tracking-tight text-foreground sm:text-xl">
             {pageTitle}
           </div>
@@ -284,7 +274,7 @@ export default function DashboardHeader() {
                   No results for “{query.trim()}”.
                 </div>
               ) : (
-                <div className="max-h-[340px] overflow-auto">
+                <div className="max-h-85 overflow-auto">
                   {inventory.length > 0 ? (
                     <div className="border-b border-border">
                       <div className="px-4 pt-4 pb-2 text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
