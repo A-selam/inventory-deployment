@@ -158,7 +158,7 @@ export default function UpdateItemForm({
           <Input
             id="update-item-name"
             placeholder="Item name"
-            className="h-11 rounded-[10px] px-4"
+            className="h-9 rounded-md px-3"
             aria-invalid={Boolean(errors.name)}
             disabled={isSubmitting}
             {...register("name")}
@@ -179,7 +179,7 @@ export default function UpdateItemForm({
             id="update-item-description"
             rows={3}
             placeholder="Brief description of the item"
-            className="w-full resize-none rounded-[10px] border border-input bg-transparent px-4 py-2 text-sm text-foreground shadow-xs outline-none transition-[color,box-shadow] placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40"
+            className="w-full resize-none rounded-md border border-input bg-transparent px-3 py-2 text-sm text-foreground shadow-xs outline-none transition-[color,box-shadow] placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40"
             aria-invalid={Boolean(errors.description)}
             disabled={isSubmitting}
             {...register("description")}
@@ -203,7 +203,7 @@ export default function UpdateItemForm({
             type="number"
             min={0}
             step="1"
-            className="h-11 rounded-[10px] px-4"
+            className="h-9 rounded-md px-3"
             aria-invalid={Boolean(errors.minimum_stock_level)}
             disabled={isSubmitting}
             {...register("minimum_stock_level")}
@@ -232,7 +232,7 @@ export default function UpdateItemForm({
               step="0.01"
               min={0}
               placeholder="0.00"
-              className="h-11 rounded-[10px] pl-7 pr-4"
+              className="h-9 rounded-md pl-7 pr-3"
               aria-invalid={Boolean(errors.cost_price)}
               disabled={isSubmitting}
               {...register("cost_price")}
@@ -262,7 +262,7 @@ export default function UpdateItemForm({
               step="0.01"
               min={0}
               placeholder="0.00"
-              className="h-11 rounded-[10px] pl-7 pr-4"
+              className="h-9 rounded-md pl-7 pr-3"
               aria-invalid={Boolean(errors.selling_price)}
               disabled={isSubmitting}
               {...register("selling_price")}
@@ -284,7 +284,7 @@ export default function UpdateItemForm({
           </Label>
           <select
             id="update-item-category"
-            className="h-11 w-full rounded-[10px] border border-input bg-transparent px-3 text-sm text-foreground shadow-xs outline-none transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40"
+            className="h-9 w-full rounded-md border border-input bg-transparent px-3 text-sm text-foreground shadow-xs outline-none transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 dark:bg-input/30"
             aria-invalid={Boolean(errors.category_id)}
             disabled={isSubmitting || categoriesQuery.isLoading}
             {...register("category_id")}
@@ -316,7 +316,7 @@ export default function UpdateItemForm({
           </Label>
           <select
             id="update-item-vendor"
-            className="h-11 w-full rounded-[10px] border border-input bg-transparent px-3 text-sm text-foreground shadow-xs outline-none transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40"
+            className="h-9 w-full rounded-md border border-input bg-transparent px-3 text-sm text-foreground shadow-xs outline-none transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 dark:bg-input/30"
             aria-invalid={Boolean(errors.vendor_id)}
             disabled={isSubmitting || vendorsQuery.isLoading}
             {...register("vendor_id")}
@@ -347,7 +347,7 @@ export default function UpdateItemForm({
           <Input
             id="update-item-bin-location"
             placeholder="e.g. A-12-04"
-            className="h-11 rounded-[10px] px-4"
+            className="h-9 rounded-md px-3"
             aria-invalid={Boolean(errors.bin_location)}
             disabled={isSubmitting}
             {...register("bin_location")}

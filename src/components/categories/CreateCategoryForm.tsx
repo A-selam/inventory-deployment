@@ -78,7 +78,7 @@ export default function CreateCategoryForm({
         <Input
           id="category-name"
           placeholder="e.g. Healthcare Logistics"
-          className="h-11 rounded-xl px-4"
+          className="h-9 rounded-md px-3"
           autoFocus
           aria-invalid={Boolean(errors.name)}
           disabled={isSubmitting}
@@ -93,7 +93,7 @@ export default function CreateCategoryForm({
         <Button
           type="button"
           variant="outline"
-          className="h-11 rounded-xl px-5"
+          className="h-9 rounded-md px-4"
           onClick={onCancel}
           disabled={isSubmitting}
         >
@@ -101,7 +101,7 @@ export default function CreateCategoryForm({
         </Button>
         <Button
           type="submit"
-          className="h-11 rounded-xl px-5"
+          className="h-9 rounded-md px-4"
           disabled={isSubmitting}
         >
           {isSubmitting ? <Loader2 className="size-4 animate-spin" /> : null}

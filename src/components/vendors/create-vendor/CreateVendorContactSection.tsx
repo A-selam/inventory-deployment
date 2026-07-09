@@ -31,7 +31,7 @@ export default function CreateVendorContactSection({
           placeholder="e.g. Chen"
           aria-invalid={Boolean(errors.contact_person?.first_name)}
           disabled={disabled}
-          className="h-11 rounded-[10px] px-4"
+          className="h-9 rounded-md px-3"
         />
         {errors.contact_person?.first_name && (
           <p className="text-xs text-destructive">
@@ -53,7 +53,7 @@ export default function CreateVendorContactSection({
           placeholder="e.g. Wei"
           aria-invalid={Boolean(errors.contact_person?.last_name)}
           disabled={disabled}
-          className="h-11 rounded-[10px] px-4"
+          className="h-9 rounded-md px-3"
         />
         {errors.contact_person?.last_name && (
           <p className="text-xs text-destructive">
@@ -76,7 +76,7 @@ export default function CreateVendorContactSection({
           placeholder="e.g. chen.wei@lumina.com"
           aria-invalid={Boolean(errors.contact_info?.email)}
           disabled={disabled}
-          className="h-11 rounded-[10px] px-4"
+          className="h-9 rounded-md px-3"
         />
         {errors.contact_info?.email && (
           <p className="text-xs text-destructive">
@@ -98,7 +98,7 @@ export default function CreateVendorContactSection({
           placeholder="e.g. +86 123 4567 890"
           aria-invalid={Boolean(errors.contact_info?.primary_phone)}
           disabled={disabled}
-          className="h-11 rounded-[10px] px-4"
+          className="h-9 rounded-md px-3"
         />
         {errors.contact_info?.primary_phone && (
           <p className="text-xs text-destructive">
@@ -120,7 +120,7 @@ export default function CreateVendorContactSection({
           placeholder="Optional"
           aria-invalid={Boolean(errors.contact_info?.secondary_phone)}
           disabled={disabled}
-          className="h-11 rounded-[10px] px-4"
+          className="h-9 rounded-md px-3"
         />
         {errors.contact_info?.secondary_phone && (
           <p className="text-xs text-destructive">

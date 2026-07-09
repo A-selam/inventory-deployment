@@ -33,7 +33,7 @@ export default function UsersPagination({
           type="button"
           variant="outline"
           size="sm"
-          className="h-10 gap-2 rounded-[10px] px-3"
+          className="h-9 gap-2 rounded-md px-3"
           disabled={page <= 1}
           onClick={() => onPageChange(page - 1)}
         >
@@ -44,7 +44,7 @@ export default function UsersPagination({
           type="button"
           variant="outline"
           size="sm"
-          className="h-10 gap-2 rounded-[10px] px-3"
+          className="h-9 gap-2 rounded-md px-3"
           disabled={page >= totalPages}
           onClick={() => onPageChange(page + 1)}
         >
@@ -55,4 +55,3 @@ export default function UsersPagination({
     </div>
   );
 }
-

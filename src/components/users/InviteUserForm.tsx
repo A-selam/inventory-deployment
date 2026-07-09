@@ -179,7 +179,7 @@ export default function InviteUserForm({ onCancel }: InviteUserFormProps) {
           <Input
             id="invite-email"
             placeholder="name@company.com"
-            className={cn("h-11 rounded-xl pl-9 pr-4", errors.email && "pr-9")}
+            className={cn("h-9 rounded-md pl-9 pr-3", errors.email && "pr-9")}
             autoFocus
             aria-invalid={Boolean(errors.email)}
             disabled={isSubmitting}
@@ -198,7 +198,7 @@ export default function InviteUserForm({ onCancel }: InviteUserFormProps) {
         </Label>
         <select
           id="invite-role"
-          className="h-11 w-full rounded-xl border border-input bg-card px-4 text-sm text-foreground outline-none transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-60"
+          className="h-9 w-full rounded-md border border-input bg-transparent px-3 text-sm text-foreground shadow-xs outline-none transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-60 dark:bg-input/30"
           disabled={isSubmitting}
           {...register("role")}
         >

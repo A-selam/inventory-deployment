@@ -108,7 +108,7 @@ export default function UpdateWarehouseForm({
           <Input
             id="warehouse-name"
             placeholder="Warehouse name"
-            className="h-11 rounded-xl px-4"
+            className="h-9 rounded-md px-3"
             autoFocus
             aria-invalid={Boolean(errors.name)}
             disabled={isSubmitting}
@@ -129,7 +129,7 @@ export default function UpdateWarehouseForm({
           <Input
             id="warehouse-location"
             placeholder="City / region"
-            className="h-11 rounded-xl px-4"
+            className="h-9 rounded-md px-3"
             aria-invalid={Boolean(errors.location)}
             disabled={isSubmitting}
             {...register("location")}
@@ -153,7 +153,7 @@ export default function UpdateWarehouseForm({
             type="number"
             min={0}
             step={1}
-            className="h-11 rounded-xl px-4"
+            className="h-9 rounded-md px-3"
             aria-invalid={Boolean(errors.capacity)}
             disabled={isSubmitting}
             {...register("capacity")}
@@ -177,7 +177,7 @@ export default function UpdateWarehouseForm({
           id="warehouse-description"
           rows={3}
           placeholder="Add any notes about this location"
-          className="w-full resize-none rounded-[10px] border border-input bg-transparent px-4 py-2 text-sm text-foreground shadow-xs outline-none transition-[color,box-shadow] placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40"
+          className="w-full resize-none rounded-md border border-input bg-transparent px-3 py-2 text-sm text-foreground shadow-xs outline-none transition-[color,box-shadow] placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40"
           aria-invalid={Boolean(errors.description)}
           disabled={isSubmitting}
           {...register("description")}

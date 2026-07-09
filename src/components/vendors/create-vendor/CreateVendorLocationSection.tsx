@@ -31,7 +31,7 @@ export default function CreateVendorLocationSection({
           placeholder="e.g. Shenzhen"
           aria-invalid={Boolean(errors.location?.city)}
           disabled={disabled}
-          className="h-11 rounded-[10px] px-4"
+          className="h-9 rounded-md px-3"
         />
         {errors.location?.city && (
           <p className="text-xs text-destructive">
@@ -52,7 +52,7 @@ export default function CreateVendorLocationSection({
           placeholder="e.g. China"
           aria-invalid={Boolean(errors.location?.country)}
           disabled={disabled}
-          className="h-11 rounded-[10px] px-4"
+          className="h-9 rounded-md px-3"
         />
         {errors.location?.country && (
           <p className="text-xs text-destructive">

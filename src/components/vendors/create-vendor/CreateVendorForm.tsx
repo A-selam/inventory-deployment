@@ -125,7 +125,9 @@ export default function CreateVendorForm({
 }: CreateVendorFormProps) {
   const { toast } = useToast();
   const createVendorMutation = useCreateVendor();
-  const updateVendorMutation = useUpdateVendor(mode === "edit" ? vendor?.id : undefined);
+  const updateVendorMutation = useUpdateVendor(
+    mode === "edit" ? vendor?.id : undefined,
+  );
   const isEdit = mode === "edit";
 
   const {
@@ -139,7 +141,9 @@ export default function CreateVendorForm({
   });
 
   useEffect(() => {
-    onSubmittingChange(isEdit ? updateVendorMutation.isPending : createVendorMutation.isPending);
+    onSubmittingChange(
+      isEdit ? updateVendorMutation.isPending : createVendorMutation.isPending,
+    );
   }, [
     createVendorMutation.isPending,
     isEdit,
@@ -202,7 +206,9 @@ export default function CreateVendorForm({
       onSuccess();
     } catch (error) {
       toast({
-        title: isEdit ? "Failed to update supplier" : "Failed to create supplier",
+        title: isEdit
+          ? "Failed to update supplier"
+          : "Failed to create supplier",
         description: getApiErrorMessage(error),
         variant: "error",
       });
@@ -219,7 +225,7 @@ export default function CreateVendorForm({
       className="flex-1 overflow-y-auto px-6 py-6"
     >
       <div className="space-y-6">
-        <section className="space-y-4">
+        <section className="space-y-1">
           <h4 className="text-sm font-semibold text-foreground">
             Basic Information
           </h4>
@@ -230,7 +236,7 @@ export default function CreateVendorForm({
           />
         </section>
 
-        <section className="space-y-4">
+        <section className="space-y-1">
           <h4 className="text-sm font-semibold text-foreground">
             Contact Details
           </h4>
@@ -241,7 +247,7 @@ export default function CreateVendorForm({
           />
         </section>
 
-        <section className="space-y-4">
+        <section className="space-y-1">
           <h4 className="text-sm font-semibold text-foreground">Location</h4>
           <CreateVendorLocationSection
             register={register}
@@ -254,7 +260,9 @@ export default function CreateVendorForm({
           <p className="text-sm text-destructive">
             {getApiErrorMessage(
               activeMutation.error,
-              isEdit ? "Failed to update supplier" : "Failed to create supplier",
+              isEdit
+                ? "Failed to update supplier"
+                : "Failed to create supplier",
             )}
           </p>
         ) : null}

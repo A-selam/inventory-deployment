@@ -38,7 +38,7 @@ export default function ReplenishmentFilters({
                 value={search}
                 onChange={(event) => onSearchChange(event.target.value)}
                 placeholder="Search by item name or SKU"
-                className="h-11 bg-background pl-10"
+                className="h-9 bg-background pl-10"
               />
             </div>
           </label>
@@ -49,7 +49,7 @@ export default function ReplenishmentFilters({
               value={category}
               onChange={(event) => onCategoryChange(event.target.value)}
               disabled={isCategoriesLoading}
-              className="h-11 w-full rounded-md border border-input bg-background px-3 text-sm text-foreground shadow-sm outline-none transition-colors focus:border-ring focus:ring-2 focus:ring-ring/40 disabled:cursor-not-allowed disabled:opacity-60"
+              className="h-9 w-full rounded-md border border-input bg-transparent px-3 text-sm text-foreground shadow-xs outline-none transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-input/30"
             >
               <option value="">All categories</option>
               {categories.map((item) => (
