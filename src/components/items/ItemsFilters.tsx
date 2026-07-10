@@ -5,6 +5,7 @@ import { ChevronDown, Search } from "lucide-react";
 
 import { useCategoriesList } from "@/hooks/useCategories";
 import { useVendorsList } from "@/hooks/useVendors";
+import { useSanitizedSearch } from "@/hooks/useSanitizedSearch";
 import Button from "@/components/ui/button";
 import Label from "@/components/ui/label";
 
@@ -13,6 +14,7 @@ const DEFAULT_LIMIT = 20;
 export default function ItemsFilters() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { sanitizeSearch } = useSanitizedSearch();
   const categoriesQuery = useCategoriesList();
   const vendorsQuery = useVendorsList({
     page: 1,
@@ -61,7 +63,10 @@ export default function ItemsFilters() {
           <input
             type="text"
             value={search}
-            onChange={(event) => updateParam("search", event.target.value || null)}
+            onChange={(event) => {
+              const sanitized = sanitizeSearch(event.target.value || "");
+              updateParam("search", sanitized || null);
+            }}
             placeholder="Search items..."
             className="h-9 w-full rounded-md border border-input bg-transparent pl-9 pr-3 text-sm text-foreground shadow-xs outline-none transition-[color,box-shadow] placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 dark:bg-input/30"
           />

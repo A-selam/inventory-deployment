@@ -3,6 +3,7 @@ import { Search, RotateCcw } from "lucide-react";
 import Button from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Card from "@/components/ui/card";
+import { useSanitizedSearch } from "@/hooks/useSanitizedSearch";
 import type { Category } from "@/lib/categories";
 
 type ReplenishmentFiltersProps = {
@@ -24,6 +25,7 @@ export default function ReplenishmentFilters({
   onCategoryChange,
   onClear,
 }: ReplenishmentFiltersProps) {
+  const { sanitizeSearch } = useSanitizedSearch();
   const hasFilters = Boolean(search || category);
 
   return (
@@ -36,7 +38,10 @@ export default function ReplenishmentFilters({
               <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
               <Input
                 value={search}
-                onChange={(event) => onSearchChange(event.target.value)}
+                onChange={(event) => {
+                  const sanitized = sanitizeSearch(event.target.value);
+                  onSearchChange(sanitized);
+                }}
                 placeholder="Search by item name or SKU"
                 className="h-9 bg-background pl-10"
               />
