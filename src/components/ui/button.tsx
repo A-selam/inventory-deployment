@@ -4,7 +4,7 @@ import React from "react";
 import { cn } from "@/lib/utils";
 
 type ButtonVariant = "default" | "outline" | "ghost";
-type ButtonSize = "default" | "sm" | "lg";
+type ButtonSize = "default" | "sm" | "lg" | "icon";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;
@@ -33,6 +33,7 @@ export function Button({
           "px-3 py-2 text-sm": size === "sm",
           "px-4 py-3 text-base": size === "default",
           "px-6 py-4 text-lg": size === "lg",
+          "p-2": size === "icon",
         },
         className,
       )}
