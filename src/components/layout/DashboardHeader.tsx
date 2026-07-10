@@ -18,6 +18,7 @@ import NotificationsBell from "@/components/notifications/NotificationsBell";
 import { cn } from "@/lib/utils";
 
 import { useUiStore } from "@/stores/ui-store";
+import { useSanitizedSearch } from "@/hooks/useSanitizedSearch";
 
 const EMPTY_INVENTORY: Array<{
   id: string;
@@ -48,6 +49,7 @@ function getDashboardPageTitle(pathname: string) {
 
 export default function DashboardHeader() {
   const { setMobileSidebarOpen } = useUiStore();
+  const { sanitizeSearch } = useSanitizedSearch();
 
   const router = useRouter();
   const pathname = usePathname();
@@ -221,7 +223,8 @@ export default function DashboardHeader() {
               setActiveIndex(0);
             }}
             onChange={(event) => {
-              setQuery(event.target.value);
+              const sanitized = sanitizeSearch(event.target.value || "");
+              setQuery(sanitized);
               setOpen(true);
               setActiveIndex(0);
             }}
