@@ -37,22 +37,22 @@ function StatCard({
 }) {
   return (
     <Card
-      className={`rounded-[12px] border border-border p-6 shadow-[0_1px_2px_rgba(15,23,42,0.04)] ${borderClassName ?? ""}`}
+      className={`rounded-[12px] border border-border p-3  shadow-[0_1px_2px_rgba(15,23,42,0.04)] ${borderClassName ?? ""}`}
     >
       <div className="flex items-start justify-between gap-4">
         <div className="space-y-3">
           <div className="label-caps">{title}</div>
           <div
-            className={`text-3xl font-bold tracking-tight ${valueClassName}`}
+            className={`text-xl font-bold tracking-tight ${valueClassName}`}
           >
             {value}
           </div>
         </div>
 
         <div
-          className={`flex size-11 shrink-0 items-center justify-center rounded-xl ${iconClassName}`}
+          className={`flex size-6 shrink-0 items-center justify-center rounded-xl ${iconClassName}`}
         >
-          <Icon className="size-5" />
+          <Icon className="size-4" />
         </div>
       </div>
     </Card>
@@ -66,7 +66,7 @@ export default function TransactionStats({
   anomalies,
 }: TransactionStatsProps) {
   return (
-    <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
+    <div className="grid grid-cols-1 gap-4 md:grid-cols-4 mb-3">
       <StatCard
         title="Total Movements"
         value={formatCount(totalMovements)}

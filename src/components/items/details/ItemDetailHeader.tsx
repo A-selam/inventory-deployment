@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, PackagePlus, SquarePen, Trash } from "lucide-react";
 
@@ -7,6 +8,8 @@ import { Badge } from "@/components/ui/badge";
 import Button from "@/components/ui/button";
 import type { ItemDetail } from "@/types/items";
 import { cn } from "@/lib/utils";
+
+const DESCRIPTION_MAX_LENGTH = 100;
 
 type ItemDetailHeaderProps = {
   item: ItemDetail;
@@ -25,8 +28,17 @@ export default function ItemDetailHeader({
   onDelete,
   onCreateTransaction,
 }: ItemDetailHeaderProps) {
+  const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
+
+  const shouldTruncate =
+    item.description && item.description.length > DESCRIPTION_MAX_LENGTH;
+  const displayDescription =
+    shouldTruncate && !isDescriptionExpanded
+      ? `${item.description!.slice(0, DESCRIPTION_MAX_LENGTH)}...`
+      : item.description;
+
   return (
-    <section className="space-y-4">
+    <section className="sticky top-0 z-10 -mx-2 px-2 py-3 bg-background/95 bg-muted border-b border-border/50 mb-3 sm:-mx-3 sm:px-3 lg:-mx-4 lg:px-4">
       <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
         <Link
           href="/inventory"
@@ -44,13 +56,24 @@ export default function ItemDetailHeader({
               {item.name}
             </h1>
             {item.description && (
-              <p className="max-w-3xl text-sm leading-6 text-muted-foreground sm:text-base">
-                {item.description}
-              </p>
+              <div className="max-w-3xl">
+                <p className="text-sm leading-6 text-muted-foreground sm:text-base">
+                  {displayDescription}
+                </p>
+                {shouldTruncate && (
+                  <button
+                    type="button"
+                    className="mt-1 text-sm font-medium text-primary hover:underline"
+                    onClick={() => setIsDescriptionExpanded(!isDescriptionExpanded)}
+                  >
+                    {isDescriptionExpanded ? "See less" : "See more"}
+                  </button>
+                )}
+              </div>
             )}
           </div>
 
-          <div className="flex flex-wrap items-center gap-3">
+          {/* <div className="flex flex-wrap items-center gap-3">
             <Badge className="bg-muted px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
               {item.sku}
             </Badge>
@@ -65,10 +88,10 @@ export default function ItemDetailHeader({
             <Badge className="bg-slate-100 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-700">
               {item.bin_location}
             </Badge>
-          </div>
+          </div> */}
         </div>
 
-        <div className="flex flex-wrap items-center justify-start gap-2 lg:justify-end">
+        <div className="flex items-center gap-2 shrink-0 flex-nowrap">
           <Button
             type="button"
             variant="default"

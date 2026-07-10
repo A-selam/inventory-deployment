@@ -46,7 +46,7 @@ export default function ImportsWizard({ steps }: { steps: ImportsWizardStep[] })
   return (
     <div className="relative">
       <div className="absolute left-0 top-5 h-px w-full bg-border" />
-      <div className="relative grid grid-cols-3 gap-4">
+      <div className="relative flex justify-around items-center">
         {steps.map((step, idx) => (
           <div
             key={step.key}

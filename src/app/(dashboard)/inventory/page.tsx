@@ -57,7 +57,8 @@ export default function InventoryPage() {
     const category = searchParams.get("category") ?? "";
     const vendor = searchParams.get("vendor") ?? "";
     const lowStock = parseBoolean(searchParams.get("low_stock"));
-    return Boolean(category || vendor || lowStock);
+    const search = searchParams.get("search") ?? "";
+    return Boolean(category || vendor || lowStock || search);
   });
 
   const page = parsePositiveInt(searchParams.get("page"), DEFAULT_PAGE);
@@ -65,6 +66,7 @@ export default function InventoryPage() {
   const category = searchParams.get("category") ?? "";
   const vendor = searchParams.get("vendor") ?? "";
   const lowStock = parseBoolean(searchParams.get("low_stock"));
+  const search = searchParams.get("search") ?? "";
 
   useEffect(() => {
     const normalizedPage = searchParams.get("page");
@@ -87,6 +89,7 @@ export default function InventoryPage() {
     category: category || undefined,
     vendor: vendor || undefined,
     low_stock: lowStock ? true : undefined,
+    search: search || undefined,
   });
 
   const itemsData = data?.data;

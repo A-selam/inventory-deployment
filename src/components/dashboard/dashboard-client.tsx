@@ -151,15 +151,18 @@ export default function DashboardClient() {
 
   return (
     <div className="space-y-8">
-      <OverviewCards data={query.data} />
+      <div className="grid gap-6 xl:grid-cols-[minmax(0,3fr)_minmax(320px,1fr)]">
+        {/* Left Side: Summary Cards + Bar Chart */}
+        <div className="space-y-6">
+          <OverviewCards data={query.data} />
+          <StockChart yearlyData={query.data.stock_movement_chart} />
+        </div>
 
-      <div>
-        <StockChart yearlyData={query.data.stock_movement_chart} />
-      </div>
-
-      <div className="grid gap-6 xl:grid-cols-2">
-        <CategoryPieWrapper enabled={enabled} />
-        <DashboardWarehousePieWrapper enabled={enabled} />
+        {/* Right Side: Two Pie Charts */}
+        <div className="space-y-4">
+          <CategoryPieWrapper enabled={enabled} />
+          <DashboardWarehousePieWrapper enabled={enabled} />
+        </div>
       </div>
 
       <RecentTransactionsTable transactions={query.data.recent_transactions} />
