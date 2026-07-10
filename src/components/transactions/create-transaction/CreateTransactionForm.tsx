@@ -171,7 +171,7 @@ export default function CreateTransactionForm({
             )}
           >
             <span className="truncate font-semibold">{itemName}</span>
-            <span className="ml-3 text-xs text-muted-foreground">{itemId}</span>
+            {/* <span className="ml-3 text-xs text-muted-foreground">{itemId}</span> */}
           </div>
         </div>
 

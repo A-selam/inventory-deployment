@@ -55,7 +55,7 @@ export default function ItemDetailHeader({
             <h1 className="text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
               {item.name}
             </h1>
-            {item.description && (
+            {/* {item.description && (
               <div className="max-w-3xl">
                 <p className="text-sm leading-6 text-muted-foreground sm:text-base">
                   {displayDescription}
@@ -70,7 +70,7 @@ export default function ItemDetailHeader({
                   </button>
                 )}
               </div>
-            )}
+            )} */}
           </div>
 
           {/* <div className="flex flex-wrap items-center gap-3">
