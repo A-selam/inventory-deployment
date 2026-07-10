@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Plus, Upload } from "lucide-react";
 
 import type { Item } from "@/lib/items";
+import { useRole } from "@/hooks/useRole";
 
 import StandardDataTable, {
   StandardEmptyRow,
@@ -76,6 +77,7 @@ export default function ItemsTable({
   onAddItem,
   onPageChange,
 }: ItemsTableProps) {
+  const { can } = useRole();
   const tableHead = (
     <>
       <StandardTableHeadCell className="whitespace-nowrap has-[[role=checkbox]]:pr-0">
@@ -153,6 +155,24 @@ export default function ItemsTable({
       })
     );
 
+  const actions = [];
+  if (can("import:data")) {
+    actions.push({
+      label: "Import Items",
+      onClick: onImport,
+      disabled: false,
+      icon: <Upload className="size-4" />,
+    });
+  }
+  if (can("create:items")) {
+    actions.push({
+      label: "Add Item",
+      onClick: onAddItem,
+      disabled: false,
+      icon: <Plus className="size-4" />,
+    });
+  }
+
   return (
     <StandardDataTable
       title={title}
@@ -164,20 +184,7 @@ export default function ItemsTable({
       isLoading={isLoading}
       filters={filters}
       filtersOpen={filtersOpen}
-      addAction={[
-        {
-          label: "Import Items",
-          onClick: onImport,
-          disabled: false,
-          icon: <Upload className="size-4" />,
-        },
-        {
-          label: "Add Item",
-          onClick: onAddItem,
-          disabled: false,
-          icon: <Plus className="size-4" />,
-        },
-      ]}
+      addAction={actions}
       onToggleFilters={onToggleFilters}
       emptyState={{ title: "No items found" }}
       tableHead={tableHead}
