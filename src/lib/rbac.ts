@@ -76,6 +76,11 @@ export const rolePermissions: Record<UserRole, Set<string>> = {
 
     // Dashboard
     "view:dashboard",
+
+    "view:inventory",
+    "view:reports",
+    "view:dashboard",
+    "view:transactions",
   ]),
 
   viewer: new Set([
@@ -90,11 +95,12 @@ export const rolePermissions: Record<UserRole, Set<string>> = {
 /**
  * Check if a user has a specific permission
  */
-export function hasPermission(
-  user: User | null,
-  permission: string,
-): boolean {
+export function hasPermission(user: User | null, permission: string): boolean {
   if (!user) return false;
+  if (user.role === "admin") {
+    // Admin has all permissions
+    return true;
+  }
   return rolePermissions[user.role]?.has(permission) ?? false;
 }
 
@@ -183,7 +189,8 @@ export function getRoleLabel(role: UserRole): string {
  */
 export function getRoleDescription(role: UserRole): string {
   const descriptions: Record<UserRole, string> = {
-    admin: "Full system access - Manage users, inventory, vendors, import/export",
+    admin:
+      "Full system access - Manage users, inventory, vendors, import/export",
     operator:
       "Can create/update items and transactions, view reports. Cannot manage users or delete system resources.",
     viewer:
