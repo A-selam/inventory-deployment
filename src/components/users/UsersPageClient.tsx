@@ -11,6 +11,8 @@ import InviteUserModal from "@/components/users/InviteUserModal";
 import Button from "@/components/ui/button";
 import Card from "@/components/ui/card";
 import { useUsersList } from "@/hooks/useUsers";
+import { useRole } from "@/hooks/useRole";
+import { CanAccess } from "@/components/rbac/CanAccess";
 import type { UserRole } from "@/lib/users";
 
 const DEFAULT_PAGE = 1;
@@ -69,9 +71,26 @@ function UsersErrorState({
 }
 
 export default function UsersPageClient() {
+  const { can } = useRole();
   const router = useRouter();
   const searchParams = useSearchParams();
   const [inviteOpen, setInviteOpen] = useState(false);
+
+  // Redirect non-admin users
+  if (!can("manage:users")) {
+    return (
+      <Card className="rounded-[12px] border-border bg-card p-6 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
+        <div className="flex flex-col gap-4">
+          <div>
+            <div className="label-caps">Access Denied</div>
+            <p className="mt-2 text-sm leading-6 text-muted-foreground">
+              You don&apos;t have permission to manage users. Only administrators can access this section.
+            </p>
+          </div>
+        </div>
+      </Card>
+    );
+  }
   const page = parsePositiveInt(searchParams.get("page"), DEFAULT_PAGE);
   const limit = parsePositiveInt(searchParams.get("limit"), DEFAULT_LIMIT);
   const role = parseRole(searchParams.get("role"));
@@ -131,15 +150,17 @@ export default function UsersPageClient() {
           }
         />
         <div className="flex flex-wrap items-center justify-end gap-3">
-          <Button
-            type="button"
-            size="sm"
-            className="h-9 gap-2"
-            onClick={() => setInviteOpen(true)}
-          >
-            <UserPlus className="size-4" />
-            Invite User
-          </Button>
+          <CanAccess permission="invite:users">
+            <Button
+              type="button"
+              size="sm"
+              className="h-9 gap-2"
+              onClick={() => setInviteOpen(true)}
+            >
+              <UserPlus className="size-4" />
+              Invite User
+            </Button>
+          </CanAccess>
         </div>
       </div>
 

@@ -8,6 +8,7 @@ import Card from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import Label from "@/components/ui/label";
 import { cn } from "@/lib/utils";
+import { useSanitizedSearch } from "@/hooks/useSanitizedSearch";
 
 const DEFAULT_LIMIT = 20;
 
@@ -22,6 +23,7 @@ export default function TransactionFilters({
 }: TransactionFiltersProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { sanitizeSearch } = useSanitizedSearch();
 
   const inbound = searchParams.get("inbound") === "1";
   const outbound = searchParams.get("outbound") === "1";
@@ -75,7 +77,10 @@ export default function TransactionFilters({
           <input
             type="text"
             value={search}
-            onChange={(event) => updateParam("search", event.target.value || null)}
+            onChange={(event) => {
+              const sanitized = sanitizeSearch(event.target.value || "");
+              updateParam("search", sanitized || null);
+            }}
             placeholder="Search transactions..."
             className="h-9 w-full min-w-[200px] rounded-md border border-input bg-transparent pl-9 pr-3 text-sm text-foreground shadow-xs outline-none transition-[color,box-shadow] placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 dark:bg-input/30"
           />

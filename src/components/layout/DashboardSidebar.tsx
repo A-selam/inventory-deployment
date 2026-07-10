@@ -14,6 +14,7 @@ import {
 import ProfileCard from "@/components/shared/ProfileCard";
 import { useAuthStore } from "@/stores/auth-store";
 import { cn } from "@/lib/utils";
+import { useRole } from "@/hooks/useRole";
 
 import { useUiStore } from "@/stores/ui-store";
 
@@ -63,7 +64,7 @@ function DashboardNavLink({
 
 export default function DashboardSidebar() {
   const pathname = usePathname();
-  const userRole = useAuthStore((state) => state.user?.role);
+  const { can, isAnyRole } = useRole();
   const {
     sidebarCollapsed,
     setSidebarCollapsed,
@@ -71,9 +72,29 @@ export default function DashboardSidebar() {
     setMobileSidebarOpen,
   } = useUiStore();
 
-  const navItems = DASHBOARD_NAV_LINKS.filter(
-    (item) => !item.adminOnly || userRole === "admin",
-  );
+  const hasPermission = (item: DashboardNavItem): boolean => {
+    // If no permission requirement, allow access
+    if (!item.requiredPermission && !item.requiredRole) {
+      return true;
+    }
+
+    // Check permission if specified
+    if (item.requiredPermission && !can(item.requiredPermission)) {
+      return false;
+    }
+
+    // Check role if specified
+    if (item.requiredRole) {
+      if (Array.isArray(item.requiredRole)) {
+        return isAnyRole(item.requiredRole);
+      }
+      return isAnyRole([item.requiredRole]);
+    }
+
+    return true;
+  };
+
+  const navItems = DASHBOARD_NAV_LINKS.filter(hasPermission);
 
   const itemsNav = navItems.find((item) => item.label === "Items");
   const topLevelItems = navItems.filter(
