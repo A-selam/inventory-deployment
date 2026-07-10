@@ -332,17 +332,14 @@ export default function VendorsPageClient() {
         />
       ) : (
         <section className="space-y-4">
-          <Card className="rounded-[12px] border border-border bg-card p-0 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
-            <div className="flex flex-col gap-3 border-b border-border bg-background px-4 py-4 sm:flex-row sm:items-center sm:justify-between">
-              <div className="min-w-0">
+          <Card className="rounded-[12px] p-0 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
+             <div className="flex flex-col gap-3 bg-background p-3 sm:flex-row sm:items-center sm:justify-between">
+             <div className="min-w-0 flex flex-col gap-0.5">
                 <h2 className="truncate text-base font-semibold text-foreground">
                   List of suppliers
                 </h2>
                 <p className="text-xs text-muted-foreground">
-                  {search
-                    ? `Filtered by "${search}"`
-                    : "Showing suppliers from the connected API"}{" "}
-                  • Sorted by {sortBy.replace("_", " ")} ({sortDir})
+                  Sorted by {sortBy.replace("_", " ")} ({sortDir})
                 </p>
               </div>
 

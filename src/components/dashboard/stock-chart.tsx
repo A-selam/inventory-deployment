@@ -336,7 +336,7 @@ export default function StockChart({
   }, [mode, range, transactionsQuery.data, yearlyData]);
 
   return (
-    <Card className="rounded-[12px] border-border shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
+    <Card className="rounded-[12px] p-3 border-border shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
       <div className="flex items-start justify-between gap-4">
         <div className="space-y-2">
           <div className="label-caps font-bold text-2xl mb-0">

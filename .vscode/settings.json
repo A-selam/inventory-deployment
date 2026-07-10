@@ -1,5 +1,6 @@
 {
   "cSpell.words": [
     "stocklogic"
-  ]
+  ],
+  "typescript.autoClosingTags": false
 }

@@ -34,21 +34,19 @@ function MetricCard({
   accentClassName: string;
 }) {
   return (
-    <Card className="rounded-[12px] border-border p-5 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
+    <Card className="rounded-[12px] border-border p-3 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
       <div className="flex items-start justify-between gap-4">
-        <div className="space-y-2">
-          <div className="label-caps">{title}</div>
-          <div className="text-3xl font-bold tracking-tight text-foreground">
-            {value}
-          </div>
-          <div className="text-sm text-muted-foreground">{note}</div>
-        </div>
+        <div className="label-caps">{title}</div>
         <div
-          className={`flex size-11 shrink-0 items-center justify-center rounded-xl ${accentClassName}`}
+          className={`flex size-6 shrink-0 items-center justify-center rounded-xl ${accentClassName}`}
         >
-          <Icon className="size-5" />
+          <Icon className="size-4" />
         </div>
       </div>
+      <div className="mt-2 text-2xl font-bold tracking-tight text-foreground">
+        {value}
+      </div>
+      <div className="mt-1 text-sm text-muted-foreground">{note}</div>
     </Card>
   );
 }
@@ -67,7 +65,7 @@ export default function ItemSummaryCards({ item }: ItemSummaryCardsProps) {
         : "Healthy inventory position";
 
   return (
-    <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+    <section className="hidden grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
       <MetricCard
         title="Stock on hand"
         value={new Intl.NumberFormat("en-US").format(quantity)}

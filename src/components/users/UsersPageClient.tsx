@@ -116,7 +116,7 @@ export default function UsersPageClient() {
 
   return (
     <div className="space-y-8">
-      <div className="flex items-center justify-between gap-4">
+      <div className="flex items-center justify-between gap-4 mb-3">
         <UsersFiltersBar
           role={role}
           onRoleChange={(nextRole) =>

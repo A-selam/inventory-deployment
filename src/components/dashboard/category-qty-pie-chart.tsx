@@ -54,21 +54,21 @@ export default function CategoryQtyPieChart({
   const colors = ["#0f172a", "#c6c6cd", "#22c55e", "#f59e0b", "#ef4444"];
 
   return (
-    <Card className="rounded-[12px] border-border shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
+    <Card className="rounded-[12px] p-3 border-border shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
       <div className="flex items-start justify-between gap-4">
         <div className="space-y-2">
           <div className="label-caps mb-0 text-2xl font-bold">
             Items by Category
           </div>
-          <p className="text-sm text-muted-foreground">
+          {/* <p className="text-sm text-muted-foreground">
             {totalItems > 0
               ? `${new Intl.NumberFormat("en-US").format(totalItems)} total items across categories`
               : "Category item totals"}
-          </p>
+          </p> */}
         </div>
       </div>
 
-      <div className="mt-2 h-55 w-full">
+      <div className="mt-2 h-50 w-full">
         {safeData.length === 0 ? (
           <div className="flex h-full items-center justify-center rounded-lg border border-dashed border-border text-sm text-muted-foreground">
             No category totals available yet.

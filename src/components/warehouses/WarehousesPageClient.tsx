@@ -149,10 +149,12 @@ export default function WarehousesPageClient() {
             <WarehouseFilters
               sortBy={sortBy as WarehouseSortBy}
               sortDir={sortDir as WarehouseSortDir}
+              limit={limit}
               onSortByChange={(value) => replaceWithResetPage({ sort_by: value })}
               onSortDirChange={(value) =>
                 replaceWithResetPage({ sort_dir: value })
               }
+              onLimitChange={(value) => updateParams({ limit: value })}
               onClear={() => router.push("/warehouses")}
             />
           }

@@ -3,6 +3,7 @@
 import { ArrowDownAZ, ChevronDown, X } from "lucide-react";
 
 import Button from "@/components/ui/button";
+import Label from "@/components/ui/label";
 import type { CategorySortBy, CategorySortDir } from "@/lib/categories";
 
 type CategoryFiltersProps = {
@@ -23,9 +24,7 @@ export default function CategoryFilters({
   return (
     <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-[220px_180px_auto] lg:items-end">
       <div>
-        <label className="mb-1 block text-[11px] font-medium text-muted-foreground">
-          Sort by
-        </label>
+        <Label className="mb-1 text-[11px]">Sort by</Label>
         <div className="relative">
           <select
             value={sortBy}
@@ -42,9 +41,7 @@ export default function CategoryFilters({
       </div>
 
       <div>
-        <label className="mb-1 block text-[11px] font-medium text-muted-foreground">
-          Direction
-        </label>
+        <Label className="mb-1 text-[11px]">Direction</Label>
         <Button
           type="button"
           variant="outline"
@@ -59,13 +56,13 @@ export default function CategoryFilters({
 
       <Button
         type="button"
-        variant="outline"
-        size="sm"
-        className="h-9 gap-2 rounded-md px-3"
+        variant="ghost"
+        size="icon"
+        className="h-8 w-8 rounded-md"
         onClick={onClear}
+        title="Clear filters"
       >
         <X className="size-4" />
-        Clear
       </Button>
     </div>
   );

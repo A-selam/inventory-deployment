@@ -27,6 +27,7 @@ export default function TransactionsPage() {
   const outbound = searchParams.get("outbound") === "1";
   const startDate = searchParams.get("start_date") ?? undefined;
   const endDate = searchParams.get("end_date") ?? undefined;
+  const search = searchParams.get("search") ?? undefined;
 
   useEffect(() => {
     const normalizedPage = searchParams.get("page");
@@ -50,6 +51,7 @@ export default function TransactionsPage() {
     outbound: outbound || undefined,
     start_date: startDate,
     end_date: endDate,
+    search,
   });
 
   const transactionsData = data?.data;

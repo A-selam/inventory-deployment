@@ -135,22 +135,25 @@ export default function ItemDetailPage() {
       />
       <ItemSummaryCards item={item} />
 
-      <div className="grid gap-6 lg:grid-cols-12">
-        <div className="space-y-6 lg:col-span-8">
-          <ItemOverviewPanel item={item} />
-          <ItemActivityTable
-            transactions={itemTransactions}
-            isLoading={transactionsQuery.isLoading || transactionsQuery.isFetching}
-          />
+      <div className="space-y-6">
+        <div className="grid gap-6 lg:grid-cols-12">
+          <div className="lg:col-span-8">
+            <ItemOverviewPanel item={item} />
+          </div>
+
+          <div className="lg:col-span-4">
+            <ItemSidebar
+              item={item}
+              vendor={vendorResponse?.data}
+              isVendorLoading={isVendorLoading}
+            />
+          </div>
         </div>
 
-        <div className="lg:col-span-4">
-          <ItemSidebar
-            item={item}
-            vendor={vendorResponse?.data}
-            isVendorLoading={isVendorLoading}
-          />
-        </div>
+        <ItemActivityTable
+          transactions={itemTransactions}
+          isLoading={transactionsQuery.isLoading || transactionsQuery.isFetching}
+        />
       </div>
 
       <UpdateItemDrawer
